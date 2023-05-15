@@ -1,0 +1,8 @@
+service:
+  full_name: Amazon Kinesis Data Firehose
+  short_name: Firehose
+  link: https://aws.amazon.com/kinesis/data-firehose/
+  documentation: https://aws.amazon.com/kinesis/data-firehose/
+api_versions:
+  - api_version: v1alpha1
+    status: available

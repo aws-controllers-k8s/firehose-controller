@@ -1,0 +1,4 @@
+ignore:
+  resource_names:
+      - DeliveryStream
+model_name: firehose
