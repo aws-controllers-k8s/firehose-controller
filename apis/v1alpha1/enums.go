@@ -49,11 +49,25 @@ const (
 	CompressionFormat_HADOOP_SNAPPY CompressionFormat = "HADOOP_SNAPPY"
 )
 
+type Connectivity string
+
+const (
+	Connectivity_PUBLIC  Connectivity = "PUBLIC"
+	Connectivity_PRIVATE Connectivity = "PRIVATE"
+)
+
 type ContentEncoding string
 
 const (
 	ContentEncoding_NONE ContentEncoding = "NONE"
 	ContentEncoding_GZIP ContentEncoding = "GZIP"
+)
+
+type DefaultDocumentIDFormat string
+
+const (
+	DefaultDocumentIDFormat_FIREHOSE_DEFAULT DefaultDocumentIDFormat = "FIREHOSE_DEFAULT"
+	DefaultDocumentIDFormat_NO_DOCUMENT_ID   DefaultDocumentIDFormat = "NO_DOCUMENT_ID"
 )
 
 type DeliveryStreamEncryptionStatus string
@@ -102,6 +116,7 @@ type DeliveryStreamType string
 const (
 	DeliveryStreamType_DirectPut             DeliveryStreamType = "DirectPut"
 	DeliveryStreamType_KinesisStreamAsSource DeliveryStreamType = "KinesisStreamAsSource"
+	DeliveryStreamType_MSKAsSource           DeliveryStreamType = "MSKAsSource"
 )
 
 type ElasticsearchIndexRotationPeriod string
@@ -133,6 +148,13 @@ type HTTPEndpointS3BackupMode string
 const (
 	HTTPEndpointS3BackupMode_FailedDataOnly HTTPEndpointS3BackupMode = "FailedDataOnly"
 	HTTPEndpointS3BackupMode_AllData        HTTPEndpointS3BackupMode = "AllData"
+)
+
+type IcebergS3BackupMode string
+
+const (
+	IcebergS3BackupMode_FailedDataOnly IcebergS3BackupMode = "FailedDataOnly"
+	IcebergS3BackupMode_AllData        IcebergS3BackupMode = "AllData"
 )
 
 type KeyType string
@@ -190,12 +212,16 @@ const (
 	ProcessorParameterName_BufferIntervalInSeconds ProcessorParameterName = "BufferIntervalInSeconds"
 	ProcessorParameterName_SubRecordType           ProcessorParameterName = "SubRecordType"
 	ProcessorParameterName_Delimiter               ProcessorParameterName = "Delimiter"
+	ProcessorParameterName_CompressionFormat       ProcessorParameterName = "CompressionFormat"
+	ProcessorParameterName_DataMessageExtraction   ProcessorParameterName = "DataMessageExtraction"
 )
 
 type ProcessorType string
 
 const (
 	ProcessorType_RecordDeAggregation     ProcessorType = "RecordDeAggregation"
+	ProcessorType_Decompression           ProcessorType = "Decompression"
+	ProcessorType_CloudWatchLogProcessing ProcessorType = "CloudWatchLogProcessing"
 	ProcessorType_Lambda                  ProcessorType = "Lambda"
 	ProcessorType_MetadataExtraction      ProcessorType = "MetadataExtraction"
 	ProcessorType_AppendDelimiterToRecord ProcessorType = "AppendDelimiterToRecord"
@@ -213,6 +239,21 @@ type S3BackupMode string
 const (
 	S3BackupMode_Disabled S3BackupMode = "Disabled"
 	S3BackupMode_Enabled  S3BackupMode = "Enabled"
+)
+
+type SnowflakeDataLoadingOption string
+
+const (
+	SnowflakeDataLoadingOption_JSON_MAPPING                         SnowflakeDataLoadingOption = "JSON_MAPPING"
+	SnowflakeDataLoadingOption_VARIANT_CONTENT_MAPPING              SnowflakeDataLoadingOption = "VARIANT_CONTENT_MAPPING"
+	SnowflakeDataLoadingOption_VARIANT_CONTENT_AND_METADATA_MAPPING SnowflakeDataLoadingOption = "VARIANT_CONTENT_AND_METADATA_MAPPING"
+)
+
+type SnowflakeS3BackupMode string
+
+const (
+	SnowflakeS3BackupMode_FailedDataOnly SnowflakeS3BackupMode = "FailedDataOnly"
+	SnowflakeS3BackupMode_AllData        SnowflakeS3BackupMode = "AllData"
 )
 
 type SplunkS3BackupMode string
