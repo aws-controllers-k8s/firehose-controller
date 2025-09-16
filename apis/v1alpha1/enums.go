@@ -18,49 +18,56 @@ package v1alpha1
 type AmazonOpenSearchServerlessS3BackupMode string
 
 const (
-	AmazonOpenSearchServerlessS3BackupMode_FailedDocumentsOnly AmazonOpenSearchServerlessS3BackupMode = "FailedDocumentsOnly"
 	AmazonOpenSearchServerlessS3BackupMode_AllDocuments        AmazonOpenSearchServerlessS3BackupMode = "AllDocuments"
+	AmazonOpenSearchServerlessS3BackupMode_FailedDocumentsOnly AmazonOpenSearchServerlessS3BackupMode = "FailedDocumentsOnly"
 )
 
 type AmazonopensearchserviceIndexRotationPeriod string
 
 const (
 	AmazonopensearchserviceIndexRotationPeriod_NoRotation AmazonopensearchserviceIndexRotationPeriod = "NoRotation"
-	AmazonopensearchserviceIndexRotationPeriod_OneHour    AmazonopensearchserviceIndexRotationPeriod = "OneHour"
 	AmazonopensearchserviceIndexRotationPeriod_OneDay     AmazonopensearchserviceIndexRotationPeriod = "OneDay"
-	AmazonopensearchserviceIndexRotationPeriod_OneWeek    AmazonopensearchserviceIndexRotationPeriod = "OneWeek"
+	AmazonopensearchserviceIndexRotationPeriod_OneHour    AmazonopensearchserviceIndexRotationPeriod = "OneHour"
 	AmazonopensearchserviceIndexRotationPeriod_OneMonth   AmazonopensearchserviceIndexRotationPeriod = "OneMonth"
+	AmazonopensearchserviceIndexRotationPeriod_OneWeek    AmazonopensearchserviceIndexRotationPeriod = "OneWeek"
 )
 
 type AmazonopensearchserviceS3BackupMode string
 
 const (
-	AmazonopensearchserviceS3BackupMode_FailedDocumentsOnly AmazonopensearchserviceS3BackupMode = "FailedDocumentsOnly"
 	AmazonopensearchserviceS3BackupMode_AllDocuments        AmazonopensearchserviceS3BackupMode = "AllDocuments"
+	AmazonopensearchserviceS3BackupMode_FailedDocumentsOnly AmazonopensearchserviceS3BackupMode = "FailedDocumentsOnly"
 )
 
 type CompressionFormat string
 
 const (
-	CompressionFormat_UNCOMPRESSED  CompressionFormat = "UNCOMPRESSED"
 	CompressionFormat_GZIP          CompressionFormat = "GZIP"
-	CompressionFormat_ZIP           CompressionFormat = "ZIP"
-	CompressionFormat_Snappy        CompressionFormat = "Snappy"
 	CompressionFormat_HADOOP_SNAPPY CompressionFormat = "HADOOP_SNAPPY"
+	CompressionFormat_Snappy        CompressionFormat = "Snappy"
+	CompressionFormat_UNCOMPRESSED  CompressionFormat = "UNCOMPRESSED"
+	CompressionFormat_ZIP           CompressionFormat = "ZIP"
 )
 
 type Connectivity string
 
 const (
-	Connectivity_PUBLIC  Connectivity = "PUBLIC"
 	Connectivity_PRIVATE Connectivity = "PRIVATE"
+	Connectivity_PUBLIC  Connectivity = "PUBLIC"
 )
 
 type ContentEncoding string
 
 const (
-	ContentEncoding_NONE ContentEncoding = "NONE"
 	ContentEncoding_GZIP ContentEncoding = "GZIP"
+	ContentEncoding_NONE ContentEncoding = "NONE"
+)
+
+type DatabaseType string
+
+const (
+	DatabaseType_MySQL      DatabaseType = "MySQL"
+	DatabaseType_PostgreSQL DatabaseType = "PostgreSQL"
 )
 
 type DefaultDocumentIDFormat string
@@ -73,47 +80,50 @@ const (
 type DeliveryStreamEncryptionStatus string
 
 const (
-	DeliveryStreamEncryptionStatus_ENABLED          DeliveryStreamEncryptionStatus = "ENABLED"
-	DeliveryStreamEncryptionStatus_ENABLING         DeliveryStreamEncryptionStatus = "ENABLING"
-	DeliveryStreamEncryptionStatus_ENABLING_FAILED  DeliveryStreamEncryptionStatus = "ENABLING_FAILED"
 	DeliveryStreamEncryptionStatus_DISABLED         DeliveryStreamEncryptionStatus = "DISABLED"
 	DeliveryStreamEncryptionStatus_DISABLING        DeliveryStreamEncryptionStatus = "DISABLING"
 	DeliveryStreamEncryptionStatus_DISABLING_FAILED DeliveryStreamEncryptionStatus = "DISABLING_FAILED"
+	DeliveryStreamEncryptionStatus_ENABLED          DeliveryStreamEncryptionStatus = "ENABLED"
+	DeliveryStreamEncryptionStatus_ENABLING         DeliveryStreamEncryptionStatus = "ENABLING"
+	DeliveryStreamEncryptionStatus_ENABLING_FAILED  DeliveryStreamEncryptionStatus = "ENABLING_FAILED"
 )
 
 type DeliveryStreamFailureType string
 
 const (
-	DeliveryStreamFailureType_RETIRE_KMS_GRANT_FAILED      DeliveryStreamFailureType = "RETIRE_KMS_GRANT_FAILED"
-	DeliveryStreamFailureType_CREATE_KMS_GRANT_FAILED      DeliveryStreamFailureType = "CREATE_KMS_GRANT_FAILED"
-	DeliveryStreamFailureType_KMS_ACCESS_DENIED            DeliveryStreamFailureType = "KMS_ACCESS_DENIED"
-	DeliveryStreamFailureType_DISABLED_KMS_KEY             DeliveryStreamFailureType = "DISABLED_KMS_KEY"
-	DeliveryStreamFailureType_INVALID_KMS_KEY              DeliveryStreamFailureType = "INVALID_KMS_KEY"
-	DeliveryStreamFailureType_KMS_KEY_NOT_FOUND            DeliveryStreamFailureType = "KMS_KEY_NOT_FOUND"
-	DeliveryStreamFailureType_KMS_OPT_IN_REQUIRED          DeliveryStreamFailureType = "KMS_OPT_IN_REQUIRED"
-	DeliveryStreamFailureType_CREATE_ENI_FAILED            DeliveryStreamFailureType = "CREATE_ENI_FAILED"
-	DeliveryStreamFailureType_DELETE_ENI_FAILED            DeliveryStreamFailureType = "DELETE_ENI_FAILED"
-	DeliveryStreamFailureType_SUBNET_NOT_FOUND             DeliveryStreamFailureType = "SUBNET_NOT_FOUND"
-	DeliveryStreamFailureType_SECURITY_GROUP_NOT_FOUND     DeliveryStreamFailureType = "SECURITY_GROUP_NOT_FOUND"
-	DeliveryStreamFailureType_ENI_ACCESS_DENIED            DeliveryStreamFailureType = "ENI_ACCESS_DENIED"
-	DeliveryStreamFailureType_SUBNET_ACCESS_DENIED         DeliveryStreamFailureType = "SUBNET_ACCESS_DENIED"
-	DeliveryStreamFailureType_SECURITY_GROUP_ACCESS_DENIED DeliveryStreamFailureType = "SECURITY_GROUP_ACCESS_DENIED"
-	DeliveryStreamFailureType_UNKNOWN_ERROR                DeliveryStreamFailureType = "UNKNOWN_ERROR"
+	DeliveryStreamFailureType_CREATE_ENI_FAILED                            DeliveryStreamFailureType = "CREATE_ENI_FAILED"
+	DeliveryStreamFailureType_CREATE_KMS_GRANT_FAILED                      DeliveryStreamFailureType = "CREATE_KMS_GRANT_FAILED"
+	DeliveryStreamFailureType_DELETE_ENI_FAILED                            DeliveryStreamFailureType = "DELETE_ENI_FAILED"
+	DeliveryStreamFailureType_DISABLED_KMS_KEY                             DeliveryStreamFailureType = "DISABLED_KMS_KEY"
+	DeliveryStreamFailureType_ENI_ACCESS_DENIED                            DeliveryStreamFailureType = "ENI_ACCESS_DENIED"
+	DeliveryStreamFailureType_INVALID_KMS_KEY                              DeliveryStreamFailureType = "INVALID_KMS_KEY"
+	DeliveryStreamFailureType_KMS_ACCESS_DENIED                            DeliveryStreamFailureType = "KMS_ACCESS_DENIED"
+	DeliveryStreamFailureType_KMS_KEY_NOT_FOUND                            DeliveryStreamFailureType = "KMS_KEY_NOT_FOUND"
+	DeliveryStreamFailureType_KMS_OPT_IN_REQUIRED                          DeliveryStreamFailureType = "KMS_OPT_IN_REQUIRED"
+	DeliveryStreamFailureType_RETIRE_KMS_GRANT_FAILED                      DeliveryStreamFailureType = "RETIRE_KMS_GRANT_FAILED"
+	DeliveryStreamFailureType_SECURITY_GROUP_ACCESS_DENIED                 DeliveryStreamFailureType = "SECURITY_GROUP_ACCESS_DENIED"
+	DeliveryStreamFailureType_SECURITY_GROUP_NOT_FOUND                     DeliveryStreamFailureType = "SECURITY_GROUP_NOT_FOUND"
+	DeliveryStreamFailureType_SUBNET_ACCESS_DENIED                         DeliveryStreamFailureType = "SUBNET_ACCESS_DENIED"
+	DeliveryStreamFailureType_SUBNET_NOT_FOUND                             DeliveryStreamFailureType = "SUBNET_NOT_FOUND"
+	DeliveryStreamFailureType_UNKNOWN_ERROR                                DeliveryStreamFailureType = "UNKNOWN_ERROR"
+	DeliveryStreamFailureType_VPC_ENDPOINT_SERVICE_NAME_NOT_FOUND          DeliveryStreamFailureType = "VPC_ENDPOINT_SERVICE_NAME_NOT_FOUND"
+	DeliveryStreamFailureType_VPC_INTERFACE_ENDPOINT_SERVICE_ACCESS_DENIED DeliveryStreamFailureType = "VPC_INTERFACE_ENDPOINT_SERVICE_ACCESS_DENIED"
 )
 
 type DeliveryStreamStatus string
 
 const (
+	DeliveryStreamStatus_ACTIVE          DeliveryStreamStatus = "ACTIVE"
 	DeliveryStreamStatus_CREATING        DeliveryStreamStatus = "CREATING"
 	DeliveryStreamStatus_CREATING_FAILED DeliveryStreamStatus = "CREATING_FAILED"
 	DeliveryStreamStatus_DELETING        DeliveryStreamStatus = "DELETING"
 	DeliveryStreamStatus_DELETING_FAILED DeliveryStreamStatus = "DELETING_FAILED"
-	DeliveryStreamStatus_ACTIVE          DeliveryStreamStatus = "ACTIVE"
 )
 
 type DeliveryStreamType string
 
 const (
+	DeliveryStreamType_DatabaseAsSource      DeliveryStreamType = "DatabaseAsSource"
 	DeliveryStreamType_DirectPut             DeliveryStreamType = "DirectPut"
 	DeliveryStreamType_KinesisStreamAsSource DeliveryStreamType = "KinesisStreamAsSource"
 	DeliveryStreamType_MSKAsSource           DeliveryStreamType = "MSKAsSource"
@@ -123,38 +133,38 @@ type ElasticsearchIndexRotationPeriod string
 
 const (
 	ElasticsearchIndexRotationPeriod_NoRotation ElasticsearchIndexRotationPeriod = "NoRotation"
-	ElasticsearchIndexRotationPeriod_OneHour    ElasticsearchIndexRotationPeriod = "OneHour"
 	ElasticsearchIndexRotationPeriod_OneDay     ElasticsearchIndexRotationPeriod = "OneDay"
-	ElasticsearchIndexRotationPeriod_OneWeek    ElasticsearchIndexRotationPeriod = "OneWeek"
+	ElasticsearchIndexRotationPeriod_OneHour    ElasticsearchIndexRotationPeriod = "OneHour"
 	ElasticsearchIndexRotationPeriod_OneMonth   ElasticsearchIndexRotationPeriod = "OneMonth"
+	ElasticsearchIndexRotationPeriod_OneWeek    ElasticsearchIndexRotationPeriod = "OneWeek"
 )
 
 type ElasticsearchS3BackupMode string
 
 const (
-	ElasticsearchS3BackupMode_FailedDocumentsOnly ElasticsearchS3BackupMode = "FailedDocumentsOnly"
 	ElasticsearchS3BackupMode_AllDocuments        ElasticsearchS3BackupMode = "AllDocuments"
+	ElasticsearchS3BackupMode_FailedDocumentsOnly ElasticsearchS3BackupMode = "FailedDocumentsOnly"
 )
 
 type HECEndpointType string
 
 const (
-	HECEndpointType_Raw   HECEndpointType = "Raw"
 	HECEndpointType_Event HECEndpointType = "Event"
+	HECEndpointType_Raw   HECEndpointType = "Raw"
 )
 
 type HTTPEndpointS3BackupMode string
 
 const (
-	HTTPEndpointS3BackupMode_FailedDataOnly HTTPEndpointS3BackupMode = "FailedDataOnly"
 	HTTPEndpointS3BackupMode_AllData        HTTPEndpointS3BackupMode = "AllData"
+	HTTPEndpointS3BackupMode_FailedDataOnly HTTPEndpointS3BackupMode = "FailedDataOnly"
 )
 
 type IcebergS3BackupMode string
 
 const (
-	IcebergS3BackupMode_FailedDataOnly IcebergS3BackupMode = "FailedDataOnly"
 	IcebergS3BackupMode_AllData        IcebergS3BackupMode = "AllData"
+	IcebergS3BackupMode_FailedDataOnly IcebergS3BackupMode = "FailedDataOnly"
 )
 
 type KeyType string
@@ -174,8 +184,8 @@ type OrcCompression string
 
 const (
 	OrcCompression_NONE   OrcCompression = "NONE"
-	OrcCompression_ZLIB   OrcCompression = "ZLIB"
 	OrcCompression_SNAPPY OrcCompression = "SNAPPY"
+	OrcCompression_ZLIB   OrcCompression = "ZLIB"
 )
 
 type OrcFormatVersion string
@@ -188,9 +198,9 @@ const (
 type ParquetCompression string
 
 const (
-	ParquetCompression_UNCOMPRESSED ParquetCompression = "UNCOMPRESSED"
 	ParquetCompression_GZIP         ParquetCompression = "GZIP"
 	ParquetCompression_SNAPPY       ParquetCompression = "SNAPPY"
+	ParquetCompression_UNCOMPRESSED ParquetCompression = "UNCOMPRESSED"
 )
 
 type ParquetWriterVersion string
@@ -203,28 +213,28 @@ const (
 type ProcessorParameterName string
 
 const (
-	ProcessorParameterName_LambdaArn               ProcessorParameterName = "LambdaArn"
-	ProcessorParameterName_NumberOfRetries         ProcessorParameterName = "NumberOfRetries"
-	ProcessorParameterName_MetadataExtractionQuery ProcessorParameterName = "MetadataExtractionQuery"
-	ProcessorParameterName_JsonParsingEngine       ProcessorParameterName = "JsonParsingEngine"
-	ProcessorParameterName_RoleArn                 ProcessorParameterName = "RoleArn"
-	ProcessorParameterName_BufferSizeInMBs         ProcessorParameterName = "BufferSizeInMBs"
 	ProcessorParameterName_BufferIntervalInSeconds ProcessorParameterName = "BufferIntervalInSeconds"
-	ProcessorParameterName_SubRecordType           ProcessorParameterName = "SubRecordType"
-	ProcessorParameterName_Delimiter               ProcessorParameterName = "Delimiter"
+	ProcessorParameterName_BufferSizeInMBs         ProcessorParameterName = "BufferSizeInMBs"
 	ProcessorParameterName_CompressionFormat       ProcessorParameterName = "CompressionFormat"
 	ProcessorParameterName_DataMessageExtraction   ProcessorParameterName = "DataMessageExtraction"
+	ProcessorParameterName_Delimiter               ProcessorParameterName = "Delimiter"
+	ProcessorParameterName_JsonParsingEngine       ProcessorParameterName = "JsonParsingEngine"
+	ProcessorParameterName_LambdaArn               ProcessorParameterName = "LambdaArn"
+	ProcessorParameterName_MetadataExtractionQuery ProcessorParameterName = "MetadataExtractionQuery"
+	ProcessorParameterName_NumberOfRetries         ProcessorParameterName = "NumberOfRetries"
+	ProcessorParameterName_RoleArn                 ProcessorParameterName = "RoleArn"
+	ProcessorParameterName_SubRecordType           ProcessorParameterName = "SubRecordType"
 )
 
 type ProcessorType string
 
 const (
-	ProcessorType_RecordDeAggregation     ProcessorType = "RecordDeAggregation"
-	ProcessorType_Decompression           ProcessorType = "Decompression"
+	ProcessorType_AppendDelimiterToRecord ProcessorType = "AppendDelimiterToRecord"
 	ProcessorType_CloudWatchLogProcessing ProcessorType = "CloudWatchLogProcessing"
+	ProcessorType_Decompression           ProcessorType = "Decompression"
 	ProcessorType_Lambda                  ProcessorType = "Lambda"
 	ProcessorType_MetadataExtraction      ProcessorType = "MetadataExtraction"
-	ProcessorType_AppendDelimiterToRecord ProcessorType = "AppendDelimiterToRecord"
+	ProcessorType_RecordDeAggregation     ProcessorType = "RecordDeAggregation"
 )
 
 type RedshiftS3BackupMode string
@@ -241,24 +251,46 @@ const (
 	S3BackupMode_Enabled  S3BackupMode = "Enabled"
 )
 
+type SSLMode string
+
+const (
+	SSLMode_Disabled SSLMode = "Disabled"
+	SSLMode_Enabled  SSLMode = "Enabled"
+)
+
+type SnapshotRequestedBy string
+
+const (
+	SnapshotRequestedBy_FIREHOSE SnapshotRequestedBy = "FIREHOSE"
+	SnapshotRequestedBy_USER     SnapshotRequestedBy = "USER"
+)
+
+type SnapshotStatus string
+
+const (
+	SnapshotStatus_COMPLETE    SnapshotStatus = "COMPLETE"
+	SnapshotStatus_IN_PROGRESS SnapshotStatus = "IN_PROGRESS"
+	SnapshotStatus_SUSPENDED   SnapshotStatus = "SUSPENDED"
+)
+
 type SnowflakeDataLoadingOption string
 
 const (
 	SnowflakeDataLoadingOption_JSON_MAPPING                         SnowflakeDataLoadingOption = "JSON_MAPPING"
-	SnowflakeDataLoadingOption_VARIANT_CONTENT_MAPPING              SnowflakeDataLoadingOption = "VARIANT_CONTENT_MAPPING"
 	SnowflakeDataLoadingOption_VARIANT_CONTENT_AND_METADATA_MAPPING SnowflakeDataLoadingOption = "VARIANT_CONTENT_AND_METADATA_MAPPING"
+	SnowflakeDataLoadingOption_VARIANT_CONTENT_MAPPING              SnowflakeDataLoadingOption = "VARIANT_CONTENT_MAPPING"
 )
 
 type SnowflakeS3BackupMode string
 
 const (
-	SnowflakeS3BackupMode_FailedDataOnly SnowflakeS3BackupMode = "FailedDataOnly"
 	SnowflakeS3BackupMode_AllData        SnowflakeS3BackupMode = "AllData"
+	SnowflakeS3BackupMode_FailedDataOnly SnowflakeS3BackupMode = "FailedDataOnly"
 )
 
 type SplunkS3BackupMode string
 
 const (
-	SplunkS3BackupMode_FailedEventsOnly SplunkS3BackupMode = "FailedEventsOnly"
 	SplunkS3BackupMode_AllEvents        SplunkS3BackupMode = "AllEvents"
+	SplunkS3BackupMode_FailedEventsOnly SplunkS3BackupMode = "FailedEventsOnly"
 )
