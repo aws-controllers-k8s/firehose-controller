@@ -91,6 +91,11 @@ func (rm *resourceManager) sdkFind(
 	// the original Kubernetes object we passed to the function
 	ko := r.ko.DeepCopy()
 
+	if resp.DeliveryStreamDescription.CreateTimestamp != nil {
+		ko.Status.CreateTimestamp = &metav1.Time{*resp.DeliveryStreamDescription.CreateTimestamp}
+	} else {
+		ko.Status.CreateTimestamp = nil
+	}
 	if ko.Status.ACKResourceMetadata == nil {
 		ko.Status.ACKResourceMetadata = &ackv1alpha1.ResourceMetadata{}
 	}
@@ -103,10 +108,25 @@ func (rm *resourceManager) sdkFind(
 	} else {
 		ko.Spec.DeliveryStreamName = nil
 	}
+	if resp.DeliveryStreamDescription.DeliveryStreamStatus != "" {
+		ko.Status.DeliveryStreamStatus = aws.String(string(resp.DeliveryStreamDescription.DeliveryStreamStatus))
+	} else {
+		ko.Status.DeliveryStreamStatus = nil
+	}
 	if resp.DeliveryStreamDescription.DeliveryStreamType != "" {
 		ko.Spec.DeliveryStreamType = aws.String(string(resp.DeliveryStreamDescription.DeliveryStreamType))
 	} else {
 		ko.Spec.DeliveryStreamType = nil
+	}
+	if resp.DeliveryStreamDescription.LastUpdateTimestamp != nil {
+		ko.Status.LastUpdateTimestamp = &metav1.Time{*resp.DeliveryStreamDescription.LastUpdateTimestamp}
+	} else {
+		ko.Status.LastUpdateTimestamp = nil
+	}
+	if resp.DeliveryStreamDescription.VersionId != nil {
+		ko.Status.VersionID = resp.DeliveryStreamDescription.VersionId
+	} else {
+		ko.Status.VersionID = nil
 	}
 
 	rm.setStatusDefaults(ko)
@@ -185,456 +205,15 @@ func (rm *resourceManager) newCreateRequestPayload(
 ) (*svcsdk.CreateDeliveryStreamInput, error) {
 	res := &svcsdk.CreateDeliveryStreamInput{}
 
-	if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration != nil {
-		f0 := &svcsdktypes.AmazonOpenSearchServerlessDestinationConfiguration{}
-		if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.BufferingHints != nil {
-			f0f0 := &svcsdktypes.AmazonOpenSearchServerlessBufferingHints{}
-			if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.BufferingHints.IntervalInSeconds != nil {
-				intervalInSecondsCopy0 := *r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.BufferingHints.IntervalInSeconds
-				if intervalInSecondsCopy0 > math.MaxInt32 || intervalInSecondsCopy0 < math.MinInt32 {
-					return nil, fmt.Errorf("error: field IntervalInSeconds is of type int32")
-				}
-				intervalInSecondsCopy := int32(intervalInSecondsCopy0)
-				f0f0.IntervalInSeconds = &intervalInSecondsCopy
-			}
-			if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.BufferingHints.SizeInMBs != nil {
-				sizeInMBsCopy0 := *r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.BufferingHints.SizeInMBs
-				if sizeInMBsCopy0 > math.MaxInt32 || sizeInMBsCopy0 < math.MinInt32 {
-					return nil, fmt.Errorf("error: field SizeInMBs is of type int32")
-				}
-				sizeInMBsCopy := int32(sizeInMBsCopy0)
-				f0f0.SizeInMBs = &sizeInMBsCopy
-			}
-			f0.BufferingHints = f0f0
-		}
-		if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.CloudWatchLoggingOptions != nil {
-			f0f1 := &svcsdktypes.CloudWatchLoggingOptions{}
-			if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.CloudWatchLoggingOptions.Enabled != nil {
-				f0f1.Enabled = r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.CloudWatchLoggingOptions.Enabled
-			}
-			if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName != nil {
-				f0f1.LogGroupName = r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName
-			}
-			if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName != nil {
-				f0f1.LogStreamName = r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName
-			}
-			f0.CloudWatchLoggingOptions = f0f1
-		}
-		if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.CollectionEndpoint != nil {
-			f0.CollectionEndpoint = r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.CollectionEndpoint
-		}
-		if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.IndexName != nil {
-			f0.IndexName = r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.IndexName
-		}
-		if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.ProcessingConfiguration != nil {
-			f0f4 := &svcsdktypes.ProcessingConfiguration{}
-			if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.ProcessingConfiguration.Enabled != nil {
-				f0f4.Enabled = r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.ProcessingConfiguration.Enabled
-			}
-			if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.ProcessingConfiguration.Processors != nil {
-				f0f4f1 := []svcsdktypes.Processor{}
-				for _, f0f4f1iter := range r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.ProcessingConfiguration.Processors {
-					f0f4f1elem := &svcsdktypes.Processor{}
-					if f0f4f1iter.Parameters != nil {
-						f0f4f1elemf0 := []svcsdktypes.ProcessorParameter{}
-						for _, f0f4f1elemf0iter := range f0f4f1iter.Parameters {
-							f0f4f1elemf0elem := &svcsdktypes.ProcessorParameter{}
-							if f0f4f1elemf0iter.ParameterName != nil {
-								f0f4f1elemf0elem.ParameterName = svcsdktypes.ProcessorParameterName(*f0f4f1elemf0iter.ParameterName)
-							}
-							if f0f4f1elemf0iter.ParameterValue != nil {
-								f0f4f1elemf0elem.ParameterValue = f0f4f1elemf0iter.ParameterValue
-							}
-							f0f4f1elemf0 = append(f0f4f1elemf0, *f0f4f1elemf0elem)
-						}
-						f0f4f1elem.Parameters = f0f4f1elemf0
-					}
-					if f0f4f1iter.Type != nil {
-						f0f4f1elem.Type = svcsdktypes.ProcessorType(*f0f4f1iter.Type)
-					}
-					f0f4f1 = append(f0f4f1, *f0f4f1elem)
-				}
-				f0f4.Processors = f0f4f1
-			}
-			f0.ProcessingConfiguration = f0f4
-		}
-		if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.RetryOptions != nil {
-			f0f5 := &svcsdktypes.AmazonOpenSearchServerlessRetryOptions{}
-			if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.RetryOptions.DurationInSeconds != nil {
-				durationInSecondsCopy0 := *r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.RetryOptions.DurationInSeconds
-				if durationInSecondsCopy0 > math.MaxInt32 || durationInSecondsCopy0 < math.MinInt32 {
-					return nil, fmt.Errorf("error: field DurationInSeconds is of type int32")
-				}
-				durationInSecondsCopy := int32(durationInSecondsCopy0)
-				f0f5.DurationInSeconds = &durationInSecondsCopy
-			}
-			f0.RetryOptions = f0f5
-		}
-		if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.RoleARN != nil {
-			f0.RoleARN = r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.RoleARN
-		}
-		if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3BackupMode != nil {
-			f0.S3BackupMode = svcsdktypes.AmazonOpenSearchServerlessS3BackupMode(*r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3BackupMode)
-		}
-		if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration != nil {
-			f0f8 := &svcsdktypes.S3DestinationConfiguration{}
-			if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration.BucketARN != nil {
-				f0f8.BucketARN = r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration.BucketARN
-			}
-			if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration.BufferingHints != nil {
-				f0f8f1 := &svcsdktypes.BufferingHints{}
-				if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds != nil {
-					intervalInSecondsCopy0 := *r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds
-					if intervalInSecondsCopy0 > math.MaxInt32 || intervalInSecondsCopy0 < math.MinInt32 {
-						return nil, fmt.Errorf("error: field IntervalInSeconds is of type int32")
-					}
-					intervalInSecondsCopy := int32(intervalInSecondsCopy0)
-					f0f8f1.IntervalInSeconds = &intervalInSecondsCopy
-				}
-				if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs != nil {
-					sizeInMBsCopy0 := *r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs
-					if sizeInMBsCopy0 > math.MaxInt32 || sizeInMBsCopy0 < math.MinInt32 {
-						return nil, fmt.Errorf("error: field SizeInMBs is of type int32")
-					}
-					sizeInMBsCopy := int32(sizeInMBsCopy0)
-					f0f8f1.SizeInMBs = &sizeInMBsCopy
-				}
-				f0f8.BufferingHints = f0f8f1
-			}
-			if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions != nil {
-				f0f8f2 := &svcsdktypes.CloudWatchLoggingOptions{}
-				if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled != nil {
-					f0f8f2.Enabled = r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled
-				}
-				if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName != nil {
-					f0f8f2.LogGroupName = r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName
-				}
-				if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName != nil {
-					f0f8f2.LogStreamName = r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName
-				}
-				f0f8.CloudWatchLoggingOptions = f0f8f2
-			}
-			if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration.CompressionFormat != nil {
-				f0f8.CompressionFormat = svcsdktypes.CompressionFormat(*r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration.CompressionFormat)
-			}
-			if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration.EncryptionConfiguration != nil {
-				f0f8f4 := &svcsdktypes.EncryptionConfiguration{}
-				if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig != nil {
-					f0f8f4f0 := &svcsdktypes.KMSEncryptionConfig{}
-					if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN != nil {
-						f0f8f4f0.AWSKMSKeyARN = r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN
-					}
-					f0f8f4.KMSEncryptionConfig = f0f8f4f0
-				}
-				if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig != nil {
-					f0f8f4.NoEncryptionConfig = svcsdktypes.NoEncryptionConfig(*r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig)
-				}
-				f0f8.EncryptionConfiguration = f0f8f4
-			}
-			if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration.ErrorOutputPrefix != nil {
-				f0f8.ErrorOutputPrefix = r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration.ErrorOutputPrefix
-			}
-			if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration.Prefix != nil {
-				f0f8.Prefix = r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration.Prefix
-			}
-			if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration.RoleARN != nil {
-				f0f8.RoleARN = r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.S3Configuration.RoleARN
-			}
-			f0.S3Configuration = f0f8
-		}
-		if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.VPCConfiguration != nil {
-			f0f9 := &svcsdktypes.VpcConfiguration{}
-			if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.VPCConfiguration.RoleARN != nil {
-				f0f9.RoleARN = r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.VPCConfiguration.RoleARN
-			}
-			if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.VPCConfiguration.SecurityGroupIDs != nil {
-				f0f9.SecurityGroupIds = aws.ToStringSlice(r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.VPCConfiguration.SecurityGroupIDs)
-			}
-			if r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.VPCConfiguration.SubnetIDs != nil {
-				f0f9.SubnetIds = aws.ToStringSlice(r.ko.Spec.AmazonOpenSearchServerlessDestinationConfiguration.VPCConfiguration.SubnetIDs)
-			}
-			f0.VpcConfiguration = f0f9
-		}
-		res.AmazonOpenSearchServerlessDestinationConfiguration = f0
-	}
-	if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration != nil {
-		f1 := &svcsdktypes.AmazonopensearchserviceDestinationConfiguration{}
-		if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.BufferingHints != nil {
-			f1f0 := &svcsdktypes.AmazonopensearchserviceBufferingHints{}
-			if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.BufferingHints.IntervalInSeconds != nil {
-				intervalInSecondsCopy0 := *r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.BufferingHints.IntervalInSeconds
-				if intervalInSecondsCopy0 > math.MaxInt32 || intervalInSecondsCopy0 < math.MinInt32 {
-					return nil, fmt.Errorf("error: field IntervalInSeconds is of type int32")
-				}
-				intervalInSecondsCopy := int32(intervalInSecondsCopy0)
-				f1f0.IntervalInSeconds = &intervalInSecondsCopy
-			}
-			if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.BufferingHints.SizeInMBs != nil {
-				sizeInMBsCopy0 := *r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.BufferingHints.SizeInMBs
-				if sizeInMBsCopy0 > math.MaxInt32 || sizeInMBsCopy0 < math.MinInt32 {
-					return nil, fmt.Errorf("error: field SizeInMBs is of type int32")
-				}
-				sizeInMBsCopy := int32(sizeInMBsCopy0)
-				f1f0.SizeInMBs = &sizeInMBsCopy
-			}
-			f1.BufferingHints = f1f0
-		}
-		if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.CloudWatchLoggingOptions != nil {
-			f1f1 := &svcsdktypes.CloudWatchLoggingOptions{}
-			if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.CloudWatchLoggingOptions.Enabled != nil {
-				f1f1.Enabled = r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.CloudWatchLoggingOptions.Enabled
-			}
-			if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName != nil {
-				f1f1.LogGroupName = r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName
-			}
-			if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName != nil {
-				f1f1.LogStreamName = r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName
-			}
-			f1.CloudWatchLoggingOptions = f1f1
-		}
-		if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.ClusterEndpoint != nil {
-			f1.ClusterEndpoint = r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.ClusterEndpoint
-		}
-		if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.DocumentIDOptions != nil {
-			f1f3 := &svcsdktypes.DocumentIdOptions{}
-			if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.DocumentIDOptions.DefaultDocumentIDFormat != nil {
-				f1f3.DefaultDocumentIdFormat = svcsdktypes.DefaultDocumentIdFormat(*r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.DocumentIDOptions.DefaultDocumentIDFormat)
-			}
-			f1.DocumentIdOptions = f1f3
-		}
-		if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.DomainARN != nil {
-			f1.DomainARN = r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.DomainARN
-		}
-		if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.IndexName != nil {
-			f1.IndexName = r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.IndexName
-		}
-		if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.IndexRotationPeriod != nil {
-			f1.IndexRotationPeriod = svcsdktypes.AmazonopensearchserviceIndexRotationPeriod(*r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.IndexRotationPeriod)
-		}
-		if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.ProcessingConfiguration != nil {
-			f1f7 := &svcsdktypes.ProcessingConfiguration{}
-			if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.ProcessingConfiguration.Enabled != nil {
-				f1f7.Enabled = r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.ProcessingConfiguration.Enabled
-			}
-			if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.ProcessingConfiguration.Processors != nil {
-				f1f7f1 := []svcsdktypes.Processor{}
-				for _, f1f7f1iter := range r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.ProcessingConfiguration.Processors {
-					f1f7f1elem := &svcsdktypes.Processor{}
-					if f1f7f1iter.Parameters != nil {
-						f1f7f1elemf0 := []svcsdktypes.ProcessorParameter{}
-						for _, f1f7f1elemf0iter := range f1f7f1iter.Parameters {
-							f1f7f1elemf0elem := &svcsdktypes.ProcessorParameter{}
-							if f1f7f1elemf0iter.ParameterName != nil {
-								f1f7f1elemf0elem.ParameterName = svcsdktypes.ProcessorParameterName(*f1f7f1elemf0iter.ParameterName)
-							}
-							if f1f7f1elemf0iter.ParameterValue != nil {
-								f1f7f1elemf0elem.ParameterValue = f1f7f1elemf0iter.ParameterValue
-							}
-							f1f7f1elemf0 = append(f1f7f1elemf0, *f1f7f1elemf0elem)
-						}
-						f1f7f1elem.Parameters = f1f7f1elemf0
-					}
-					if f1f7f1iter.Type != nil {
-						f1f7f1elem.Type = svcsdktypes.ProcessorType(*f1f7f1iter.Type)
-					}
-					f1f7f1 = append(f1f7f1, *f1f7f1elem)
-				}
-				f1f7.Processors = f1f7f1
-			}
-			f1.ProcessingConfiguration = f1f7
-		}
-		if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.RetryOptions != nil {
-			f1f8 := &svcsdktypes.AmazonopensearchserviceRetryOptions{}
-			if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.RetryOptions.DurationInSeconds != nil {
-				durationInSecondsCopy0 := *r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.RetryOptions.DurationInSeconds
-				if durationInSecondsCopy0 > math.MaxInt32 || durationInSecondsCopy0 < math.MinInt32 {
-					return nil, fmt.Errorf("error: field DurationInSeconds is of type int32")
-				}
-				durationInSecondsCopy := int32(durationInSecondsCopy0)
-				f1f8.DurationInSeconds = &durationInSecondsCopy
-			}
-			f1.RetryOptions = f1f8
-		}
-		if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.RoleARN != nil {
-			f1.RoleARN = r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.RoleARN
-		}
-		if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3BackupMode != nil {
-			f1.S3BackupMode = svcsdktypes.AmazonopensearchserviceS3BackupMode(*r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3BackupMode)
-		}
-		if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration != nil {
-			f1f11 := &svcsdktypes.S3DestinationConfiguration{}
-			if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration.BucketARN != nil {
-				f1f11.BucketARN = r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration.BucketARN
-			}
-			if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration.BufferingHints != nil {
-				f1f11f1 := &svcsdktypes.BufferingHints{}
-				if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds != nil {
-					intervalInSecondsCopy0 := *r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds
-					if intervalInSecondsCopy0 > math.MaxInt32 || intervalInSecondsCopy0 < math.MinInt32 {
-						return nil, fmt.Errorf("error: field IntervalInSeconds is of type int32")
-					}
-					intervalInSecondsCopy := int32(intervalInSecondsCopy0)
-					f1f11f1.IntervalInSeconds = &intervalInSecondsCopy
-				}
-				if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs != nil {
-					sizeInMBsCopy0 := *r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs
-					if sizeInMBsCopy0 > math.MaxInt32 || sizeInMBsCopy0 < math.MinInt32 {
-						return nil, fmt.Errorf("error: field SizeInMBs is of type int32")
-					}
-					sizeInMBsCopy := int32(sizeInMBsCopy0)
-					f1f11f1.SizeInMBs = &sizeInMBsCopy
-				}
-				f1f11.BufferingHints = f1f11f1
-			}
-			if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions != nil {
-				f1f11f2 := &svcsdktypes.CloudWatchLoggingOptions{}
-				if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled != nil {
-					f1f11f2.Enabled = r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled
-				}
-				if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName != nil {
-					f1f11f2.LogGroupName = r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName
-				}
-				if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName != nil {
-					f1f11f2.LogStreamName = r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName
-				}
-				f1f11.CloudWatchLoggingOptions = f1f11f2
-			}
-			if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration.CompressionFormat != nil {
-				f1f11.CompressionFormat = svcsdktypes.CompressionFormat(*r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration.CompressionFormat)
-			}
-			if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration.EncryptionConfiguration != nil {
-				f1f11f4 := &svcsdktypes.EncryptionConfiguration{}
-				if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig != nil {
-					f1f11f4f0 := &svcsdktypes.KMSEncryptionConfig{}
-					if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN != nil {
-						f1f11f4f0.AWSKMSKeyARN = r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN
-					}
-					f1f11f4.KMSEncryptionConfig = f1f11f4f0
-				}
-				if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig != nil {
-					f1f11f4.NoEncryptionConfig = svcsdktypes.NoEncryptionConfig(*r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig)
-				}
-				f1f11.EncryptionConfiguration = f1f11f4
-			}
-			if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration.ErrorOutputPrefix != nil {
-				f1f11.ErrorOutputPrefix = r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration.ErrorOutputPrefix
-			}
-			if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration.Prefix != nil {
-				f1f11.Prefix = r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration.Prefix
-			}
-			if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration.RoleARN != nil {
-				f1f11.RoleARN = r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.S3Configuration.RoleARN
-			}
-			f1.S3Configuration = f1f11
-		}
-		if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.TypeName != nil {
-			f1.TypeName = r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.TypeName
-		}
-		if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.VPCConfiguration != nil {
-			f1f13 := &svcsdktypes.VpcConfiguration{}
-			if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.VPCConfiguration.RoleARN != nil {
-				f1f13.RoleARN = r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.VPCConfiguration.RoleARN
-			}
-			if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.VPCConfiguration.SecurityGroupIDs != nil {
-				f1f13.SecurityGroupIds = aws.ToStringSlice(r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.VPCConfiguration.SecurityGroupIDs)
-			}
-			if r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.VPCConfiguration.SubnetIDs != nil {
-				f1f13.SubnetIds = aws.ToStringSlice(r.ko.Spec.AmazonopensearchserviceDestinationConfiguration.VPCConfiguration.SubnetIDs)
-			}
-			f1.VpcConfiguration = f1f13
-		}
-		res.AmazonopensearchserviceDestinationConfiguration = f1
-	}
-	if r.ko.Spec.DatabaseSourceConfiguration != nil {
-		f2 := &svcsdktypes.DatabaseSourceConfiguration{}
-		if r.ko.Spec.DatabaseSourceConfiguration.Columns != nil {
-			f2f0 := &svcsdktypes.DatabaseColumnList{}
-			if r.ko.Spec.DatabaseSourceConfiguration.Columns.Exclude != nil {
-				f2f0.Exclude = aws.ToStringSlice(r.ko.Spec.DatabaseSourceConfiguration.Columns.Exclude)
-			}
-			if r.ko.Spec.DatabaseSourceConfiguration.Columns.Include != nil {
-				f2f0.Include = aws.ToStringSlice(r.ko.Spec.DatabaseSourceConfiguration.Columns.Include)
-			}
-			f2.Columns = f2f0
-		}
-		if r.ko.Spec.DatabaseSourceConfiguration.DatabaseSourceAuthenticationConfiguration != nil {
-			f2f1 := &svcsdktypes.DatabaseSourceAuthenticationConfiguration{}
-			if r.ko.Spec.DatabaseSourceConfiguration.DatabaseSourceAuthenticationConfiguration.SecretsManagerConfiguration != nil {
-				f2f1f0 := &svcsdktypes.SecretsManagerConfiguration{}
-				if r.ko.Spec.DatabaseSourceConfiguration.DatabaseSourceAuthenticationConfiguration.SecretsManagerConfiguration.Enabled != nil {
-					f2f1f0.Enabled = r.ko.Spec.DatabaseSourceConfiguration.DatabaseSourceAuthenticationConfiguration.SecretsManagerConfiguration.Enabled
-				}
-				if r.ko.Spec.DatabaseSourceConfiguration.DatabaseSourceAuthenticationConfiguration.SecretsManagerConfiguration.RoleARN != nil {
-					f2f1f0.RoleARN = r.ko.Spec.DatabaseSourceConfiguration.DatabaseSourceAuthenticationConfiguration.SecretsManagerConfiguration.RoleARN
-				}
-				if r.ko.Spec.DatabaseSourceConfiguration.DatabaseSourceAuthenticationConfiguration.SecretsManagerConfiguration.SecretARN != nil {
-					f2f1f0.SecretARN = r.ko.Spec.DatabaseSourceConfiguration.DatabaseSourceAuthenticationConfiguration.SecretsManagerConfiguration.SecretARN
-				}
-				f2f1.SecretsManagerConfiguration = f2f1f0
-			}
-			f2.DatabaseSourceAuthenticationConfiguration = f2f1
-		}
-		if r.ko.Spec.DatabaseSourceConfiguration.DatabaseSourceVPCConfiguration != nil {
-			f2f2 := &svcsdktypes.DatabaseSourceVPCConfiguration{}
-			if r.ko.Spec.DatabaseSourceConfiguration.DatabaseSourceVPCConfiguration.VPCEndpointServiceName != nil {
-				f2f2.VpcEndpointServiceName = r.ko.Spec.DatabaseSourceConfiguration.DatabaseSourceVPCConfiguration.VPCEndpointServiceName
-			}
-			f2.DatabaseSourceVPCConfiguration = f2f2
-		}
-		if r.ko.Spec.DatabaseSourceConfiguration.Databases != nil {
-			f2f3 := &svcsdktypes.DatabaseList{}
-			if r.ko.Spec.DatabaseSourceConfiguration.Databases.Exclude != nil {
-				f2f3.Exclude = aws.ToStringSlice(r.ko.Spec.DatabaseSourceConfiguration.Databases.Exclude)
-			}
-			if r.ko.Spec.DatabaseSourceConfiguration.Databases.Include != nil {
-				f2f3.Include = aws.ToStringSlice(r.ko.Spec.DatabaseSourceConfiguration.Databases.Include)
-			}
-			f2.Databases = f2f3
-		}
-		if r.ko.Spec.DatabaseSourceConfiguration.Endpoint != nil {
-			f2.Endpoint = r.ko.Spec.DatabaseSourceConfiguration.Endpoint
-		}
-		if r.ko.Spec.DatabaseSourceConfiguration.Port != nil {
-			portCopy0 := *r.ko.Spec.DatabaseSourceConfiguration.Port
-			if portCopy0 > math.MaxInt32 || portCopy0 < math.MinInt32 {
-				return nil, fmt.Errorf("error: field Port is of type int32")
-			}
-			portCopy := int32(portCopy0)
-			f2.Port = &portCopy
-		}
-		if r.ko.Spec.DatabaseSourceConfiguration.SSLMode != nil {
-			f2.SSLMode = svcsdktypes.SSLMode(*r.ko.Spec.DatabaseSourceConfiguration.SSLMode)
-		}
-		if r.ko.Spec.DatabaseSourceConfiguration.SnapshotWatermarkTable != nil {
-			f2.SnapshotWatermarkTable = r.ko.Spec.DatabaseSourceConfiguration.SnapshotWatermarkTable
-		}
-		if r.ko.Spec.DatabaseSourceConfiguration.SurrogateKeys != nil {
-			f2.SurrogateKeys = aws.ToStringSlice(r.ko.Spec.DatabaseSourceConfiguration.SurrogateKeys)
-		}
-		if r.ko.Spec.DatabaseSourceConfiguration.Tables != nil {
-			f2f9 := &svcsdktypes.DatabaseTableList{}
-			if r.ko.Spec.DatabaseSourceConfiguration.Tables.Exclude != nil {
-				f2f9.Exclude = aws.ToStringSlice(r.ko.Spec.DatabaseSourceConfiguration.Tables.Exclude)
-			}
-			if r.ko.Spec.DatabaseSourceConfiguration.Tables.Include != nil {
-				f2f9.Include = aws.ToStringSlice(r.ko.Spec.DatabaseSourceConfiguration.Tables.Include)
-			}
-			f2.Tables = f2f9
-		}
-		if r.ko.Spec.DatabaseSourceConfiguration.Type != nil {
-			f2.Type = svcsdktypes.DatabaseType(*r.ko.Spec.DatabaseSourceConfiguration.Type)
-		}
-		res.DatabaseSourceConfiguration = f2
-	}
 	if r.ko.Spec.DeliveryStreamEncryptionConfigurationInput != nil {
-		f3 := &svcsdktypes.DeliveryStreamEncryptionConfigurationInput{}
+		f0 := &svcsdktypes.DeliveryStreamEncryptionConfigurationInput{}
 		if r.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyARN != nil {
-			f3.KeyARN = r.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyARN
+			f0.KeyARN = r.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyARN
 		}
 		if r.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyType != nil {
-			f3.KeyType = svcsdktypes.KeyType(*r.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyType)
+			f0.KeyType = svcsdktypes.KeyType(*r.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyType)
 		}
-		res.DeliveryStreamEncryptionConfigurationInput = f3
+		res.DeliveryStreamEncryptionConfigurationInput = f0
 	}
 	if r.ko.Spec.DeliveryStreamName != nil {
 		res.DeliveryStreamName = r.ko.Spec.DeliveryStreamName
@@ -642,560 +221,17 @@ func (rm *resourceManager) newCreateRequestPayload(
 	if r.ko.Spec.DeliveryStreamType != nil {
 		res.DeliveryStreamType = svcsdktypes.DeliveryStreamType(*r.ko.Spec.DeliveryStreamType)
 	}
-	if r.ko.Spec.DirectPutSourceConfiguration != nil {
-		f6 := &svcsdktypes.DirectPutSourceConfiguration{}
-		if r.ko.Spec.DirectPutSourceConfiguration.ThroughputHintInMBs != nil {
-			throughputHintInMBsCopy0 := *r.ko.Spec.DirectPutSourceConfiguration.ThroughputHintInMBs
-			if throughputHintInMBsCopy0 > math.MaxInt32 || throughputHintInMBsCopy0 < math.MinInt32 {
-				return nil, fmt.Errorf("error: field ThroughputHintInMBs is of type int32")
-			}
-			throughputHintInMBsCopy := int32(throughputHintInMBsCopy0)
-			f6.ThroughputHintInMBs = &throughputHintInMBsCopy
-		}
-		res.DirectPutSourceConfiguration = f6
-	}
-	if r.ko.Spec.ElasticsearchDestinationConfiguration != nil {
-		f7 := &svcsdktypes.ElasticsearchDestinationConfiguration{}
-		if r.ko.Spec.ElasticsearchDestinationConfiguration.BufferingHints != nil {
-			f7f0 := &svcsdktypes.ElasticsearchBufferingHints{}
-			if r.ko.Spec.ElasticsearchDestinationConfiguration.BufferingHints.IntervalInSeconds != nil {
-				intervalInSecondsCopy0 := *r.ko.Spec.ElasticsearchDestinationConfiguration.BufferingHints.IntervalInSeconds
-				if intervalInSecondsCopy0 > math.MaxInt32 || intervalInSecondsCopy0 < math.MinInt32 {
-					return nil, fmt.Errorf("error: field IntervalInSeconds is of type int32")
-				}
-				intervalInSecondsCopy := int32(intervalInSecondsCopy0)
-				f7f0.IntervalInSeconds = &intervalInSecondsCopy
-			}
-			if r.ko.Spec.ElasticsearchDestinationConfiguration.BufferingHints.SizeInMBs != nil {
-				sizeInMBsCopy0 := *r.ko.Spec.ElasticsearchDestinationConfiguration.BufferingHints.SizeInMBs
-				if sizeInMBsCopy0 > math.MaxInt32 || sizeInMBsCopy0 < math.MinInt32 {
-					return nil, fmt.Errorf("error: field SizeInMBs is of type int32")
-				}
-				sizeInMBsCopy := int32(sizeInMBsCopy0)
-				f7f0.SizeInMBs = &sizeInMBsCopy
-			}
-			f7.BufferingHints = f7f0
-		}
-		if r.ko.Spec.ElasticsearchDestinationConfiguration.CloudWatchLoggingOptions != nil {
-			f7f1 := &svcsdktypes.CloudWatchLoggingOptions{}
-			if r.ko.Spec.ElasticsearchDestinationConfiguration.CloudWatchLoggingOptions.Enabled != nil {
-				f7f1.Enabled = r.ko.Spec.ElasticsearchDestinationConfiguration.CloudWatchLoggingOptions.Enabled
-			}
-			if r.ko.Spec.ElasticsearchDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName != nil {
-				f7f1.LogGroupName = r.ko.Spec.ElasticsearchDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName
-			}
-			if r.ko.Spec.ElasticsearchDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName != nil {
-				f7f1.LogStreamName = r.ko.Spec.ElasticsearchDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName
-			}
-			f7.CloudWatchLoggingOptions = f7f1
-		}
-		if r.ko.Spec.ElasticsearchDestinationConfiguration.ClusterEndpoint != nil {
-			f7.ClusterEndpoint = r.ko.Spec.ElasticsearchDestinationConfiguration.ClusterEndpoint
-		}
-		if r.ko.Spec.ElasticsearchDestinationConfiguration.DocumentIDOptions != nil {
-			f7f3 := &svcsdktypes.DocumentIdOptions{}
-			if r.ko.Spec.ElasticsearchDestinationConfiguration.DocumentIDOptions.DefaultDocumentIDFormat != nil {
-				f7f3.DefaultDocumentIdFormat = svcsdktypes.DefaultDocumentIdFormat(*r.ko.Spec.ElasticsearchDestinationConfiguration.DocumentIDOptions.DefaultDocumentIDFormat)
-			}
-			f7.DocumentIdOptions = f7f3
-		}
-		if r.ko.Spec.ElasticsearchDestinationConfiguration.DomainARN != nil {
-			f7.DomainARN = r.ko.Spec.ElasticsearchDestinationConfiguration.DomainARN
-		}
-		if r.ko.Spec.ElasticsearchDestinationConfiguration.IndexName != nil {
-			f7.IndexName = r.ko.Spec.ElasticsearchDestinationConfiguration.IndexName
-		}
-		if r.ko.Spec.ElasticsearchDestinationConfiguration.IndexRotationPeriod != nil {
-			f7.IndexRotationPeriod = svcsdktypes.ElasticsearchIndexRotationPeriod(*r.ko.Spec.ElasticsearchDestinationConfiguration.IndexRotationPeriod)
-		}
-		if r.ko.Spec.ElasticsearchDestinationConfiguration.ProcessingConfiguration != nil {
-			f7f7 := &svcsdktypes.ProcessingConfiguration{}
-			if r.ko.Spec.ElasticsearchDestinationConfiguration.ProcessingConfiguration.Enabled != nil {
-				f7f7.Enabled = r.ko.Spec.ElasticsearchDestinationConfiguration.ProcessingConfiguration.Enabled
-			}
-			if r.ko.Spec.ElasticsearchDestinationConfiguration.ProcessingConfiguration.Processors != nil {
-				f7f7f1 := []svcsdktypes.Processor{}
-				for _, f7f7f1iter := range r.ko.Spec.ElasticsearchDestinationConfiguration.ProcessingConfiguration.Processors {
-					f7f7f1elem := &svcsdktypes.Processor{}
-					if f7f7f1iter.Parameters != nil {
-						f7f7f1elemf0 := []svcsdktypes.ProcessorParameter{}
-						for _, f7f7f1elemf0iter := range f7f7f1iter.Parameters {
-							f7f7f1elemf0elem := &svcsdktypes.ProcessorParameter{}
-							if f7f7f1elemf0iter.ParameterName != nil {
-								f7f7f1elemf0elem.ParameterName = svcsdktypes.ProcessorParameterName(*f7f7f1elemf0iter.ParameterName)
-							}
-							if f7f7f1elemf0iter.ParameterValue != nil {
-								f7f7f1elemf0elem.ParameterValue = f7f7f1elemf0iter.ParameterValue
-							}
-							f7f7f1elemf0 = append(f7f7f1elemf0, *f7f7f1elemf0elem)
-						}
-						f7f7f1elem.Parameters = f7f7f1elemf0
-					}
-					if f7f7f1iter.Type != nil {
-						f7f7f1elem.Type = svcsdktypes.ProcessorType(*f7f7f1iter.Type)
-					}
-					f7f7f1 = append(f7f7f1, *f7f7f1elem)
-				}
-				f7f7.Processors = f7f7f1
-			}
-			f7.ProcessingConfiguration = f7f7
-		}
-		if r.ko.Spec.ElasticsearchDestinationConfiguration.RetryOptions != nil {
-			f7f8 := &svcsdktypes.ElasticsearchRetryOptions{}
-			if r.ko.Spec.ElasticsearchDestinationConfiguration.RetryOptions.DurationInSeconds != nil {
-				durationInSecondsCopy0 := *r.ko.Spec.ElasticsearchDestinationConfiguration.RetryOptions.DurationInSeconds
-				if durationInSecondsCopy0 > math.MaxInt32 || durationInSecondsCopy0 < math.MinInt32 {
-					return nil, fmt.Errorf("error: field DurationInSeconds is of type int32")
-				}
-				durationInSecondsCopy := int32(durationInSecondsCopy0)
-				f7f8.DurationInSeconds = &durationInSecondsCopy
-			}
-			f7.RetryOptions = f7f8
-		}
-		if r.ko.Spec.ElasticsearchDestinationConfiguration.RoleARN != nil {
-			f7.RoleARN = r.ko.Spec.ElasticsearchDestinationConfiguration.RoleARN
-		}
-		if r.ko.Spec.ElasticsearchDestinationConfiguration.S3BackupMode != nil {
-			f7.S3BackupMode = svcsdktypes.ElasticsearchS3BackupMode(*r.ko.Spec.ElasticsearchDestinationConfiguration.S3BackupMode)
-		}
-		if r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration != nil {
-			f7f11 := &svcsdktypes.S3DestinationConfiguration{}
-			if r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration.BucketARN != nil {
-				f7f11.BucketARN = r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration.BucketARN
-			}
-			if r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration.BufferingHints != nil {
-				f7f11f1 := &svcsdktypes.BufferingHints{}
-				if r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds != nil {
-					intervalInSecondsCopy0 := *r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds
-					if intervalInSecondsCopy0 > math.MaxInt32 || intervalInSecondsCopy0 < math.MinInt32 {
-						return nil, fmt.Errorf("error: field IntervalInSeconds is of type int32")
-					}
-					intervalInSecondsCopy := int32(intervalInSecondsCopy0)
-					f7f11f1.IntervalInSeconds = &intervalInSecondsCopy
-				}
-				if r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs != nil {
-					sizeInMBsCopy0 := *r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs
-					if sizeInMBsCopy0 > math.MaxInt32 || sizeInMBsCopy0 < math.MinInt32 {
-						return nil, fmt.Errorf("error: field SizeInMBs is of type int32")
-					}
-					sizeInMBsCopy := int32(sizeInMBsCopy0)
-					f7f11f1.SizeInMBs = &sizeInMBsCopy
-				}
-				f7f11.BufferingHints = f7f11f1
-			}
-			if r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions != nil {
-				f7f11f2 := &svcsdktypes.CloudWatchLoggingOptions{}
-				if r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled != nil {
-					f7f11f2.Enabled = r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled
-				}
-				if r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName != nil {
-					f7f11f2.LogGroupName = r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName
-				}
-				if r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName != nil {
-					f7f11f2.LogStreamName = r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName
-				}
-				f7f11.CloudWatchLoggingOptions = f7f11f2
-			}
-			if r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration.CompressionFormat != nil {
-				f7f11.CompressionFormat = svcsdktypes.CompressionFormat(*r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration.CompressionFormat)
-			}
-			if r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration.EncryptionConfiguration != nil {
-				f7f11f4 := &svcsdktypes.EncryptionConfiguration{}
-				if r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig != nil {
-					f7f11f4f0 := &svcsdktypes.KMSEncryptionConfig{}
-					if r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN != nil {
-						f7f11f4f0.AWSKMSKeyARN = r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN
-					}
-					f7f11f4.KMSEncryptionConfig = f7f11f4f0
-				}
-				if r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig != nil {
-					f7f11f4.NoEncryptionConfig = svcsdktypes.NoEncryptionConfig(*r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig)
-				}
-				f7f11.EncryptionConfiguration = f7f11f4
-			}
-			if r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration.ErrorOutputPrefix != nil {
-				f7f11.ErrorOutputPrefix = r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration.ErrorOutputPrefix
-			}
-			if r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration.Prefix != nil {
-				f7f11.Prefix = r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration.Prefix
-			}
-			if r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration.RoleARN != nil {
-				f7f11.RoleARN = r.ko.Spec.ElasticsearchDestinationConfiguration.S3Configuration.RoleARN
-			}
-			f7.S3Configuration = f7f11
-		}
-		if r.ko.Spec.ElasticsearchDestinationConfiguration.TypeName != nil {
-			f7.TypeName = r.ko.Spec.ElasticsearchDestinationConfiguration.TypeName
-		}
-		if r.ko.Spec.ElasticsearchDestinationConfiguration.VPCConfiguration != nil {
-			f7f13 := &svcsdktypes.VpcConfiguration{}
-			if r.ko.Spec.ElasticsearchDestinationConfiguration.VPCConfiguration.RoleARN != nil {
-				f7f13.RoleARN = r.ko.Spec.ElasticsearchDestinationConfiguration.VPCConfiguration.RoleARN
-			}
-			if r.ko.Spec.ElasticsearchDestinationConfiguration.VPCConfiguration.SecurityGroupIDs != nil {
-				f7f13.SecurityGroupIds = aws.ToStringSlice(r.ko.Spec.ElasticsearchDestinationConfiguration.VPCConfiguration.SecurityGroupIDs)
-			}
-			if r.ko.Spec.ElasticsearchDestinationConfiguration.VPCConfiguration.SubnetIDs != nil {
-				f7f13.SubnetIds = aws.ToStringSlice(r.ko.Spec.ElasticsearchDestinationConfiguration.VPCConfiguration.SubnetIDs)
-			}
-			f7.VpcConfiguration = f7f13
-		}
-		res.ElasticsearchDestinationConfiguration = f7
-	}
-	if r.ko.Spec.ExtendedS3DestinationConfiguration != nil {
-		f8 := &svcsdktypes.ExtendedS3DestinationConfiguration{}
-		if r.ko.Spec.ExtendedS3DestinationConfiguration.BucketARN != nil {
-			f8.BucketARN = r.ko.Spec.ExtendedS3DestinationConfiguration.BucketARN
-		}
-		if r.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints != nil {
-			f8f1 := &svcsdktypes.BufferingHints{}
-			if r.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints.IntervalInSeconds != nil {
-				intervalInSecondsCopy0 := *r.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints.IntervalInSeconds
-				if intervalInSecondsCopy0 > math.MaxInt32 || intervalInSecondsCopy0 < math.MinInt32 {
-					return nil, fmt.Errorf("error: field IntervalInSeconds is of type int32")
-				}
-				intervalInSecondsCopy := int32(intervalInSecondsCopy0)
-				f8f1.IntervalInSeconds = &intervalInSecondsCopy
-			}
-			if r.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints.SizeInMBs != nil {
-				sizeInMBsCopy0 := *r.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints.SizeInMBs
-				if sizeInMBsCopy0 > math.MaxInt32 || sizeInMBsCopy0 < math.MinInt32 {
-					return nil, fmt.Errorf("error: field SizeInMBs is of type int32")
-				}
-				sizeInMBsCopy := int32(sizeInMBsCopy0)
-				f8f1.SizeInMBs = &sizeInMBsCopy
-			}
-			f8.BufferingHints = f8f1
-		}
-		if r.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions != nil {
-			f8f2 := &svcsdktypes.CloudWatchLoggingOptions{}
-			if r.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.Enabled != nil {
-				f8f2.Enabled = r.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.Enabled
-			}
-			if r.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogGroupName != nil {
-				f8f2.LogGroupName = r.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogGroupName
-			}
-			if r.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogStreamName != nil {
-				f8f2.LogStreamName = r.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogStreamName
-			}
-			f8.CloudWatchLoggingOptions = f8f2
-		}
-		if r.ko.Spec.ExtendedS3DestinationConfiguration.CompressionFormat != nil {
-			f8.CompressionFormat = svcsdktypes.CompressionFormat(*r.ko.Spec.ExtendedS3DestinationConfiguration.CompressionFormat)
-		}
-		if r.ko.Spec.ExtendedS3DestinationConfiguration.CustomTimeZone != nil {
-			f8.CustomTimeZone = r.ko.Spec.ExtendedS3DestinationConfiguration.CustomTimeZone
-		}
-		if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration != nil {
-			f8f5 := &svcsdktypes.DataFormatConversionConfiguration{}
-			if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.Enabled != nil {
-				f8f5.Enabled = r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.Enabled
-			}
-			if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration != nil {
-				f8f5f1 := &svcsdktypes.InputFormatConfiguration{}
-				if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer != nil {
-					f8f5f1f0 := &svcsdktypes.Deserializer{}
-					if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.HiveJSONSerDe != nil {
-						f8f5f1f0f0 := &svcsdktypes.HiveJsonSerDe{}
-						if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.HiveJSONSerDe.TimestampFormats != nil {
-							f8f5f1f0f0.TimestampFormats = aws.ToStringSlice(r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.HiveJSONSerDe.TimestampFormats)
-						}
-						f8f5f1f0.HiveJsonSerDe = f8f5f1f0f0
-					}
-					if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe != nil {
-						f8f5f1f0f1 := &svcsdktypes.OpenXJsonSerDe{}
-						if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.CaseInsensitive != nil {
-							f8f5f1f0f1.CaseInsensitive = r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.CaseInsensitive
-						}
-						if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.ColumnToJSONKeyMappings != nil {
-							f8f5f1f0f1.ColumnToJsonKeyMappings = aws.ToStringMap(r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.ColumnToJSONKeyMappings)
-						}
-						if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.ConvertDotsInJSONKeysToUnderscores != nil {
-							f8f5f1f0f1.ConvertDotsInJsonKeysToUnderscores = r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.ConvertDotsInJSONKeysToUnderscores
-						}
-						f8f5f1f0.OpenXJsonSerDe = f8f5f1f0f1
-					}
-					f8f5f1.Deserializer = f8f5f1f0
-				}
-				f8f5.InputFormatConfiguration = f8f5f1
-			}
-			if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration != nil {
-				f8f5f2 := &svcsdktypes.OutputFormatConfiguration{}
-				if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer != nil {
-					f8f5f2f0 := &svcsdktypes.Serializer{}
-					if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe != nil {
-						f8f5f2f0f0 := &svcsdktypes.OrcSerDe{}
-						if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BlockSizeBytes != nil {
-							blockSizeBytesCopy0 := *r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BlockSizeBytes
-							if blockSizeBytesCopy0 > math.MaxInt32 || blockSizeBytesCopy0 < math.MinInt32 {
-								return nil, fmt.Errorf("error: field BlockSizeBytes is of type int32")
-							}
-							blockSizeBytesCopy := int32(blockSizeBytesCopy0)
-							f8f5f2f0f0.BlockSizeBytes = &blockSizeBytesCopy
-						}
-						if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BloomFilterColumns != nil {
-							f8f5f2f0f0.BloomFilterColumns = aws.ToStringSlice(r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BloomFilterColumns)
-						}
-						if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BloomFilterFalsePositiveProbability != nil {
-							f8f5f2f0f0.BloomFilterFalsePositiveProbability = r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BloomFilterFalsePositiveProbability
-						}
-						if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.Compression != nil {
-							f8f5f2f0f0.Compression = svcsdktypes.OrcCompression(*r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.Compression)
-						}
-						if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.DictionaryKeyThreshold != nil {
-							f8f5f2f0f0.DictionaryKeyThreshold = r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.DictionaryKeyThreshold
-						}
-						if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.EnablePadding != nil {
-							f8f5f2f0f0.EnablePadding = r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.EnablePadding
-						}
-						if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.FormatVersion != nil {
-							f8f5f2f0f0.FormatVersion = svcsdktypes.OrcFormatVersion(*r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.FormatVersion)
-						}
-						if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.PaddingTolerance != nil {
-							f8f5f2f0f0.PaddingTolerance = r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.PaddingTolerance
-						}
-						if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.RowIndexStride != nil {
-							rowIndexStrideCopy0 := *r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.RowIndexStride
-							if rowIndexStrideCopy0 > math.MaxInt32 || rowIndexStrideCopy0 < math.MinInt32 {
-								return nil, fmt.Errorf("error: field RowIndexStride is of type int32")
-							}
-							rowIndexStrideCopy := int32(rowIndexStrideCopy0)
-							f8f5f2f0f0.RowIndexStride = &rowIndexStrideCopy
-						}
-						if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.StripeSizeBytes != nil {
-							stripeSizeBytesCopy0 := *r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.StripeSizeBytes
-							if stripeSizeBytesCopy0 > math.MaxInt32 || stripeSizeBytesCopy0 < math.MinInt32 {
-								return nil, fmt.Errorf("error: field StripeSizeBytes is of type int32")
-							}
-							stripeSizeBytesCopy := int32(stripeSizeBytesCopy0)
-							f8f5f2f0f0.StripeSizeBytes = &stripeSizeBytesCopy
-						}
-						f8f5f2f0.OrcSerDe = f8f5f2f0f0
-					}
-					if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe != nil {
-						f8f5f2f0f1 := &svcsdktypes.ParquetSerDe{}
-						if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.BlockSizeBytes != nil {
-							blockSizeBytesCopy0 := *r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.BlockSizeBytes
-							if blockSizeBytesCopy0 > math.MaxInt32 || blockSizeBytesCopy0 < math.MinInt32 {
-								return nil, fmt.Errorf("error: field BlockSizeBytes is of type int32")
-							}
-							blockSizeBytesCopy := int32(blockSizeBytesCopy0)
-							f8f5f2f0f1.BlockSizeBytes = &blockSizeBytesCopy
-						}
-						if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.Compression != nil {
-							f8f5f2f0f1.Compression = svcsdktypes.ParquetCompression(*r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.Compression)
-						}
-						if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.EnableDictionaryCompression != nil {
-							f8f5f2f0f1.EnableDictionaryCompression = r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.EnableDictionaryCompression
-						}
-						if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.MaxPaddingBytes != nil {
-							maxPaddingBytesCopy0 := *r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.MaxPaddingBytes
-							if maxPaddingBytesCopy0 > math.MaxInt32 || maxPaddingBytesCopy0 < math.MinInt32 {
-								return nil, fmt.Errorf("error: field MaxPaddingBytes is of type int32")
-							}
-							maxPaddingBytesCopy := int32(maxPaddingBytesCopy0)
-							f8f5f2f0f1.MaxPaddingBytes = &maxPaddingBytesCopy
-						}
-						if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.PageSizeBytes != nil {
-							pageSizeBytesCopy0 := *r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.PageSizeBytes
-							if pageSizeBytesCopy0 > math.MaxInt32 || pageSizeBytesCopy0 < math.MinInt32 {
-								return nil, fmt.Errorf("error: field PageSizeBytes is of type int32")
-							}
-							pageSizeBytesCopy := int32(pageSizeBytesCopy0)
-							f8f5f2f0f1.PageSizeBytes = &pageSizeBytesCopy
-						}
-						if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.WriterVersion != nil {
-							f8f5f2f0f1.WriterVersion = svcsdktypes.ParquetWriterVersion(*r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.WriterVersion)
-						}
-						f8f5f2f0.ParquetSerDe = f8f5f2f0f1
-					}
-					f8f5f2.Serializer = f8f5f2f0
-				}
-				f8f5.OutputFormatConfiguration = f8f5f2
-			}
-			if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration != nil {
-				f8f5f3 := &svcsdktypes.SchemaConfiguration{}
-				if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.CatalogID != nil {
-					f8f5f3.CatalogId = r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.CatalogID
-				}
-				if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.DatabaseName != nil {
-					f8f5f3.DatabaseName = r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.DatabaseName
-				}
-				if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.Region != nil {
-					f8f5f3.Region = r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.Region
-				}
-				if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.RoleARN != nil {
-					f8f5f3.RoleARN = r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.RoleARN
-				}
-				if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.TableName != nil {
-					f8f5f3.TableName = r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.TableName
-				}
-				if r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.VersionID != nil {
-					f8f5f3.VersionId = r.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.VersionID
-				}
-				f8f5.SchemaConfiguration = f8f5f3
-			}
-			f8.DataFormatConversionConfiguration = f8f5
-		}
-		if r.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration != nil {
-			f8f6 := &svcsdktypes.DynamicPartitioningConfiguration{}
-			if r.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.Enabled != nil {
-				f8f6.Enabled = r.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.Enabled
-			}
-			if r.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.RetryOptions != nil {
-				f8f6f1 := &svcsdktypes.RetryOptions{}
-				if r.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.RetryOptions.DurationInSeconds != nil {
-					durationInSecondsCopy0 := *r.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.RetryOptions.DurationInSeconds
-					if durationInSecondsCopy0 > math.MaxInt32 || durationInSecondsCopy0 < math.MinInt32 {
-						return nil, fmt.Errorf("error: field DurationInSeconds is of type int32")
-					}
-					durationInSecondsCopy := int32(durationInSecondsCopy0)
-					f8f6f1.DurationInSeconds = &durationInSecondsCopy
-				}
-				f8f6.RetryOptions = f8f6f1
-			}
-			f8.DynamicPartitioningConfiguration = f8f6
-		}
-		if r.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration != nil {
-			f8f7 := &svcsdktypes.EncryptionConfiguration{}
-			if r.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig != nil {
-				f8f7f0 := &svcsdktypes.KMSEncryptionConfig{}
-				if r.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN != nil {
-					f8f7f0.AWSKMSKeyARN = r.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN
-				}
-				f8f7.KMSEncryptionConfig = f8f7f0
-			}
-			if r.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.NoEncryptionConfig != nil {
-				f8f7.NoEncryptionConfig = svcsdktypes.NoEncryptionConfig(*r.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.NoEncryptionConfig)
-			}
-			f8.EncryptionConfiguration = f8f7
-		}
-		if r.ko.Spec.ExtendedS3DestinationConfiguration.ErrorOutputPrefix != nil {
-			f8.ErrorOutputPrefix = r.ko.Spec.ExtendedS3DestinationConfiguration.ErrorOutputPrefix
-		}
-		if r.ko.Spec.ExtendedS3DestinationConfiguration.FileExtension != nil {
-			f8.FileExtension = r.ko.Spec.ExtendedS3DestinationConfiguration.FileExtension
-		}
-		if r.ko.Spec.ExtendedS3DestinationConfiguration.Prefix != nil {
-			f8.Prefix = r.ko.Spec.ExtendedS3DestinationConfiguration.Prefix
-		}
-		if r.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration != nil {
-			f8f11 := &svcsdktypes.ProcessingConfiguration{}
-			if r.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration.Enabled != nil {
-				f8f11.Enabled = r.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration.Enabled
-			}
-			if r.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration.Processors != nil {
-				f8f11f1 := []svcsdktypes.Processor{}
-				for _, f8f11f1iter := range r.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration.Processors {
-					f8f11f1elem := &svcsdktypes.Processor{}
-					if f8f11f1iter.Parameters != nil {
-						f8f11f1elemf0 := []svcsdktypes.ProcessorParameter{}
-						for _, f8f11f1elemf0iter := range f8f11f1iter.Parameters {
-							f8f11f1elemf0elem := &svcsdktypes.ProcessorParameter{}
-							if f8f11f1elemf0iter.ParameterName != nil {
-								f8f11f1elemf0elem.ParameterName = svcsdktypes.ProcessorParameterName(*f8f11f1elemf0iter.ParameterName)
-							}
-							if f8f11f1elemf0iter.ParameterValue != nil {
-								f8f11f1elemf0elem.ParameterValue = f8f11f1elemf0iter.ParameterValue
-							}
-							f8f11f1elemf0 = append(f8f11f1elemf0, *f8f11f1elemf0elem)
-						}
-						f8f11f1elem.Parameters = f8f11f1elemf0
-					}
-					if f8f11f1iter.Type != nil {
-						f8f11f1elem.Type = svcsdktypes.ProcessorType(*f8f11f1iter.Type)
-					}
-					f8f11f1 = append(f8f11f1, *f8f11f1elem)
-				}
-				f8f11.Processors = f8f11f1
-			}
-			f8.ProcessingConfiguration = f8f11
-		}
-		if r.ko.Spec.ExtendedS3DestinationConfiguration.RoleARN != nil {
-			f8.RoleARN = r.ko.Spec.ExtendedS3DestinationConfiguration.RoleARN
-		}
-		if r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration != nil {
-			f8f13 := &svcsdktypes.S3DestinationConfiguration{}
-			if r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketARN != nil {
-				f8f13.BucketARN = r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketARN
-			}
-			if r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints != nil {
-				f8f13f1 := &svcsdktypes.BufferingHints{}
-				if r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints.IntervalInSeconds != nil {
-					intervalInSecondsCopy0 := *r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints.IntervalInSeconds
-					if intervalInSecondsCopy0 > math.MaxInt32 || intervalInSecondsCopy0 < math.MinInt32 {
-						return nil, fmt.Errorf("error: field IntervalInSeconds is of type int32")
-					}
-					intervalInSecondsCopy := int32(intervalInSecondsCopy0)
-					f8f13f1.IntervalInSeconds = &intervalInSecondsCopy
-				}
-				if r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints.SizeInMBs != nil {
-					sizeInMBsCopy0 := *r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints.SizeInMBs
-					if sizeInMBsCopy0 > math.MaxInt32 || sizeInMBsCopy0 < math.MinInt32 {
-						return nil, fmt.Errorf("error: field SizeInMBs is of type int32")
-					}
-					sizeInMBsCopy := int32(sizeInMBsCopy0)
-					f8f13f1.SizeInMBs = &sizeInMBsCopy
-				}
-				f8f13.BufferingHints = f8f13f1
-			}
-			if r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions != nil {
-				f8f13f2 := &svcsdktypes.CloudWatchLoggingOptions{}
-				if r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.Enabled != nil {
-					f8f13f2.Enabled = r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.Enabled
-				}
-				if r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogGroupName != nil {
-					f8f13f2.LogGroupName = r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogGroupName
-				}
-				if r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogStreamName != nil {
-					f8f13f2.LogStreamName = r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogStreamName
-				}
-				f8f13.CloudWatchLoggingOptions = f8f13f2
-			}
-			if r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CompressionFormat != nil {
-				f8f13.CompressionFormat = svcsdktypes.CompressionFormat(*r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CompressionFormat)
-			}
-			if r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration != nil {
-				f8f13f4 := &svcsdktypes.EncryptionConfiguration{}
-				if r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.KMSEncryptionConfig != nil {
-					f8f13f4f0 := &svcsdktypes.KMSEncryptionConfig{}
-					if r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN != nil {
-						f8f13f4f0.AWSKMSKeyARN = r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN
-					}
-					f8f13f4.KMSEncryptionConfig = f8f13f4f0
-				}
-				if r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.NoEncryptionConfig != nil {
-					f8f13f4.NoEncryptionConfig = svcsdktypes.NoEncryptionConfig(*r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.NoEncryptionConfig)
-				}
-				f8f13.EncryptionConfiguration = f8f13f4
-			}
-			if r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.ErrorOutputPrefix != nil {
-				f8f13.ErrorOutputPrefix = r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.ErrorOutputPrefix
-			}
-			if r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.Prefix != nil {
-				f8f13.Prefix = r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.Prefix
-			}
-			if r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleARN != nil {
-				f8f13.RoleARN = r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleARN
-			}
-			f8.S3BackupConfiguration = f8f13
-		}
-		if r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupMode != nil {
-			f8.S3BackupMode = svcsdktypes.S3BackupMode(*r.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupMode)
-		}
-		res.ExtendedS3DestinationConfiguration = f8
-	}
 	if r.ko.Spec.HTTPEndpointDestinationConfiguration != nil {
-		f9 := &svcsdktypes.HttpEndpointDestinationConfiguration{}
+		f3 := &svcsdktypes.HttpEndpointDestinationConfiguration{}
 		if r.ko.Spec.HTTPEndpointDestinationConfiguration.BufferingHints != nil {
-			f9f0 := &svcsdktypes.HttpEndpointBufferingHints{}
+			f3f0 := &svcsdktypes.HttpEndpointBufferingHints{}
 			if r.ko.Spec.HTTPEndpointDestinationConfiguration.BufferingHints.IntervalInSeconds != nil {
 				intervalInSecondsCopy0 := *r.ko.Spec.HTTPEndpointDestinationConfiguration.BufferingHints.IntervalInSeconds
 				if intervalInSecondsCopy0 > math.MaxInt32 || intervalInSecondsCopy0 < math.MinInt32 {
 					return nil, fmt.Errorf("error: field IntervalInSeconds is of type int32")
 				}
 				intervalInSecondsCopy := int32(intervalInSecondsCopy0)
-				f9f0.IntervalInSeconds = &intervalInSecondsCopy
+				f3f0.IntervalInSeconds = &intervalInSecondsCopy
 			}
 			if r.ko.Spec.HTTPEndpointDestinationConfiguration.BufferingHints.SizeInMBs != nil {
 				sizeInMBsCopy0 := *r.ko.Spec.HTTPEndpointDestinationConfiguration.BufferingHints.SizeInMBs
@@ -1203,121 +239,121 @@ func (rm *resourceManager) newCreateRequestPayload(
 					return nil, fmt.Errorf("error: field SizeInMBs is of type int32")
 				}
 				sizeInMBsCopy := int32(sizeInMBsCopy0)
-				f9f0.SizeInMBs = &sizeInMBsCopy
+				f3f0.SizeInMBs = &sizeInMBsCopy
 			}
-			f9.BufferingHints = f9f0
+			f3.BufferingHints = f3f0
 		}
 		if r.ko.Spec.HTTPEndpointDestinationConfiguration.CloudWatchLoggingOptions != nil {
-			f9f1 := &svcsdktypes.CloudWatchLoggingOptions{}
+			f3f1 := &svcsdktypes.CloudWatchLoggingOptions{}
 			if r.ko.Spec.HTTPEndpointDestinationConfiguration.CloudWatchLoggingOptions.Enabled != nil {
-				f9f1.Enabled = r.ko.Spec.HTTPEndpointDestinationConfiguration.CloudWatchLoggingOptions.Enabled
+				f3f1.Enabled = r.ko.Spec.HTTPEndpointDestinationConfiguration.CloudWatchLoggingOptions.Enabled
 			}
 			if r.ko.Spec.HTTPEndpointDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName != nil {
-				f9f1.LogGroupName = r.ko.Spec.HTTPEndpointDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName
+				f3f1.LogGroupName = r.ko.Spec.HTTPEndpointDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName
 			}
 			if r.ko.Spec.HTTPEndpointDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName != nil {
-				f9f1.LogStreamName = r.ko.Spec.HTTPEndpointDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName
+				f3f1.LogStreamName = r.ko.Spec.HTTPEndpointDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName
 			}
-			f9.CloudWatchLoggingOptions = f9f1
+			f3.CloudWatchLoggingOptions = f3f1
 		}
 		if r.ko.Spec.HTTPEndpointDestinationConfiguration.EndpointConfiguration != nil {
-			f9f2 := &svcsdktypes.HttpEndpointConfiguration{}
+			f3f2 := &svcsdktypes.HttpEndpointConfiguration{}
 			if r.ko.Spec.HTTPEndpointDestinationConfiguration.EndpointConfiguration.AccessKey != nil {
-				f9f2.AccessKey = r.ko.Spec.HTTPEndpointDestinationConfiguration.EndpointConfiguration.AccessKey
+				f3f2.AccessKey = r.ko.Spec.HTTPEndpointDestinationConfiguration.EndpointConfiguration.AccessKey
 			}
 			if r.ko.Spec.HTTPEndpointDestinationConfiguration.EndpointConfiguration.Name != nil {
-				f9f2.Name = r.ko.Spec.HTTPEndpointDestinationConfiguration.EndpointConfiguration.Name
+				f3f2.Name = r.ko.Spec.HTTPEndpointDestinationConfiguration.EndpointConfiguration.Name
 			}
 			if r.ko.Spec.HTTPEndpointDestinationConfiguration.EndpointConfiguration.URL != nil {
-				f9f2.Url = r.ko.Spec.HTTPEndpointDestinationConfiguration.EndpointConfiguration.URL
+				f3f2.Url = r.ko.Spec.HTTPEndpointDestinationConfiguration.EndpointConfiguration.URL
 			}
-			f9.EndpointConfiguration = f9f2
+			f3.EndpointConfiguration = f3f2
 		}
 		if r.ko.Spec.HTTPEndpointDestinationConfiguration.ProcessingConfiguration != nil {
-			f9f3 := &svcsdktypes.ProcessingConfiguration{}
+			f3f3 := &svcsdktypes.ProcessingConfiguration{}
 			if r.ko.Spec.HTTPEndpointDestinationConfiguration.ProcessingConfiguration.Enabled != nil {
-				f9f3.Enabled = r.ko.Spec.HTTPEndpointDestinationConfiguration.ProcessingConfiguration.Enabled
+				f3f3.Enabled = r.ko.Spec.HTTPEndpointDestinationConfiguration.ProcessingConfiguration.Enabled
 			}
 			if r.ko.Spec.HTTPEndpointDestinationConfiguration.ProcessingConfiguration.Processors != nil {
-				f9f3f1 := []svcsdktypes.Processor{}
-				for _, f9f3f1iter := range r.ko.Spec.HTTPEndpointDestinationConfiguration.ProcessingConfiguration.Processors {
-					f9f3f1elem := &svcsdktypes.Processor{}
-					if f9f3f1iter.Parameters != nil {
-						f9f3f1elemf0 := []svcsdktypes.ProcessorParameter{}
-						for _, f9f3f1elemf0iter := range f9f3f1iter.Parameters {
-							f9f3f1elemf0elem := &svcsdktypes.ProcessorParameter{}
-							if f9f3f1elemf0iter.ParameterName != nil {
-								f9f3f1elemf0elem.ParameterName = svcsdktypes.ProcessorParameterName(*f9f3f1elemf0iter.ParameterName)
+				f3f3f1 := []svcsdktypes.Processor{}
+				for _, f3f3f1iter := range r.ko.Spec.HTTPEndpointDestinationConfiguration.ProcessingConfiguration.Processors {
+					f3f3f1elem := &svcsdktypes.Processor{}
+					if f3f3f1iter.Parameters != nil {
+						f3f3f1elemf0 := []svcsdktypes.ProcessorParameter{}
+						for _, f3f3f1elemf0iter := range f3f3f1iter.Parameters {
+							f3f3f1elemf0elem := &svcsdktypes.ProcessorParameter{}
+							if f3f3f1elemf0iter.ParameterName != nil {
+								f3f3f1elemf0elem.ParameterName = svcsdktypes.ProcessorParameterName(*f3f3f1elemf0iter.ParameterName)
 							}
-							if f9f3f1elemf0iter.ParameterValue != nil {
-								f9f3f1elemf0elem.ParameterValue = f9f3f1elemf0iter.ParameterValue
+							if f3f3f1elemf0iter.ParameterValue != nil {
+								f3f3f1elemf0elem.ParameterValue = f3f3f1elemf0iter.ParameterValue
 							}
-							f9f3f1elemf0 = append(f9f3f1elemf0, *f9f3f1elemf0elem)
+							f3f3f1elemf0 = append(f3f3f1elemf0, *f3f3f1elemf0elem)
 						}
-						f9f3f1elem.Parameters = f9f3f1elemf0
+						f3f3f1elem.Parameters = f3f3f1elemf0
 					}
-					if f9f3f1iter.Type != nil {
-						f9f3f1elem.Type = svcsdktypes.ProcessorType(*f9f3f1iter.Type)
+					if f3f3f1iter.Type != nil {
+						f3f3f1elem.Type = svcsdktypes.ProcessorType(*f3f3f1iter.Type)
 					}
-					f9f3f1 = append(f9f3f1, *f9f3f1elem)
+					f3f3f1 = append(f3f3f1, *f3f3f1elem)
 				}
-				f9f3.Processors = f9f3f1
+				f3f3.Processors = f3f3f1
 			}
-			f9.ProcessingConfiguration = f9f3
+			f3.ProcessingConfiguration = f3f3
 		}
 		if r.ko.Spec.HTTPEndpointDestinationConfiguration.RequestConfiguration != nil {
-			f9f4 := &svcsdktypes.HttpEndpointRequestConfiguration{}
+			f3f4 := &svcsdktypes.HttpEndpointRequestConfiguration{}
 			if r.ko.Spec.HTTPEndpointDestinationConfiguration.RequestConfiguration.CommonAttributes != nil {
-				f9f4f0 := []svcsdktypes.HttpEndpointCommonAttribute{}
-				for _, f9f4f0iter := range r.ko.Spec.HTTPEndpointDestinationConfiguration.RequestConfiguration.CommonAttributes {
-					f9f4f0elem := &svcsdktypes.HttpEndpointCommonAttribute{}
-					if f9f4f0iter.AttributeName != nil {
-						f9f4f0elem.AttributeName = f9f4f0iter.AttributeName
+				f3f4f0 := []svcsdktypes.HttpEndpointCommonAttribute{}
+				for _, f3f4f0iter := range r.ko.Spec.HTTPEndpointDestinationConfiguration.RequestConfiguration.CommonAttributes {
+					f3f4f0elem := &svcsdktypes.HttpEndpointCommonAttribute{}
+					if f3f4f0iter.AttributeName != nil {
+						f3f4f0elem.AttributeName = f3f4f0iter.AttributeName
 					}
-					if f9f4f0iter.AttributeValue != nil {
-						f9f4f0elem.AttributeValue = f9f4f0iter.AttributeValue
+					if f3f4f0iter.AttributeValue != nil {
+						f3f4f0elem.AttributeValue = f3f4f0iter.AttributeValue
 					}
-					f9f4f0 = append(f9f4f0, *f9f4f0elem)
+					f3f4f0 = append(f3f4f0, *f3f4f0elem)
 				}
-				f9f4.CommonAttributes = f9f4f0
+				f3f4.CommonAttributes = f3f4f0
 			}
 			if r.ko.Spec.HTTPEndpointDestinationConfiguration.RequestConfiguration.ContentEncoding != nil {
-				f9f4.ContentEncoding = svcsdktypes.ContentEncoding(*r.ko.Spec.HTTPEndpointDestinationConfiguration.RequestConfiguration.ContentEncoding)
+				f3f4.ContentEncoding = svcsdktypes.ContentEncoding(*r.ko.Spec.HTTPEndpointDestinationConfiguration.RequestConfiguration.ContentEncoding)
 			}
-			f9.RequestConfiguration = f9f4
+			f3.RequestConfiguration = f3f4
 		}
 		if r.ko.Spec.HTTPEndpointDestinationConfiguration.RetryOptions != nil {
-			f9f5 := &svcsdktypes.HttpEndpointRetryOptions{}
+			f3f5 := &svcsdktypes.HttpEndpointRetryOptions{}
 			if r.ko.Spec.HTTPEndpointDestinationConfiguration.RetryOptions.DurationInSeconds != nil {
 				durationInSecondsCopy0 := *r.ko.Spec.HTTPEndpointDestinationConfiguration.RetryOptions.DurationInSeconds
 				if durationInSecondsCopy0 > math.MaxInt32 || durationInSecondsCopy0 < math.MinInt32 {
 					return nil, fmt.Errorf("error: field DurationInSeconds is of type int32")
 				}
 				durationInSecondsCopy := int32(durationInSecondsCopy0)
-				f9f5.DurationInSeconds = &durationInSecondsCopy
+				f3f5.DurationInSeconds = &durationInSecondsCopy
 			}
-			f9.RetryOptions = f9f5
+			f3.RetryOptions = f3f5
 		}
 		if r.ko.Spec.HTTPEndpointDestinationConfiguration.RoleARN != nil {
-			f9.RoleARN = r.ko.Spec.HTTPEndpointDestinationConfiguration.RoleARN
+			f3.RoleARN = r.ko.Spec.HTTPEndpointDestinationConfiguration.RoleARN
 		}
 		if r.ko.Spec.HTTPEndpointDestinationConfiguration.S3BackupMode != nil {
-			f9.S3BackupMode = svcsdktypes.HttpEndpointS3BackupMode(*r.ko.Spec.HTTPEndpointDestinationConfiguration.S3BackupMode)
+			f3.S3BackupMode = svcsdktypes.HttpEndpointS3BackupMode(*r.ko.Spec.HTTPEndpointDestinationConfiguration.S3BackupMode)
 		}
 		if r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration != nil {
-			f9f8 := &svcsdktypes.S3DestinationConfiguration{}
+			f3f8 := &svcsdktypes.S3DestinationConfiguration{}
 			if r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.BucketARN != nil {
-				f9f8.BucketARN = r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.BucketARN
+				f3f8.BucketARN = r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.BucketARN
 			}
 			if r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.BufferingHints != nil {
-				f9f8f1 := &svcsdktypes.BufferingHints{}
+				f3f8f1 := &svcsdktypes.BufferingHints{}
 				if r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds != nil {
 					intervalInSecondsCopy0 := *r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds
 					if intervalInSecondsCopy0 > math.MaxInt32 || intervalInSecondsCopy0 < math.MinInt32 {
 						return nil, fmt.Errorf("error: field IntervalInSeconds is of type int32")
 					}
 					intervalInSecondsCopy := int32(intervalInSecondsCopy0)
-					f9f8f1.IntervalInSeconds = &intervalInSecondsCopy
+					f3f8f1.IntervalInSeconds = &intervalInSecondsCopy
 				}
 				if r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs != nil {
 					sizeInMBsCopy0 := *r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs
@@ -1325,1020 +361,79 @@ func (rm *resourceManager) newCreateRequestPayload(
 						return nil, fmt.Errorf("error: field SizeInMBs is of type int32")
 					}
 					sizeInMBsCopy := int32(sizeInMBsCopy0)
-					f9f8f1.SizeInMBs = &sizeInMBsCopy
+					f3f8f1.SizeInMBs = &sizeInMBsCopy
 				}
-				f9f8.BufferingHints = f9f8f1
+				f3f8.BufferingHints = f3f8f1
 			}
 			if r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions != nil {
-				f9f8f2 := &svcsdktypes.CloudWatchLoggingOptions{}
+				f3f8f2 := &svcsdktypes.CloudWatchLoggingOptions{}
 				if r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled != nil {
-					f9f8f2.Enabled = r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled
+					f3f8f2.Enabled = r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled
 				}
 				if r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName != nil {
-					f9f8f2.LogGroupName = r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName
+					f3f8f2.LogGroupName = r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName
 				}
 				if r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName != nil {
-					f9f8f2.LogStreamName = r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName
+					f3f8f2.LogStreamName = r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName
 				}
-				f9f8.CloudWatchLoggingOptions = f9f8f2
+				f3f8.CloudWatchLoggingOptions = f3f8f2
 			}
 			if r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.CompressionFormat != nil {
-				f9f8.CompressionFormat = svcsdktypes.CompressionFormat(*r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.CompressionFormat)
+				f3f8.CompressionFormat = svcsdktypes.CompressionFormat(*r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.CompressionFormat)
 			}
 			if r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration != nil {
-				f9f8f4 := &svcsdktypes.EncryptionConfiguration{}
+				f3f8f4 := &svcsdktypes.EncryptionConfiguration{}
 				if r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig != nil {
-					f9f8f4f0 := &svcsdktypes.KMSEncryptionConfig{}
+					f3f8f4f0 := &svcsdktypes.KMSEncryptionConfig{}
 					if r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN != nil {
-						f9f8f4f0.AWSKMSKeyARN = r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN
+						f3f8f4f0.AWSKMSKeyARN = r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN
 					}
-					f9f8f4.KMSEncryptionConfig = f9f8f4f0
+					f3f8f4.KMSEncryptionConfig = f3f8f4f0
 				}
 				if r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig != nil {
-					f9f8f4.NoEncryptionConfig = svcsdktypes.NoEncryptionConfig(*r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig)
+					f3f8f4.NoEncryptionConfig = svcsdktypes.NoEncryptionConfig(*r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig)
 				}
-				f9f8.EncryptionConfiguration = f9f8f4
+				f3f8.EncryptionConfiguration = f3f8f4
 			}
 			if r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.ErrorOutputPrefix != nil {
-				f9f8.ErrorOutputPrefix = r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.ErrorOutputPrefix
+				f3f8.ErrorOutputPrefix = r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.ErrorOutputPrefix
 			}
 			if r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.Prefix != nil {
-				f9f8.Prefix = r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.Prefix
+				f3f8.Prefix = r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.Prefix
 			}
 			if r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.RoleARN != nil {
-				f9f8.RoleARN = r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.RoleARN
+				f3f8.RoleARN = r.ko.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.RoleARN
 			}
-			f9.S3Configuration = f9f8
+			f3.S3Configuration = f3f8
 		}
 		if r.ko.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration != nil {
-			f9f9 := &svcsdktypes.SecretsManagerConfiguration{}
+			f3f9 := &svcsdktypes.SecretsManagerConfiguration{}
 			if r.ko.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.Enabled != nil {
-				f9f9.Enabled = r.ko.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.Enabled
+				f3f9.Enabled = r.ko.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.Enabled
 			}
 			if r.ko.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.RoleARN != nil {
-				f9f9.RoleARN = r.ko.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.RoleARN
+				f3f9.RoleARN = r.ko.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.RoleARN
 			}
 			if r.ko.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.SecretARN != nil {
-				f9f9.SecretARN = r.ko.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.SecretARN
+				f3f9.SecretARN = r.ko.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.SecretARN
 			}
-			f9.SecretsManagerConfiguration = f9f9
+			f3.SecretsManagerConfiguration = f3f9
 		}
-		res.HttpEndpointDestinationConfiguration = f9
-	}
-	if r.ko.Spec.IcebergDestinationConfiguration != nil {
-		f10 := &svcsdktypes.IcebergDestinationConfiguration{}
-		if r.ko.Spec.IcebergDestinationConfiguration.AppendOnly != nil {
-			f10.AppendOnly = r.ko.Spec.IcebergDestinationConfiguration.AppendOnly
-		}
-		if r.ko.Spec.IcebergDestinationConfiguration.BufferingHints != nil {
-			f10f1 := &svcsdktypes.BufferingHints{}
-			if r.ko.Spec.IcebergDestinationConfiguration.BufferingHints.IntervalInSeconds != nil {
-				intervalInSecondsCopy0 := *r.ko.Spec.IcebergDestinationConfiguration.BufferingHints.IntervalInSeconds
-				if intervalInSecondsCopy0 > math.MaxInt32 || intervalInSecondsCopy0 < math.MinInt32 {
-					return nil, fmt.Errorf("error: field IntervalInSeconds is of type int32")
-				}
-				intervalInSecondsCopy := int32(intervalInSecondsCopy0)
-				f10f1.IntervalInSeconds = &intervalInSecondsCopy
-			}
-			if r.ko.Spec.IcebergDestinationConfiguration.BufferingHints.SizeInMBs != nil {
-				sizeInMBsCopy0 := *r.ko.Spec.IcebergDestinationConfiguration.BufferingHints.SizeInMBs
-				if sizeInMBsCopy0 > math.MaxInt32 || sizeInMBsCopy0 < math.MinInt32 {
-					return nil, fmt.Errorf("error: field SizeInMBs is of type int32")
-				}
-				sizeInMBsCopy := int32(sizeInMBsCopy0)
-				f10f1.SizeInMBs = &sizeInMBsCopy
-			}
-			f10.BufferingHints = f10f1
-		}
-		if r.ko.Spec.IcebergDestinationConfiguration.CatalogConfiguration != nil {
-			f10f2 := &svcsdktypes.CatalogConfiguration{}
-			if r.ko.Spec.IcebergDestinationConfiguration.CatalogConfiguration.CatalogARN != nil {
-				f10f2.CatalogARN = r.ko.Spec.IcebergDestinationConfiguration.CatalogConfiguration.CatalogARN
-			}
-			if r.ko.Spec.IcebergDestinationConfiguration.CatalogConfiguration.WarehouseLocation != nil {
-				f10f2.WarehouseLocation = r.ko.Spec.IcebergDestinationConfiguration.CatalogConfiguration.WarehouseLocation
-			}
-			f10.CatalogConfiguration = f10f2
-		}
-		if r.ko.Spec.IcebergDestinationConfiguration.CloudWatchLoggingOptions != nil {
-			f10f3 := &svcsdktypes.CloudWatchLoggingOptions{}
-			if r.ko.Spec.IcebergDestinationConfiguration.CloudWatchLoggingOptions.Enabled != nil {
-				f10f3.Enabled = r.ko.Spec.IcebergDestinationConfiguration.CloudWatchLoggingOptions.Enabled
-			}
-			if r.ko.Spec.IcebergDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName != nil {
-				f10f3.LogGroupName = r.ko.Spec.IcebergDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName
-			}
-			if r.ko.Spec.IcebergDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName != nil {
-				f10f3.LogStreamName = r.ko.Spec.IcebergDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName
-			}
-			f10.CloudWatchLoggingOptions = f10f3
-		}
-		if r.ko.Spec.IcebergDestinationConfiguration.DestinationTableConfigurationList != nil {
-			f10f4 := []svcsdktypes.DestinationTableConfiguration{}
-			for _, f10f4iter := range r.ko.Spec.IcebergDestinationConfiguration.DestinationTableConfigurationList {
-				f10f4elem := &svcsdktypes.DestinationTableConfiguration{}
-				if f10f4iter.DestinationDatabaseName != nil {
-					f10f4elem.DestinationDatabaseName = f10f4iter.DestinationDatabaseName
-				}
-				if f10f4iter.DestinationTableName != nil {
-					f10f4elem.DestinationTableName = f10f4iter.DestinationTableName
-				}
-				if f10f4iter.PartitionSpec != nil {
-					f10f4elemf2 := &svcsdktypes.PartitionSpec{}
-					if f10f4iter.PartitionSpec.Identity != nil {
-						f10f4elemf2f0 := []svcsdktypes.PartitionField{}
-						for _, f10f4elemf2f0iter := range f10f4iter.PartitionSpec.Identity {
-							f10f4elemf2f0elem := &svcsdktypes.PartitionField{}
-							if f10f4elemf2f0iter.SourceName != nil {
-								f10f4elemf2f0elem.SourceName = f10f4elemf2f0iter.SourceName
-							}
-							f10f4elemf2f0 = append(f10f4elemf2f0, *f10f4elemf2f0elem)
-						}
-						f10f4elemf2.Identity = f10f4elemf2f0
-					}
-					f10f4elem.PartitionSpec = f10f4elemf2
-				}
-				if f10f4iter.S3ErrorOutputPrefix != nil {
-					f10f4elem.S3ErrorOutputPrefix = f10f4iter.S3ErrorOutputPrefix
-				}
-				if f10f4iter.UniqueKeys != nil {
-					f10f4elem.UniqueKeys = aws.ToStringSlice(f10f4iter.UniqueKeys)
-				}
-				f10f4 = append(f10f4, *f10f4elem)
-			}
-			f10.DestinationTableConfigurationList = f10f4
-		}
-		if r.ko.Spec.IcebergDestinationConfiguration.ProcessingConfiguration != nil {
-			f10f5 := &svcsdktypes.ProcessingConfiguration{}
-			if r.ko.Spec.IcebergDestinationConfiguration.ProcessingConfiguration.Enabled != nil {
-				f10f5.Enabled = r.ko.Spec.IcebergDestinationConfiguration.ProcessingConfiguration.Enabled
-			}
-			if r.ko.Spec.IcebergDestinationConfiguration.ProcessingConfiguration.Processors != nil {
-				f10f5f1 := []svcsdktypes.Processor{}
-				for _, f10f5f1iter := range r.ko.Spec.IcebergDestinationConfiguration.ProcessingConfiguration.Processors {
-					f10f5f1elem := &svcsdktypes.Processor{}
-					if f10f5f1iter.Parameters != nil {
-						f10f5f1elemf0 := []svcsdktypes.ProcessorParameter{}
-						for _, f10f5f1elemf0iter := range f10f5f1iter.Parameters {
-							f10f5f1elemf0elem := &svcsdktypes.ProcessorParameter{}
-							if f10f5f1elemf0iter.ParameterName != nil {
-								f10f5f1elemf0elem.ParameterName = svcsdktypes.ProcessorParameterName(*f10f5f1elemf0iter.ParameterName)
-							}
-							if f10f5f1elemf0iter.ParameterValue != nil {
-								f10f5f1elemf0elem.ParameterValue = f10f5f1elemf0iter.ParameterValue
-							}
-							f10f5f1elemf0 = append(f10f5f1elemf0, *f10f5f1elemf0elem)
-						}
-						f10f5f1elem.Parameters = f10f5f1elemf0
-					}
-					if f10f5f1iter.Type != nil {
-						f10f5f1elem.Type = svcsdktypes.ProcessorType(*f10f5f1iter.Type)
-					}
-					f10f5f1 = append(f10f5f1, *f10f5f1elem)
-				}
-				f10f5.Processors = f10f5f1
-			}
-			f10.ProcessingConfiguration = f10f5
-		}
-		if r.ko.Spec.IcebergDestinationConfiguration.RetryOptions != nil {
-			f10f6 := &svcsdktypes.RetryOptions{}
-			if r.ko.Spec.IcebergDestinationConfiguration.RetryOptions.DurationInSeconds != nil {
-				durationInSecondsCopy0 := *r.ko.Spec.IcebergDestinationConfiguration.RetryOptions.DurationInSeconds
-				if durationInSecondsCopy0 > math.MaxInt32 || durationInSecondsCopy0 < math.MinInt32 {
-					return nil, fmt.Errorf("error: field DurationInSeconds is of type int32")
-				}
-				durationInSecondsCopy := int32(durationInSecondsCopy0)
-				f10f6.DurationInSeconds = &durationInSecondsCopy
-			}
-			f10.RetryOptions = f10f6
-		}
-		if r.ko.Spec.IcebergDestinationConfiguration.RoleARN != nil {
-			f10.RoleARN = r.ko.Spec.IcebergDestinationConfiguration.RoleARN
-		}
-		if r.ko.Spec.IcebergDestinationConfiguration.S3BackupMode != nil {
-			f10.S3BackupMode = svcsdktypes.IcebergS3BackupMode(*r.ko.Spec.IcebergDestinationConfiguration.S3BackupMode)
-		}
-		if r.ko.Spec.IcebergDestinationConfiguration.S3Configuration != nil {
-			f10f9 := &svcsdktypes.S3DestinationConfiguration{}
-			if r.ko.Spec.IcebergDestinationConfiguration.S3Configuration.BucketARN != nil {
-				f10f9.BucketARN = r.ko.Spec.IcebergDestinationConfiguration.S3Configuration.BucketARN
-			}
-			if r.ko.Spec.IcebergDestinationConfiguration.S3Configuration.BufferingHints != nil {
-				f10f9f1 := &svcsdktypes.BufferingHints{}
-				if r.ko.Spec.IcebergDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds != nil {
-					intervalInSecondsCopy0 := *r.ko.Spec.IcebergDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds
-					if intervalInSecondsCopy0 > math.MaxInt32 || intervalInSecondsCopy0 < math.MinInt32 {
-						return nil, fmt.Errorf("error: field IntervalInSeconds is of type int32")
-					}
-					intervalInSecondsCopy := int32(intervalInSecondsCopy0)
-					f10f9f1.IntervalInSeconds = &intervalInSecondsCopy
-				}
-				if r.ko.Spec.IcebergDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs != nil {
-					sizeInMBsCopy0 := *r.ko.Spec.IcebergDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs
-					if sizeInMBsCopy0 > math.MaxInt32 || sizeInMBsCopy0 < math.MinInt32 {
-						return nil, fmt.Errorf("error: field SizeInMBs is of type int32")
-					}
-					sizeInMBsCopy := int32(sizeInMBsCopy0)
-					f10f9f1.SizeInMBs = &sizeInMBsCopy
-				}
-				f10f9.BufferingHints = f10f9f1
-			}
-			if r.ko.Spec.IcebergDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions != nil {
-				f10f9f2 := &svcsdktypes.CloudWatchLoggingOptions{}
-				if r.ko.Spec.IcebergDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled != nil {
-					f10f9f2.Enabled = r.ko.Spec.IcebergDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled
-				}
-				if r.ko.Spec.IcebergDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName != nil {
-					f10f9f2.LogGroupName = r.ko.Spec.IcebergDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName
-				}
-				if r.ko.Spec.IcebergDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName != nil {
-					f10f9f2.LogStreamName = r.ko.Spec.IcebergDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName
-				}
-				f10f9.CloudWatchLoggingOptions = f10f9f2
-			}
-			if r.ko.Spec.IcebergDestinationConfiguration.S3Configuration.CompressionFormat != nil {
-				f10f9.CompressionFormat = svcsdktypes.CompressionFormat(*r.ko.Spec.IcebergDestinationConfiguration.S3Configuration.CompressionFormat)
-			}
-			if r.ko.Spec.IcebergDestinationConfiguration.S3Configuration.EncryptionConfiguration != nil {
-				f10f9f4 := &svcsdktypes.EncryptionConfiguration{}
-				if r.ko.Spec.IcebergDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig != nil {
-					f10f9f4f0 := &svcsdktypes.KMSEncryptionConfig{}
-					if r.ko.Spec.IcebergDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN != nil {
-						f10f9f4f0.AWSKMSKeyARN = r.ko.Spec.IcebergDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN
-					}
-					f10f9f4.KMSEncryptionConfig = f10f9f4f0
-				}
-				if r.ko.Spec.IcebergDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig != nil {
-					f10f9f4.NoEncryptionConfig = svcsdktypes.NoEncryptionConfig(*r.ko.Spec.IcebergDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig)
-				}
-				f10f9.EncryptionConfiguration = f10f9f4
-			}
-			if r.ko.Spec.IcebergDestinationConfiguration.S3Configuration.ErrorOutputPrefix != nil {
-				f10f9.ErrorOutputPrefix = r.ko.Spec.IcebergDestinationConfiguration.S3Configuration.ErrorOutputPrefix
-			}
-			if r.ko.Spec.IcebergDestinationConfiguration.S3Configuration.Prefix != nil {
-				f10f9.Prefix = r.ko.Spec.IcebergDestinationConfiguration.S3Configuration.Prefix
-			}
-			if r.ko.Spec.IcebergDestinationConfiguration.S3Configuration.RoleARN != nil {
-				f10f9.RoleARN = r.ko.Spec.IcebergDestinationConfiguration.S3Configuration.RoleARN
-			}
-			f10.S3Configuration = f10f9
-		}
-		if r.ko.Spec.IcebergDestinationConfiguration.SchemaEvolutionConfiguration != nil {
-			f10f10 := &svcsdktypes.SchemaEvolutionConfiguration{}
-			if r.ko.Spec.IcebergDestinationConfiguration.SchemaEvolutionConfiguration.Enabled != nil {
-				f10f10.Enabled = r.ko.Spec.IcebergDestinationConfiguration.SchemaEvolutionConfiguration.Enabled
-			}
-			f10.SchemaEvolutionConfiguration = f10f10
-		}
-		if r.ko.Spec.IcebergDestinationConfiguration.TableCreationConfiguration != nil {
-			f10f11 := &svcsdktypes.TableCreationConfiguration{}
-			if r.ko.Spec.IcebergDestinationConfiguration.TableCreationConfiguration.Enabled != nil {
-				f10f11.Enabled = r.ko.Spec.IcebergDestinationConfiguration.TableCreationConfiguration.Enabled
-			}
-			f10.TableCreationConfiguration = f10f11
-		}
-		res.IcebergDestinationConfiguration = f10
-	}
-	if r.ko.Spec.KinesisStreamSourceConfiguration != nil {
-		f11 := &svcsdktypes.KinesisStreamSourceConfiguration{}
-		if r.ko.Spec.KinesisStreamSourceConfiguration.KinesisStreamARN != nil {
-			f11.KinesisStreamARN = r.ko.Spec.KinesisStreamSourceConfiguration.KinesisStreamARN
-		}
-		if r.ko.Spec.KinesisStreamSourceConfiguration.RoleARN != nil {
-			f11.RoleARN = r.ko.Spec.KinesisStreamSourceConfiguration.RoleARN
-		}
-		res.KinesisStreamSourceConfiguration = f11
-	}
-	if r.ko.Spec.MSKSourceConfiguration != nil {
-		f12 := &svcsdktypes.MSKSourceConfiguration{}
-		if r.ko.Spec.MSKSourceConfiguration.AuthenticationConfiguration != nil {
-			f12f0 := &svcsdktypes.AuthenticationConfiguration{}
-			if r.ko.Spec.MSKSourceConfiguration.AuthenticationConfiguration.Connectivity != nil {
-				f12f0.Connectivity = svcsdktypes.Connectivity(*r.ko.Spec.MSKSourceConfiguration.AuthenticationConfiguration.Connectivity)
-			}
-			if r.ko.Spec.MSKSourceConfiguration.AuthenticationConfiguration.RoleARN != nil {
-				f12f0.RoleARN = r.ko.Spec.MSKSourceConfiguration.AuthenticationConfiguration.RoleARN
-			}
-			f12.AuthenticationConfiguration = f12f0
-		}
-		if r.ko.Spec.MSKSourceConfiguration.MSKClusterARN != nil {
-			f12.MSKClusterARN = r.ko.Spec.MSKSourceConfiguration.MSKClusterARN
-		}
-		if r.ko.Spec.MSKSourceConfiguration.ReadFromTimestamp != nil {
-			f12.ReadFromTimestamp = &r.ko.Spec.MSKSourceConfiguration.ReadFromTimestamp.Time
-		}
-		if r.ko.Spec.MSKSourceConfiguration.TopicName != nil {
-			f12.TopicName = r.ko.Spec.MSKSourceConfiguration.TopicName
-		}
-		res.MSKSourceConfiguration = f12
-	}
-	if r.ko.Spec.RedshiftDestinationConfiguration != nil {
-		f13 := &svcsdktypes.RedshiftDestinationConfiguration{}
-		if r.ko.Spec.RedshiftDestinationConfiguration.CloudWatchLoggingOptions != nil {
-			f13f0 := &svcsdktypes.CloudWatchLoggingOptions{}
-			if r.ko.Spec.RedshiftDestinationConfiguration.CloudWatchLoggingOptions.Enabled != nil {
-				f13f0.Enabled = r.ko.Spec.RedshiftDestinationConfiguration.CloudWatchLoggingOptions.Enabled
-			}
-			if r.ko.Spec.RedshiftDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName != nil {
-				f13f0.LogGroupName = r.ko.Spec.RedshiftDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName
-			}
-			if r.ko.Spec.RedshiftDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName != nil {
-				f13f0.LogStreamName = r.ko.Spec.RedshiftDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName
-			}
-			f13.CloudWatchLoggingOptions = f13f0
-		}
-		if r.ko.Spec.RedshiftDestinationConfiguration.ClusterJDBCURL != nil {
-			f13.ClusterJDBCURL = r.ko.Spec.RedshiftDestinationConfiguration.ClusterJDBCURL
-		}
-		if r.ko.Spec.RedshiftDestinationConfiguration.CopyCommand != nil {
-			f13f2 := &svcsdktypes.CopyCommand{}
-			if r.ko.Spec.RedshiftDestinationConfiguration.CopyCommand.CopyOptions != nil {
-				f13f2.CopyOptions = r.ko.Spec.RedshiftDestinationConfiguration.CopyCommand.CopyOptions
-			}
-			if r.ko.Spec.RedshiftDestinationConfiguration.CopyCommand.DataTableColumns != nil {
-				f13f2.DataTableColumns = r.ko.Spec.RedshiftDestinationConfiguration.CopyCommand.DataTableColumns
-			}
-			if r.ko.Spec.RedshiftDestinationConfiguration.CopyCommand.DataTableName != nil {
-				f13f2.DataTableName = r.ko.Spec.RedshiftDestinationConfiguration.CopyCommand.DataTableName
-			}
-			f13.CopyCommand = f13f2
-		}
-		if r.ko.Spec.RedshiftDestinationConfiguration.Password != nil {
-			f13.Password = r.ko.Spec.RedshiftDestinationConfiguration.Password
-		}
-		if r.ko.Spec.RedshiftDestinationConfiguration.ProcessingConfiguration != nil {
-			f13f4 := &svcsdktypes.ProcessingConfiguration{}
-			if r.ko.Spec.RedshiftDestinationConfiguration.ProcessingConfiguration.Enabled != nil {
-				f13f4.Enabled = r.ko.Spec.RedshiftDestinationConfiguration.ProcessingConfiguration.Enabled
-			}
-			if r.ko.Spec.RedshiftDestinationConfiguration.ProcessingConfiguration.Processors != nil {
-				f13f4f1 := []svcsdktypes.Processor{}
-				for _, f13f4f1iter := range r.ko.Spec.RedshiftDestinationConfiguration.ProcessingConfiguration.Processors {
-					f13f4f1elem := &svcsdktypes.Processor{}
-					if f13f4f1iter.Parameters != nil {
-						f13f4f1elemf0 := []svcsdktypes.ProcessorParameter{}
-						for _, f13f4f1elemf0iter := range f13f4f1iter.Parameters {
-							f13f4f1elemf0elem := &svcsdktypes.ProcessorParameter{}
-							if f13f4f1elemf0iter.ParameterName != nil {
-								f13f4f1elemf0elem.ParameterName = svcsdktypes.ProcessorParameterName(*f13f4f1elemf0iter.ParameterName)
-							}
-							if f13f4f1elemf0iter.ParameterValue != nil {
-								f13f4f1elemf0elem.ParameterValue = f13f4f1elemf0iter.ParameterValue
-							}
-							f13f4f1elemf0 = append(f13f4f1elemf0, *f13f4f1elemf0elem)
-						}
-						f13f4f1elem.Parameters = f13f4f1elemf0
-					}
-					if f13f4f1iter.Type != nil {
-						f13f4f1elem.Type = svcsdktypes.ProcessorType(*f13f4f1iter.Type)
-					}
-					f13f4f1 = append(f13f4f1, *f13f4f1elem)
-				}
-				f13f4.Processors = f13f4f1
-			}
-			f13.ProcessingConfiguration = f13f4
-		}
-		if r.ko.Spec.RedshiftDestinationConfiguration.RetryOptions != nil {
-			f13f5 := &svcsdktypes.RedshiftRetryOptions{}
-			if r.ko.Spec.RedshiftDestinationConfiguration.RetryOptions.DurationInSeconds != nil {
-				durationInSecondsCopy0 := *r.ko.Spec.RedshiftDestinationConfiguration.RetryOptions.DurationInSeconds
-				if durationInSecondsCopy0 > math.MaxInt32 || durationInSecondsCopy0 < math.MinInt32 {
-					return nil, fmt.Errorf("error: field DurationInSeconds is of type int32")
-				}
-				durationInSecondsCopy := int32(durationInSecondsCopy0)
-				f13f5.DurationInSeconds = &durationInSecondsCopy
-			}
-			f13.RetryOptions = f13f5
-		}
-		if r.ko.Spec.RedshiftDestinationConfiguration.RoleARN != nil {
-			f13.RoleARN = r.ko.Spec.RedshiftDestinationConfiguration.RoleARN
-		}
-		if r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration != nil {
-			f13f7 := &svcsdktypes.S3DestinationConfiguration{}
-			if r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration.BucketARN != nil {
-				f13f7.BucketARN = r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration.BucketARN
-			}
-			if r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration.BufferingHints != nil {
-				f13f7f1 := &svcsdktypes.BufferingHints{}
-				if r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration.BufferingHints.IntervalInSeconds != nil {
-					intervalInSecondsCopy0 := *r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration.BufferingHints.IntervalInSeconds
-					if intervalInSecondsCopy0 > math.MaxInt32 || intervalInSecondsCopy0 < math.MinInt32 {
-						return nil, fmt.Errorf("error: field IntervalInSeconds is of type int32")
-					}
-					intervalInSecondsCopy := int32(intervalInSecondsCopy0)
-					f13f7f1.IntervalInSeconds = &intervalInSecondsCopy
-				}
-				if r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration.BufferingHints.SizeInMBs != nil {
-					sizeInMBsCopy0 := *r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration.BufferingHints.SizeInMBs
-					if sizeInMBsCopy0 > math.MaxInt32 || sizeInMBsCopy0 < math.MinInt32 {
-						return nil, fmt.Errorf("error: field SizeInMBs is of type int32")
-					}
-					sizeInMBsCopy := int32(sizeInMBsCopy0)
-					f13f7f1.SizeInMBs = &sizeInMBsCopy
-				}
-				f13f7.BufferingHints = f13f7f1
-			}
-			if r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions != nil {
-				f13f7f2 := &svcsdktypes.CloudWatchLoggingOptions{}
-				if r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.Enabled != nil {
-					f13f7f2.Enabled = r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.Enabled
-				}
-				if r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogGroupName != nil {
-					f13f7f2.LogGroupName = r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogGroupName
-				}
-				if r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogStreamName != nil {
-					f13f7f2.LogStreamName = r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogStreamName
-				}
-				f13f7.CloudWatchLoggingOptions = f13f7f2
-			}
-			if r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration.CompressionFormat != nil {
-				f13f7.CompressionFormat = svcsdktypes.CompressionFormat(*r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration.CompressionFormat)
-			}
-			if r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration != nil {
-				f13f7f4 := &svcsdktypes.EncryptionConfiguration{}
-				if r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.KMSEncryptionConfig != nil {
-					f13f7f4f0 := &svcsdktypes.KMSEncryptionConfig{}
-					if r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN != nil {
-						f13f7f4f0.AWSKMSKeyARN = r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN
-					}
-					f13f7f4.KMSEncryptionConfig = f13f7f4f0
-				}
-				if r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.NoEncryptionConfig != nil {
-					f13f7f4.NoEncryptionConfig = svcsdktypes.NoEncryptionConfig(*r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.NoEncryptionConfig)
-				}
-				f13f7.EncryptionConfiguration = f13f7f4
-			}
-			if r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration.ErrorOutputPrefix != nil {
-				f13f7.ErrorOutputPrefix = r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration.ErrorOutputPrefix
-			}
-			if r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration.Prefix != nil {
-				f13f7.Prefix = r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration.Prefix
-			}
-			if r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration.RoleARN != nil {
-				f13f7.RoleARN = r.ko.Spec.RedshiftDestinationConfiguration.S3BackupConfiguration.RoleARN
-			}
-			f13.S3BackupConfiguration = f13f7
-		}
-		if r.ko.Spec.RedshiftDestinationConfiguration.S3BackupMode != nil {
-			f13.S3BackupMode = svcsdktypes.RedshiftS3BackupMode(*r.ko.Spec.RedshiftDestinationConfiguration.S3BackupMode)
-		}
-		if r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration != nil {
-			f13f9 := &svcsdktypes.S3DestinationConfiguration{}
-			if r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration.BucketARN != nil {
-				f13f9.BucketARN = r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration.BucketARN
-			}
-			if r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration.BufferingHints != nil {
-				f13f9f1 := &svcsdktypes.BufferingHints{}
-				if r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds != nil {
-					intervalInSecondsCopy0 := *r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds
-					if intervalInSecondsCopy0 > math.MaxInt32 || intervalInSecondsCopy0 < math.MinInt32 {
-						return nil, fmt.Errorf("error: field IntervalInSeconds is of type int32")
-					}
-					intervalInSecondsCopy := int32(intervalInSecondsCopy0)
-					f13f9f1.IntervalInSeconds = &intervalInSecondsCopy
-				}
-				if r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs != nil {
-					sizeInMBsCopy0 := *r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs
-					if sizeInMBsCopy0 > math.MaxInt32 || sizeInMBsCopy0 < math.MinInt32 {
-						return nil, fmt.Errorf("error: field SizeInMBs is of type int32")
-					}
-					sizeInMBsCopy := int32(sizeInMBsCopy0)
-					f13f9f1.SizeInMBs = &sizeInMBsCopy
-				}
-				f13f9.BufferingHints = f13f9f1
-			}
-			if r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions != nil {
-				f13f9f2 := &svcsdktypes.CloudWatchLoggingOptions{}
-				if r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled != nil {
-					f13f9f2.Enabled = r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled
-				}
-				if r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName != nil {
-					f13f9f2.LogGroupName = r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName
-				}
-				if r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName != nil {
-					f13f9f2.LogStreamName = r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName
-				}
-				f13f9.CloudWatchLoggingOptions = f13f9f2
-			}
-			if r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration.CompressionFormat != nil {
-				f13f9.CompressionFormat = svcsdktypes.CompressionFormat(*r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration.CompressionFormat)
-			}
-			if r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration.EncryptionConfiguration != nil {
-				f13f9f4 := &svcsdktypes.EncryptionConfiguration{}
-				if r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig != nil {
-					f13f9f4f0 := &svcsdktypes.KMSEncryptionConfig{}
-					if r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN != nil {
-						f13f9f4f0.AWSKMSKeyARN = r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN
-					}
-					f13f9f4.KMSEncryptionConfig = f13f9f4f0
-				}
-				if r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig != nil {
-					f13f9f4.NoEncryptionConfig = svcsdktypes.NoEncryptionConfig(*r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig)
-				}
-				f13f9.EncryptionConfiguration = f13f9f4
-			}
-			if r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration.ErrorOutputPrefix != nil {
-				f13f9.ErrorOutputPrefix = r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration.ErrorOutputPrefix
-			}
-			if r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration.Prefix != nil {
-				f13f9.Prefix = r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration.Prefix
-			}
-			if r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration.RoleARN != nil {
-				f13f9.RoleARN = r.ko.Spec.RedshiftDestinationConfiguration.S3Configuration.RoleARN
-			}
-			f13.S3Configuration = f13f9
-		}
-		if r.ko.Spec.RedshiftDestinationConfiguration.SecretsManagerConfiguration != nil {
-			f13f10 := &svcsdktypes.SecretsManagerConfiguration{}
-			if r.ko.Spec.RedshiftDestinationConfiguration.SecretsManagerConfiguration.Enabled != nil {
-				f13f10.Enabled = r.ko.Spec.RedshiftDestinationConfiguration.SecretsManagerConfiguration.Enabled
-			}
-			if r.ko.Spec.RedshiftDestinationConfiguration.SecretsManagerConfiguration.RoleARN != nil {
-				f13f10.RoleARN = r.ko.Spec.RedshiftDestinationConfiguration.SecretsManagerConfiguration.RoleARN
-			}
-			if r.ko.Spec.RedshiftDestinationConfiguration.SecretsManagerConfiguration.SecretARN != nil {
-				f13f10.SecretARN = r.ko.Spec.RedshiftDestinationConfiguration.SecretsManagerConfiguration.SecretARN
-			}
-			f13.SecretsManagerConfiguration = f13f10
-		}
-		if r.ko.Spec.RedshiftDestinationConfiguration.Username != nil {
-			f13.Username = r.ko.Spec.RedshiftDestinationConfiguration.Username
-		}
-		res.RedshiftDestinationConfiguration = f13
-	}
-	if r.ko.Spec.S3DestinationConfiguration != nil {
-		f14 := &svcsdktypes.S3DestinationConfiguration{}
-		if r.ko.Spec.S3DestinationConfiguration.BucketARN != nil {
-			f14.BucketARN = r.ko.Spec.S3DestinationConfiguration.BucketARN
-		}
-		if r.ko.Spec.S3DestinationConfiguration.BufferingHints != nil {
-			f14f1 := &svcsdktypes.BufferingHints{}
-			if r.ko.Spec.S3DestinationConfiguration.BufferingHints.IntervalInSeconds != nil {
-				intervalInSecondsCopy0 := *r.ko.Spec.S3DestinationConfiguration.BufferingHints.IntervalInSeconds
-				if intervalInSecondsCopy0 > math.MaxInt32 || intervalInSecondsCopy0 < math.MinInt32 {
-					return nil, fmt.Errorf("error: field IntervalInSeconds is of type int32")
-				}
-				intervalInSecondsCopy := int32(intervalInSecondsCopy0)
-				f14f1.IntervalInSeconds = &intervalInSecondsCopy
-			}
-			if r.ko.Spec.S3DestinationConfiguration.BufferingHints.SizeInMBs != nil {
-				sizeInMBsCopy0 := *r.ko.Spec.S3DestinationConfiguration.BufferingHints.SizeInMBs
-				if sizeInMBsCopy0 > math.MaxInt32 || sizeInMBsCopy0 < math.MinInt32 {
-					return nil, fmt.Errorf("error: field SizeInMBs is of type int32")
-				}
-				sizeInMBsCopy := int32(sizeInMBsCopy0)
-				f14f1.SizeInMBs = &sizeInMBsCopy
-			}
-			f14.BufferingHints = f14f1
-		}
-		if r.ko.Spec.S3DestinationConfiguration.CloudWatchLoggingOptions != nil {
-			f14f2 := &svcsdktypes.CloudWatchLoggingOptions{}
-			if r.ko.Spec.S3DestinationConfiguration.CloudWatchLoggingOptions.Enabled != nil {
-				f14f2.Enabled = r.ko.Spec.S3DestinationConfiguration.CloudWatchLoggingOptions.Enabled
-			}
-			if r.ko.Spec.S3DestinationConfiguration.CloudWatchLoggingOptions.LogGroupName != nil {
-				f14f2.LogGroupName = r.ko.Spec.S3DestinationConfiguration.CloudWatchLoggingOptions.LogGroupName
-			}
-			if r.ko.Spec.S3DestinationConfiguration.CloudWatchLoggingOptions.LogStreamName != nil {
-				f14f2.LogStreamName = r.ko.Spec.S3DestinationConfiguration.CloudWatchLoggingOptions.LogStreamName
-			}
-			f14.CloudWatchLoggingOptions = f14f2
-		}
-		if r.ko.Spec.S3DestinationConfiguration.CompressionFormat != nil {
-			f14.CompressionFormat = svcsdktypes.CompressionFormat(*r.ko.Spec.S3DestinationConfiguration.CompressionFormat)
-		}
-		if r.ko.Spec.S3DestinationConfiguration.EncryptionConfiguration != nil {
-			f14f4 := &svcsdktypes.EncryptionConfiguration{}
-			if r.ko.Spec.S3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig != nil {
-				f14f4f0 := &svcsdktypes.KMSEncryptionConfig{}
-				if r.ko.Spec.S3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN != nil {
-					f14f4f0.AWSKMSKeyARN = r.ko.Spec.S3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN
-				}
-				f14f4.KMSEncryptionConfig = f14f4f0
-			}
-			if r.ko.Spec.S3DestinationConfiguration.EncryptionConfiguration.NoEncryptionConfig != nil {
-				f14f4.NoEncryptionConfig = svcsdktypes.NoEncryptionConfig(*r.ko.Spec.S3DestinationConfiguration.EncryptionConfiguration.NoEncryptionConfig)
-			}
-			f14.EncryptionConfiguration = f14f4
-		}
-		if r.ko.Spec.S3DestinationConfiguration.ErrorOutputPrefix != nil {
-			f14.ErrorOutputPrefix = r.ko.Spec.S3DestinationConfiguration.ErrorOutputPrefix
-		}
-		if r.ko.Spec.S3DestinationConfiguration.Prefix != nil {
-			f14.Prefix = r.ko.Spec.S3DestinationConfiguration.Prefix
-		}
-		if r.ko.Spec.S3DestinationConfiguration.RoleARN != nil {
-			f14.RoleARN = r.ko.Spec.S3DestinationConfiguration.RoleARN
-		}
-		res.S3DestinationConfiguration = f14
-	}
-	if r.ko.Spec.SnowflakeDestinationConfiguration != nil {
-		f15 := &svcsdktypes.SnowflakeDestinationConfiguration{}
-		if r.ko.Spec.SnowflakeDestinationConfiguration.AccountURL != nil {
-			f15.AccountUrl = r.ko.Spec.SnowflakeDestinationConfiguration.AccountURL
-		}
-		if r.ko.Spec.SnowflakeDestinationConfiguration.BufferingHints != nil {
-			f15f1 := &svcsdktypes.SnowflakeBufferingHints{}
-			if r.ko.Spec.SnowflakeDestinationConfiguration.BufferingHints.IntervalInSeconds != nil {
-				intervalInSecondsCopy0 := *r.ko.Spec.SnowflakeDestinationConfiguration.BufferingHints.IntervalInSeconds
-				if intervalInSecondsCopy0 > math.MaxInt32 || intervalInSecondsCopy0 < math.MinInt32 {
-					return nil, fmt.Errorf("error: field IntervalInSeconds is of type int32")
-				}
-				intervalInSecondsCopy := int32(intervalInSecondsCopy0)
-				f15f1.IntervalInSeconds = &intervalInSecondsCopy
-			}
-			if r.ko.Spec.SnowflakeDestinationConfiguration.BufferingHints.SizeInMBs != nil {
-				sizeInMBsCopy0 := *r.ko.Spec.SnowflakeDestinationConfiguration.BufferingHints.SizeInMBs
-				if sizeInMBsCopy0 > math.MaxInt32 || sizeInMBsCopy0 < math.MinInt32 {
-					return nil, fmt.Errorf("error: field SizeInMBs is of type int32")
-				}
-				sizeInMBsCopy := int32(sizeInMBsCopy0)
-				f15f1.SizeInMBs = &sizeInMBsCopy
-			}
-			f15.BufferingHints = f15f1
-		}
-		if r.ko.Spec.SnowflakeDestinationConfiguration.CloudWatchLoggingOptions != nil {
-			f15f2 := &svcsdktypes.CloudWatchLoggingOptions{}
-			if r.ko.Spec.SnowflakeDestinationConfiguration.CloudWatchLoggingOptions.Enabled != nil {
-				f15f2.Enabled = r.ko.Spec.SnowflakeDestinationConfiguration.CloudWatchLoggingOptions.Enabled
-			}
-			if r.ko.Spec.SnowflakeDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName != nil {
-				f15f2.LogGroupName = r.ko.Spec.SnowflakeDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName
-			}
-			if r.ko.Spec.SnowflakeDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName != nil {
-				f15f2.LogStreamName = r.ko.Spec.SnowflakeDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName
-			}
-			f15.CloudWatchLoggingOptions = f15f2
-		}
-		if r.ko.Spec.SnowflakeDestinationConfiguration.ContentColumnName != nil {
-			f15.ContentColumnName = r.ko.Spec.SnowflakeDestinationConfiguration.ContentColumnName
-		}
-		if r.ko.Spec.SnowflakeDestinationConfiguration.DataLoadingOption != nil {
-			f15.DataLoadingOption = svcsdktypes.SnowflakeDataLoadingOption(*r.ko.Spec.SnowflakeDestinationConfiguration.DataLoadingOption)
-		}
-		if r.ko.Spec.SnowflakeDestinationConfiguration.Database != nil {
-			f15.Database = r.ko.Spec.SnowflakeDestinationConfiguration.Database
-		}
-		if r.ko.Spec.SnowflakeDestinationConfiguration.KeyPassphrase != nil {
-			f15.KeyPassphrase = r.ko.Spec.SnowflakeDestinationConfiguration.KeyPassphrase
-		}
-		if r.ko.Spec.SnowflakeDestinationConfiguration.MetaDataColumnName != nil {
-			f15.MetaDataColumnName = r.ko.Spec.SnowflakeDestinationConfiguration.MetaDataColumnName
-		}
-		if r.ko.Spec.SnowflakeDestinationConfiguration.PrivateKey != nil {
-			f15.PrivateKey = r.ko.Spec.SnowflakeDestinationConfiguration.PrivateKey
-		}
-		if r.ko.Spec.SnowflakeDestinationConfiguration.ProcessingConfiguration != nil {
-			f15f9 := &svcsdktypes.ProcessingConfiguration{}
-			if r.ko.Spec.SnowflakeDestinationConfiguration.ProcessingConfiguration.Enabled != nil {
-				f15f9.Enabled = r.ko.Spec.SnowflakeDestinationConfiguration.ProcessingConfiguration.Enabled
-			}
-			if r.ko.Spec.SnowflakeDestinationConfiguration.ProcessingConfiguration.Processors != nil {
-				f15f9f1 := []svcsdktypes.Processor{}
-				for _, f15f9f1iter := range r.ko.Spec.SnowflakeDestinationConfiguration.ProcessingConfiguration.Processors {
-					f15f9f1elem := &svcsdktypes.Processor{}
-					if f15f9f1iter.Parameters != nil {
-						f15f9f1elemf0 := []svcsdktypes.ProcessorParameter{}
-						for _, f15f9f1elemf0iter := range f15f9f1iter.Parameters {
-							f15f9f1elemf0elem := &svcsdktypes.ProcessorParameter{}
-							if f15f9f1elemf0iter.ParameterName != nil {
-								f15f9f1elemf0elem.ParameterName = svcsdktypes.ProcessorParameterName(*f15f9f1elemf0iter.ParameterName)
-							}
-							if f15f9f1elemf0iter.ParameterValue != nil {
-								f15f9f1elemf0elem.ParameterValue = f15f9f1elemf0iter.ParameterValue
-							}
-							f15f9f1elemf0 = append(f15f9f1elemf0, *f15f9f1elemf0elem)
-						}
-						f15f9f1elem.Parameters = f15f9f1elemf0
-					}
-					if f15f9f1iter.Type != nil {
-						f15f9f1elem.Type = svcsdktypes.ProcessorType(*f15f9f1iter.Type)
-					}
-					f15f9f1 = append(f15f9f1, *f15f9f1elem)
-				}
-				f15f9.Processors = f15f9f1
-			}
-			f15.ProcessingConfiguration = f15f9
-		}
-		if r.ko.Spec.SnowflakeDestinationConfiguration.RetryOptions != nil {
-			f15f10 := &svcsdktypes.SnowflakeRetryOptions{}
-			if r.ko.Spec.SnowflakeDestinationConfiguration.RetryOptions.DurationInSeconds != nil {
-				durationInSecondsCopy0 := *r.ko.Spec.SnowflakeDestinationConfiguration.RetryOptions.DurationInSeconds
-				if durationInSecondsCopy0 > math.MaxInt32 || durationInSecondsCopy0 < math.MinInt32 {
-					return nil, fmt.Errorf("error: field DurationInSeconds is of type int32")
-				}
-				durationInSecondsCopy := int32(durationInSecondsCopy0)
-				f15f10.DurationInSeconds = &durationInSecondsCopy
-			}
-			f15.RetryOptions = f15f10
-		}
-		if r.ko.Spec.SnowflakeDestinationConfiguration.RoleARN != nil {
-			f15.RoleARN = r.ko.Spec.SnowflakeDestinationConfiguration.RoleARN
-		}
-		if r.ko.Spec.SnowflakeDestinationConfiguration.S3BackupMode != nil {
-			f15.S3BackupMode = svcsdktypes.SnowflakeS3BackupMode(*r.ko.Spec.SnowflakeDestinationConfiguration.S3BackupMode)
-		}
-		if r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration != nil {
-			f15f13 := &svcsdktypes.S3DestinationConfiguration{}
-			if r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration.BucketARN != nil {
-				f15f13.BucketARN = r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration.BucketARN
-			}
-			if r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration.BufferingHints != nil {
-				f15f13f1 := &svcsdktypes.BufferingHints{}
-				if r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds != nil {
-					intervalInSecondsCopy0 := *r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds
-					if intervalInSecondsCopy0 > math.MaxInt32 || intervalInSecondsCopy0 < math.MinInt32 {
-						return nil, fmt.Errorf("error: field IntervalInSeconds is of type int32")
-					}
-					intervalInSecondsCopy := int32(intervalInSecondsCopy0)
-					f15f13f1.IntervalInSeconds = &intervalInSecondsCopy
-				}
-				if r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs != nil {
-					sizeInMBsCopy0 := *r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs
-					if sizeInMBsCopy0 > math.MaxInt32 || sizeInMBsCopy0 < math.MinInt32 {
-						return nil, fmt.Errorf("error: field SizeInMBs is of type int32")
-					}
-					sizeInMBsCopy := int32(sizeInMBsCopy0)
-					f15f13f1.SizeInMBs = &sizeInMBsCopy
-				}
-				f15f13.BufferingHints = f15f13f1
-			}
-			if r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions != nil {
-				f15f13f2 := &svcsdktypes.CloudWatchLoggingOptions{}
-				if r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled != nil {
-					f15f13f2.Enabled = r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled
-				}
-				if r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName != nil {
-					f15f13f2.LogGroupName = r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName
-				}
-				if r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName != nil {
-					f15f13f2.LogStreamName = r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName
-				}
-				f15f13.CloudWatchLoggingOptions = f15f13f2
-			}
-			if r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration.CompressionFormat != nil {
-				f15f13.CompressionFormat = svcsdktypes.CompressionFormat(*r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration.CompressionFormat)
-			}
-			if r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration.EncryptionConfiguration != nil {
-				f15f13f4 := &svcsdktypes.EncryptionConfiguration{}
-				if r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig != nil {
-					f15f13f4f0 := &svcsdktypes.KMSEncryptionConfig{}
-					if r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN != nil {
-						f15f13f4f0.AWSKMSKeyARN = r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN
-					}
-					f15f13f4.KMSEncryptionConfig = f15f13f4f0
-				}
-				if r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig != nil {
-					f15f13f4.NoEncryptionConfig = svcsdktypes.NoEncryptionConfig(*r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig)
-				}
-				f15f13.EncryptionConfiguration = f15f13f4
-			}
-			if r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration.ErrorOutputPrefix != nil {
-				f15f13.ErrorOutputPrefix = r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration.ErrorOutputPrefix
-			}
-			if r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration.Prefix != nil {
-				f15f13.Prefix = r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration.Prefix
-			}
-			if r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration.RoleARN != nil {
-				f15f13.RoleARN = r.ko.Spec.SnowflakeDestinationConfiguration.S3Configuration.RoleARN
-			}
-			f15.S3Configuration = f15f13
-		}
-		if r.ko.Spec.SnowflakeDestinationConfiguration.Schema != nil {
-			f15.Schema = r.ko.Spec.SnowflakeDestinationConfiguration.Schema
-		}
-		if r.ko.Spec.SnowflakeDestinationConfiguration.SecretsManagerConfiguration != nil {
-			f15f15 := &svcsdktypes.SecretsManagerConfiguration{}
-			if r.ko.Spec.SnowflakeDestinationConfiguration.SecretsManagerConfiguration.Enabled != nil {
-				f15f15.Enabled = r.ko.Spec.SnowflakeDestinationConfiguration.SecretsManagerConfiguration.Enabled
-			}
-			if r.ko.Spec.SnowflakeDestinationConfiguration.SecretsManagerConfiguration.RoleARN != nil {
-				f15f15.RoleARN = r.ko.Spec.SnowflakeDestinationConfiguration.SecretsManagerConfiguration.RoleARN
-			}
-			if r.ko.Spec.SnowflakeDestinationConfiguration.SecretsManagerConfiguration.SecretARN != nil {
-				f15f15.SecretARN = r.ko.Spec.SnowflakeDestinationConfiguration.SecretsManagerConfiguration.SecretARN
-			}
-			f15.SecretsManagerConfiguration = f15f15
-		}
-		if r.ko.Spec.SnowflakeDestinationConfiguration.SnowflakeRoleConfiguration != nil {
-			f15f16 := &svcsdktypes.SnowflakeRoleConfiguration{}
-			if r.ko.Spec.SnowflakeDestinationConfiguration.SnowflakeRoleConfiguration.Enabled != nil {
-				f15f16.Enabled = r.ko.Spec.SnowflakeDestinationConfiguration.SnowflakeRoleConfiguration.Enabled
-			}
-			if r.ko.Spec.SnowflakeDestinationConfiguration.SnowflakeRoleConfiguration.SnowflakeRole != nil {
-				f15f16.SnowflakeRole = r.ko.Spec.SnowflakeDestinationConfiguration.SnowflakeRoleConfiguration.SnowflakeRole
-			}
-			f15.SnowflakeRoleConfiguration = f15f16
-		}
-		if r.ko.Spec.SnowflakeDestinationConfiguration.SnowflakeVPCConfiguration != nil {
-			f15f17 := &svcsdktypes.SnowflakeVpcConfiguration{}
-			if r.ko.Spec.SnowflakeDestinationConfiguration.SnowflakeVPCConfiguration.PrivateLinkVPCeID != nil {
-				f15f17.PrivateLinkVpceId = r.ko.Spec.SnowflakeDestinationConfiguration.SnowflakeVPCConfiguration.PrivateLinkVPCeID
-			}
-			f15.SnowflakeVpcConfiguration = f15f17
-		}
-		if r.ko.Spec.SnowflakeDestinationConfiguration.Table != nil {
-			f15.Table = r.ko.Spec.SnowflakeDestinationConfiguration.Table
-		}
-		if r.ko.Spec.SnowflakeDestinationConfiguration.User != nil {
-			f15.User = r.ko.Spec.SnowflakeDestinationConfiguration.User
-		}
-		res.SnowflakeDestinationConfiguration = f15
-	}
-	if r.ko.Spec.SplunkDestinationConfiguration != nil {
-		f16 := &svcsdktypes.SplunkDestinationConfiguration{}
-		if r.ko.Spec.SplunkDestinationConfiguration.BufferingHints != nil {
-			f16f0 := &svcsdktypes.SplunkBufferingHints{}
-			if r.ko.Spec.SplunkDestinationConfiguration.BufferingHints.IntervalInSeconds != nil {
-				intervalInSecondsCopy0 := *r.ko.Spec.SplunkDestinationConfiguration.BufferingHints.IntervalInSeconds
-				if intervalInSecondsCopy0 > math.MaxInt32 || intervalInSecondsCopy0 < math.MinInt32 {
-					return nil, fmt.Errorf("error: field IntervalInSeconds is of type int32")
-				}
-				intervalInSecondsCopy := int32(intervalInSecondsCopy0)
-				f16f0.IntervalInSeconds = &intervalInSecondsCopy
-			}
-			if r.ko.Spec.SplunkDestinationConfiguration.BufferingHints.SizeInMBs != nil {
-				sizeInMBsCopy0 := *r.ko.Spec.SplunkDestinationConfiguration.BufferingHints.SizeInMBs
-				if sizeInMBsCopy0 > math.MaxInt32 || sizeInMBsCopy0 < math.MinInt32 {
-					return nil, fmt.Errorf("error: field SizeInMBs is of type int32")
-				}
-				sizeInMBsCopy := int32(sizeInMBsCopy0)
-				f16f0.SizeInMBs = &sizeInMBsCopy
-			}
-			f16.BufferingHints = f16f0
-		}
-		if r.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions != nil {
-			f16f1 := &svcsdktypes.CloudWatchLoggingOptions{}
-			if r.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.Enabled != nil {
-				f16f1.Enabled = r.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.Enabled
-			}
-			if r.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName != nil {
-				f16f1.LogGroupName = r.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName
-			}
-			if r.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName != nil {
-				f16f1.LogStreamName = r.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName
-			}
-			f16.CloudWatchLoggingOptions = f16f1
-		}
-		if r.ko.Spec.SplunkDestinationConfiguration.HECAcknowledgmentTimeoutInSeconds != nil {
-			hECAcknowledgmentTimeoutInSecondsCopy0 := *r.ko.Spec.SplunkDestinationConfiguration.HECAcknowledgmentTimeoutInSeconds
-			if hECAcknowledgmentTimeoutInSecondsCopy0 > math.MaxInt32 || hECAcknowledgmentTimeoutInSecondsCopy0 < math.MinInt32 {
-				return nil, fmt.Errorf("error: field HECAcknowledgmentTimeoutInSeconds is of type int32")
-			}
-			hECAcknowledgmentTimeoutInSecondsCopy := int32(hECAcknowledgmentTimeoutInSecondsCopy0)
-			f16.HECAcknowledgmentTimeoutInSeconds = &hECAcknowledgmentTimeoutInSecondsCopy
-		}
-		if r.ko.Spec.SplunkDestinationConfiguration.HECEndpoint != nil {
-			f16.HECEndpoint = r.ko.Spec.SplunkDestinationConfiguration.HECEndpoint
-		}
-		if r.ko.Spec.SplunkDestinationConfiguration.HECEndpointType != nil {
-			f16.HECEndpointType = svcsdktypes.HECEndpointType(*r.ko.Spec.SplunkDestinationConfiguration.HECEndpointType)
-		}
-		if r.ko.Spec.SplunkDestinationConfiguration.HECToken != nil {
-			f16.HECToken = r.ko.Spec.SplunkDestinationConfiguration.HECToken
-		}
-		if r.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration != nil {
-			f16f6 := &svcsdktypes.ProcessingConfiguration{}
-			if r.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Enabled != nil {
-				f16f6.Enabled = r.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Enabled
-			}
-			if r.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Processors != nil {
-				f16f6f1 := []svcsdktypes.Processor{}
-				for _, f16f6f1iter := range r.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Processors {
-					f16f6f1elem := &svcsdktypes.Processor{}
-					if f16f6f1iter.Parameters != nil {
-						f16f6f1elemf0 := []svcsdktypes.ProcessorParameter{}
-						for _, f16f6f1elemf0iter := range f16f6f1iter.Parameters {
-							f16f6f1elemf0elem := &svcsdktypes.ProcessorParameter{}
-							if f16f6f1elemf0iter.ParameterName != nil {
-								f16f6f1elemf0elem.ParameterName = svcsdktypes.ProcessorParameterName(*f16f6f1elemf0iter.ParameterName)
-							}
-							if f16f6f1elemf0iter.ParameterValue != nil {
-								f16f6f1elemf0elem.ParameterValue = f16f6f1elemf0iter.ParameterValue
-							}
-							f16f6f1elemf0 = append(f16f6f1elemf0, *f16f6f1elemf0elem)
-						}
-						f16f6f1elem.Parameters = f16f6f1elemf0
-					}
-					if f16f6f1iter.Type != nil {
-						f16f6f1elem.Type = svcsdktypes.ProcessorType(*f16f6f1iter.Type)
-					}
-					f16f6f1 = append(f16f6f1, *f16f6f1elem)
-				}
-				f16f6.Processors = f16f6f1
-			}
-			f16.ProcessingConfiguration = f16f6
-		}
-		if r.ko.Spec.SplunkDestinationConfiguration.RetryOptions != nil {
-			f16f7 := &svcsdktypes.SplunkRetryOptions{}
-			if r.ko.Spec.SplunkDestinationConfiguration.RetryOptions.DurationInSeconds != nil {
-				durationInSecondsCopy0 := *r.ko.Spec.SplunkDestinationConfiguration.RetryOptions.DurationInSeconds
-				if durationInSecondsCopy0 > math.MaxInt32 || durationInSecondsCopy0 < math.MinInt32 {
-					return nil, fmt.Errorf("error: field DurationInSeconds is of type int32")
-				}
-				durationInSecondsCopy := int32(durationInSecondsCopy0)
-				f16f7.DurationInSeconds = &durationInSecondsCopy
-			}
-			f16.RetryOptions = f16f7
-		}
-		if r.ko.Spec.SplunkDestinationConfiguration.S3BackupMode != nil {
-			f16.S3BackupMode = svcsdktypes.SplunkS3BackupMode(*r.ko.Spec.SplunkDestinationConfiguration.S3BackupMode)
-		}
-		if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration != nil {
-			f16f9 := &svcsdktypes.S3DestinationConfiguration{}
-			if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BucketARN != nil {
-				f16f9.BucketARN = r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BucketARN
-			}
-			if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints != nil {
-				f16f9f1 := &svcsdktypes.BufferingHints{}
-				if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds != nil {
-					intervalInSecondsCopy0 := *r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds
-					if intervalInSecondsCopy0 > math.MaxInt32 || intervalInSecondsCopy0 < math.MinInt32 {
-						return nil, fmt.Errorf("error: field IntervalInSeconds is of type int32")
-					}
-					intervalInSecondsCopy := int32(intervalInSecondsCopy0)
-					f16f9f1.IntervalInSeconds = &intervalInSecondsCopy
-				}
-				if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs != nil {
-					sizeInMBsCopy0 := *r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs
-					if sizeInMBsCopy0 > math.MaxInt32 || sizeInMBsCopy0 < math.MinInt32 {
-						return nil, fmt.Errorf("error: field SizeInMBs is of type int32")
-					}
-					sizeInMBsCopy := int32(sizeInMBsCopy0)
-					f16f9f1.SizeInMBs = &sizeInMBsCopy
-				}
-				f16f9.BufferingHints = f16f9f1
-			}
-			if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions != nil {
-				f16f9f2 := &svcsdktypes.CloudWatchLoggingOptions{}
-				if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled != nil {
-					f16f9f2.Enabled = r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled
-				}
-				if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName != nil {
-					f16f9f2.LogGroupName = r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName
-				}
-				if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName != nil {
-					f16f9f2.LogStreamName = r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName
-				}
-				f16f9.CloudWatchLoggingOptions = f16f9f2
-			}
-			if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CompressionFormat != nil {
-				f16f9.CompressionFormat = svcsdktypes.CompressionFormat(*r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CompressionFormat)
-			}
-			if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration != nil {
-				f16f9f4 := &svcsdktypes.EncryptionConfiguration{}
-				if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig != nil {
-					f16f9f4f0 := &svcsdktypes.KMSEncryptionConfig{}
-					if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN != nil {
-						f16f9f4f0.AWSKMSKeyARN = r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN
-					}
-					f16f9f4.KMSEncryptionConfig = f16f9f4f0
-				}
-				if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig != nil {
-					f16f9f4.NoEncryptionConfig = svcsdktypes.NoEncryptionConfig(*r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig)
-				}
-				f16f9.EncryptionConfiguration = f16f9f4
-			}
-			if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.ErrorOutputPrefix != nil {
-				f16f9.ErrorOutputPrefix = r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.ErrorOutputPrefix
-			}
-			if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.Prefix != nil {
-				f16f9.Prefix = r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.Prefix
-			}
-			if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.RoleARN != nil {
-				f16f9.RoleARN = r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.RoleARN
-			}
-			f16.S3Configuration = f16f9
-		}
-		if r.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration != nil {
-			f16f10 := &svcsdktypes.SecretsManagerConfiguration{}
-			if r.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.Enabled != nil {
-				f16f10.Enabled = r.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.Enabled
-			}
-			if r.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleARN != nil {
-				f16f10.RoleARN = r.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleARN
-			}
-			if r.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretARN != nil {
-				f16f10.SecretARN = r.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretARN
-			}
-			f16.SecretsManagerConfiguration = f16f10
-		}
-		res.SplunkDestinationConfiguration = f16
+		res.HttpEndpointDestinationConfiguration = f3
 	}
 	if r.ko.Spec.Tags != nil {
-		f17 := []svcsdktypes.Tag{}
-		for _, f17iter := range r.ko.Spec.Tags {
-			f17elem := &svcsdktypes.Tag{}
-			if f17iter.Key != nil {
-				f17elem.Key = f17iter.Key
+		f4 := []svcsdktypes.Tag{}
+		for _, f4iter := range r.ko.Spec.Tags {
+			f4elem := &svcsdktypes.Tag{}
+			if f4iter.Key != nil {
+				f4elem.Key = f4iter.Key
 			}
-			if f17iter.Value != nil {
-				f17elem.Value = f17iter.Value
+			if f4iter.Value != nil {
+				f4elem.Value = f4iter.Value
 			}
-			f17 = append(f17, *f17elem)
+			f4 = append(f4, *f4elem)
 		}
-		res.Tags = f17
+		res.Tags = f4
 	}
 
 	return res, nil

@@ -3,7 +3,7 @@ module github.com/aws-controllers-k8s/firehose-controller
 go 1.23.0
 
 require (
-	github.com/aws-controllers-k8s/runtime v0.51.0
+	github.com/aws-controllers-k8s/runtime v0.52.0
 	github.com/aws/aws-sdk-go v1.49.0
 	github.com/aws/aws-sdk-go-v2 v1.39.0
 	github.com/aws/aws-sdk-go-v2/service/firehose v1.41.4

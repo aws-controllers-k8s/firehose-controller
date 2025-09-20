@@ -54,9 +54,6 @@ type AmazonOpenSearchServerlessDestinationConfiguration struct {
 	S3BackupMode *string                                 `json:"s3BackupMode,omitempty"`
 	// Describes the configuration of a destination in Amazon S3.
 	S3Configuration *S3DestinationConfiguration `json:"s3Configuration,omitempty"`
-	// The details of the VPC of the Amazon OpenSearch or Amazon OpenSearch Serverless
-	// destination.
-	VPCConfiguration *VPCConfiguration `json:"vpcConfiguration,omitempty"`
 }
 
 // The destination description in the Serverless offering for Amazon OpenSearch
@@ -138,9 +135,6 @@ type AmazonopensearchserviceDestinationConfiguration struct {
 	// Describes the configuration of a destination in Amazon S3.
 	S3Configuration *S3DestinationConfiguration `json:"s3Configuration,omitempty"`
 	TypeName        *string                     `json:"typeName,omitempty"`
-	// The details of the VPC of the Amazon OpenSearch or Amazon OpenSearch Serverless
-	// destination.
-	VPCConfiguration *VPCConfiguration `json:"vpcConfiguration,omitempty"`
 }
 
 // The destination description in Amazon OpenSearch Service.
@@ -331,7 +325,6 @@ type DatabaseSourceConfiguration struct {
 	Port                   *int64        `json:"port,omitempty"`
 	SSLMode                *string       `json:"sslMode,omitempty"`
 	SnapshotWatermarkTable *string       `json:"snapshotWatermarkTable,omitempty"`
-	SurrogateKeys          []*string     `json:"surrogateKeys,omitempty"`
 	// The structure used to configure the list of table patterns in source database
 	// endpoint for Firehose to read from.
 	//
@@ -565,9 +558,6 @@ type ElasticsearchDestinationConfiguration struct {
 	// Describes the configuration of a destination in Amazon S3.
 	S3Configuration *S3DestinationConfiguration `json:"s3Configuration,omitempty"`
 	TypeName        *string                     `json:"typeName,omitempty"`
-	// The details of the VPC of the Amazon OpenSearch or Amazon OpenSearch Serverless
-	// destination.
-	VPCConfiguration *VPCConfiguration `json:"vpcConfiguration,omitempty"`
 }
 
 // The destination description in Amazon OpenSearch Service.
@@ -1135,7 +1125,6 @@ type RedshiftDestinationConfiguration struct {
 	ClusterJDBCURL           *string                   `json:"clusterJDBCURL,omitempty"`
 	// Describes a COPY command for Amazon Redshift.
 	CopyCommand *CopyCommand `json:"copyCommand,omitempty"`
-	Password    *string      `json:"password,omitempty"`
 	// Describes a data processing configuration.
 	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
 	// Configures retry behavior in case Firehose is unable to deliver documents
@@ -1182,7 +1171,6 @@ type RedshiftDestinationUpdate struct {
 	ClusterJDBCURL           *string                   `json:"clusterJDBCURL,omitempty"`
 	// Describes a COPY command for Amazon Redshift.
 	CopyCommand *CopyCommand `json:"copyCommand,omitempty"`
-	Password    *string      `json:"password,omitempty"`
 	// Describes a data processing configuration.
 	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
 	// Configures retry behavior in case Firehose is unable to deliver documents
@@ -1319,9 +1307,7 @@ type SnowflakeDestinationConfiguration struct {
 	ContentColumnName        *string                   `json:"contentColumnName,omitempty"`
 	DataLoadingOption        *string                   `json:"dataLoadingOption,omitempty"`
 	Database                 *string                   `json:"database,omitempty"`
-	KeyPassphrase            *string                   `json:"keyPassphrase,omitempty"`
 	MetaDataColumnName       *string                   `json:"metaDataColumnName,omitempty"`
-	PrivateKey               *string                   `json:"privateKey,omitempty"`
 	// Describes a data processing configuration.
 	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
 	// Specify how long Firehose retries sending data to the New Relic HTTP endpoint.
@@ -1413,9 +1399,7 @@ type SnowflakeDestinationUpdate struct {
 	ContentColumnName        *string                   `json:"contentColumnName,omitempty"`
 	DataLoadingOption        *string                   `json:"dataLoadingOption,omitempty"`
 	Database                 *string                   `json:"database,omitempty"`
-	KeyPassphrase            *string                   `json:"keyPassphrase,omitempty"`
 	MetaDataColumnName       *string                   `json:"metaDataColumnName,omitempty"`
-	PrivateKey               *string                   `json:"privateKey,omitempty"`
 	// Describes a data processing configuration.
 	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
 	// Specify how long Firehose retries sending data to the New Relic HTTP endpoint.

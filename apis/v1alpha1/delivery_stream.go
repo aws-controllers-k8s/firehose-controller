@@ -23,15 +23,6 @@ import (
 // DeliveryStreamSpec defines the desired state of DeliveryStream.
 type DeliveryStreamSpec struct {
 
-	// The destination in the Serverless offering for Amazon OpenSearch Service.
-	// You can specify only one destination.
-	AmazonOpenSearchServerlessDestinationConfiguration *AmazonOpenSearchServerlessDestinationConfiguration `json:"amazonOpenSearchServerlessDestinationConfiguration,omitempty"`
-	// The destination in Amazon OpenSearch Service. You can specify only one destination.
-	AmazonopensearchserviceDestinationConfiguration *AmazonopensearchserviceDestinationConfiguration `json:"amazonopensearchserviceDestinationConfiguration,omitempty"`
-	// The top level object for configuring streams with database as a source.
-	//
-	// Amazon Data Firehose is in preview release and is subject to change.
-	DatabaseSourceConfiguration *DatabaseSourceConfiguration `json:"databaseSourceConfiguration,omitempty"`
 	// Used to specify the type and Amazon Resource Name (ARN) of the KMS key needed
 	// for Server-Side Encryption (SSE).
 	DeliveryStreamEncryptionConfigurationInput *DeliveryStreamEncryptionConfigurationInput `json:"deliveryStreamEncryptionConfigurationInput,omitempty"`
@@ -50,31 +41,9 @@ type DeliveryStreamSpec struct {
 	//   - KinesisStreamAsSource: The Firehose stream uses a Kinesis data stream
 	//     as a source.
 	DeliveryStreamType *string `json:"deliveryStreamType,omitempty"`
-	// The structure that configures parameters such as ThroughputHintInMBs for
-	// a stream configured with Direct PUT as a source.
-	DirectPutSourceConfiguration *DirectPutSourceConfiguration `json:"directPutSourceConfiguration,omitempty"`
-	// The destination in Amazon OpenSearch Service. You can specify only one destination.
-	ElasticsearchDestinationConfiguration *ElasticsearchDestinationConfiguration `json:"elasticsearchDestinationConfiguration,omitempty"`
-	// The destination in Amazon S3. You can specify only one destination.
-	ExtendedS3DestinationConfiguration *ExtendedS3DestinationConfiguration `json:"extendedS3DestinationConfiguration,omitempty"`
 	// Enables configuring Kinesis Firehose to deliver data to any HTTP endpoint
 	// destination. You can specify only one destination.
 	HTTPEndpointDestinationConfiguration *HTTPEndpointDestinationConfiguration `json:"httpEndpointDestinationConfiguration,omitempty"`
-	// Configure Apache Iceberg Tables destination.
-	IcebergDestinationConfiguration *IcebergDestinationConfiguration `json:"icebergDestinationConfiguration,omitempty"`
-	// When a Kinesis data stream is used as the source for the Firehose stream,
-	// a KinesisStreamSourceConfiguration containing the Kinesis data stream Amazon
-	// Resource Name (ARN) and the role ARN for the source stream.
-	KinesisStreamSourceConfiguration *KinesisStreamSourceConfiguration `json:"kinesisStreamSourceConfiguration,omitempty"`
-	MSKSourceConfiguration           *MSKSourceConfiguration           `json:"mSKSourceConfiguration,omitempty"`
-	// The destination in Amazon Redshift. You can specify only one destination.
-	RedshiftDestinationConfiguration *RedshiftDestinationConfiguration `json:"redshiftDestinationConfiguration,omitempty"`
-	// [Deprecated] The destination in Amazon S3. You can specify only one destination.
-	S3DestinationConfiguration *S3DestinationConfiguration `json:"s3DestinationConfiguration,omitempty"`
-	// Configure Snowflake destination
-	SnowflakeDestinationConfiguration *SnowflakeDestinationConfiguration `json:"snowflakeDestinationConfiguration,omitempty"`
-	// The destination in Splunk. You can specify only one destination.
-	SplunkDestinationConfiguration *SplunkDestinationConfiguration `json:"splunkDestinationConfiguration,omitempty"`
 	// A set of tags to assign to the Firehose stream. A tag is a key-value pair
 	// that you can define and assign to Amazon Web Services resources. Tags are
 	// metadata. For example, you can add friendly names and descriptions or other
@@ -113,6 +82,37 @@ type DeliveryStreamStatus struct {
 	// resource
 	// +kubebuilder:validation:Optional
 	Conditions []*ackv1alpha1.Condition `json:"conditions"`
+	// The date and time that the Firehose stream was created.
+	// +kubebuilder:validation:Optional
+	CreateTimestamp *metav1.Time `json:"createTimestamp,omitempty"`
+	// Provides details in case one of the following operations fails due to an
+	// error related to KMS: CreateDeliveryStream, DeleteDeliveryStream, StartDeliveryStreamEncryption,
+	// StopDeliveryStreamEncryption.
+	// +kubebuilder:validation:Optional
+	DeliveryStreamEncryptionConfigurationFailureDescription *FailureDescription `json:"deliveryStreamEncryptionConfigurationFailureDescription,omitempty"`
+	// This is the server-side encryption (SSE) status for the Firehose stream.
+	// For a full description of the different values of this status, see StartDeliveryStreamEncryption
+	// and StopDeliveryStreamEncryption. If this status is ENABLING_FAILED or DISABLING_FAILED,
+	// it is the status of the most recent attempt to enable or disable SSE, respectively.
+	// +kubebuilder:validation:Optional
+	DeliveryStreamEncryptionConfigurationStatus *string `json:"deliveryStreamEncryptionConfigurationStatus,omitempty"`
+	// The status of the Firehose stream. If the status of a Firehose stream is
+	// CREATING_FAILED, this status doesn't change, and you can't invoke CreateDeliveryStream
+	// again on it. However, you can invoke the DeleteDeliveryStream operation to
+	// delete it.
+	// +kubebuilder:validation:Optional
+	DeliveryStreamStatus *string `json:"deliveryStreamStatus,omitempty"`
+	// The date and time that the Firehose stream was last updated.
+	// +kubebuilder:validation:Optional
+	LastUpdateTimestamp *metav1.Time `json:"lastUpdateTimestamp,omitempty"`
+	// Each time the destination is updated for a Firehose stream, the version ID
+	// is changed, and the current version ID is required when updating the destination.
+	// This is so that the service knows it is applying the changes to the correct
+	// version of the delivery stream.
+	//
+	// Regex Pattern: `^[0-9]+$`
+	// +kubebuilder:validation:Optional
+	VersionID *string `json:"versionID,omitempty"`
 }
 
 // DeliveryStream is the Schema for the DeliveryStreams API

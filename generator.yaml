@@ -1,4 +1,67 @@
+model_name: firehose
 ignore:
   resource_names:
      # - DeliveryStream
-model_name: firehose
+  field_paths:
+    - CreateDeliveryStreamInput.AmazonOpenSearchServerlessDestinationConfiguration
+    - CreateDeliveryStreamInput.AmazonopensearchserviceDestinationConfiguration
+    - CreateDeliveryStreamInput.DatabaseSourceConfiguration
+    - CreateDeliveryStreamInput.DirectPutSourceConfiguration
+    - CreateDeliveryStreamInput.ElasticsearchDestinationConfiguration
+    - CreateDeliveryStreamInput.ExtendedS3DestinationConfiguration
+    #- CreateDeliveryStreamInput.HttpEndpointDestinationConfiguration
+    - CreateDeliveryStreamInput.IcebergDestinationConfiguration
+    - CreateDeliveryStreamInput.KinesisStreamSourceConfiguration
+    - CreateDeliveryStreamInput.MSKSourceConfiguration
+    - CreateDeliveryStreamInput.RedshiftDestinationConfiguration
+    - CreateDeliveryStreamInput.SnowflakeDestinationConfiguration
+    - CreateDeliveryStreamInput.SplunkDestinationConfiguration
+    - CreateDeliveryStreamInput.S3DestinationConfiguration
+
+
+resources:
+  DeliveryStream:
+    fields:
+      #AmazonOpenSearchServerlessDestinationConfiguration:
+        # from:
+        #   operation: DescribeDeliveryStream
+        #   path:  DeliveryStreamDescription.Destinations.AmazonOpenSearchServerlessDestinationDescription
+
+      DeliveryStreamStatus:
+        is_read_only: true
+        from:
+          operation: DescribeDeliveryStream
+          path: DeliveryStreamDescription.DeliveryStreamStatus
+
+      CreateTimestamp:
+        is_read_only: true
+        from:
+          operation: DescribeDeliveryStream
+          path: DeliveryStreamDescription.CreateTimestamp
+
+      LastUpdateTimestamp:
+        is_read_only: true
+        from:
+          operation: DescribeDeliveryStream
+          path: DeliveryStreamDescription.LastUpdateTimestamp
+      
+      DeliveryStreamEncryptionConfiguration.Status:
+        is_read_only: true
+        from:
+          operation: DescribeDeliveryStream
+          path: DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.Status
+      
+      DeliveryStreamEncryptionConfiguration.FailureDescription:
+        is_read_only: true
+        from:
+          operation: DescribeDeliveryStream
+          path: DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.FailureDescription
+
+      VersionId:
+        is_read_only: true
+        from:
+          operation: DescribeDeliveryStream
+          path: DeliveryStreamDescription.VersionId
+        
+
+
