@@ -39,6 +39,8 @@ import (
 	svctypes "github.com/aws-controllers-k8s/firehose-controller/apis/v1alpha1"
 	svcresource "github.com/aws-controllers-k8s/firehose-controller/pkg/resource"
 
+	_ "github.com/aws-controllers-k8s/firehose-controller/pkg/resource/delivery_stream"
+
 	"github.com/aws-controllers-k8s/firehose-controller/pkg/version"
 )
 

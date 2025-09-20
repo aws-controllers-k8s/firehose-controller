@@ -27,3 +27,1577 @@ var (
 	_ = &aws.JSONValue{}
 	_ = ackv1alpha1.AWSAccountID("")
 )
+
+// Describes the buffering to perform before delivering data to the Serverless
+// offering for Amazon OpenSearch Service destination.
+type AmazonOpenSearchServerlessBufferingHints struct {
+	IntervalInSeconds *int64 `json:"intervalInSeconds,omitempty"`
+	SizeInMBs         *int64 `json:"sizeInMBs,omitempty"`
+}
+
+// Describes the configuration of a destination in the Serverless offering for
+// Amazon OpenSearch Service.
+type AmazonOpenSearchServerlessDestinationConfiguration struct {
+	// Describes the buffering to perform before delivering data to the Serverless
+	// offering for Amazon OpenSearch Service destination.
+	BufferingHints *AmazonOpenSearchServerlessBufferingHints `json:"bufferingHints,omitempty"`
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions *CloudWatchLoggingOptions `json:"cloudWatchLoggingOptions,omitempty"`
+	CollectionEndpoint       *string                   `json:"collectionEndpoint,omitempty"`
+	IndexName                *string                   `json:"indexName,omitempty"`
+	// Describes a data processing configuration.
+	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
+	// Configures retry behavior in case Firehose is unable to deliver documents
+	// to the Serverless offering for Amazon OpenSearch Service.
+	RetryOptions *AmazonOpenSearchServerlessRetryOptions `json:"retryOptions,omitempty"`
+	RoleARN      *string                                 `json:"roleARN,omitempty"`
+	S3BackupMode *string                                 `json:"s3BackupMode,omitempty"`
+	// Describes the configuration of a destination in Amazon S3.
+	S3Configuration *S3DestinationConfiguration `json:"s3Configuration,omitempty"`
+	// The details of the VPC of the Amazon OpenSearch or Amazon OpenSearch Serverless
+	// destination.
+	VPCConfiguration *VPCConfiguration `json:"vpcConfiguration,omitempty"`
+}
+
+// The destination description in the Serverless offering for Amazon OpenSearch
+// Service.
+type AmazonOpenSearchServerlessDestinationDescription struct {
+	// Describes the buffering to perform before delivering data to the Serverless
+	// offering for Amazon OpenSearch Service destination.
+	BufferingHints *AmazonOpenSearchServerlessBufferingHints `json:"bufferingHints,omitempty"`
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions *CloudWatchLoggingOptions `json:"cloudWatchLoggingOptions,omitempty"`
+	CollectionEndpoint       *string                   `json:"collectionEndpoint,omitempty"`
+	IndexName                *string                   `json:"indexName,omitempty"`
+	// Describes a data processing configuration.
+	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
+	// Configures retry behavior in case Firehose is unable to deliver documents
+	// to the Serverless offering for Amazon OpenSearch Service.
+	RetryOptions *AmazonOpenSearchServerlessRetryOptions `json:"retryOptions,omitempty"`
+	RoleARN      *string                                 `json:"roleARN,omitempty"`
+	S3BackupMode *string                                 `json:"s3BackupMode,omitempty"`
+	// Describes a destination in Amazon S3.
+	S3DestinationDescription *S3DestinationDescription `json:"s3DestinationDescription,omitempty"`
+	// The details of the VPC of the Amazon OpenSearch Service destination.
+	VPCConfigurationDescription *VPCConfigurationDescription `json:"vpcConfigurationDescription,omitempty"`
+}
+
+// Describes an update for a destination in the Serverless offering for Amazon
+// OpenSearch Service.
+type AmazonOpenSearchServerlessDestinationUpdate struct {
+	// Describes the buffering to perform before delivering data to the Serverless
+	// offering for Amazon OpenSearch Service destination.
+	BufferingHints *AmazonOpenSearchServerlessBufferingHints `json:"bufferingHints,omitempty"`
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions *CloudWatchLoggingOptions `json:"cloudWatchLoggingOptions,omitempty"`
+	CollectionEndpoint       *string                   `json:"collectionEndpoint,omitempty"`
+	IndexName                *string                   `json:"indexName,omitempty"`
+	// Describes a data processing configuration.
+	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
+	// Configures retry behavior in case Firehose is unable to deliver documents
+	// to the Serverless offering for Amazon OpenSearch Service.
+	RetryOptions *AmazonOpenSearchServerlessRetryOptions `json:"retryOptions,omitempty"`
+	RoleARN      *string                                 `json:"roleARN,omitempty"`
+}
+
+// Configures retry behavior in case Firehose is unable to deliver documents
+// to the Serverless offering for Amazon OpenSearch Service.
+type AmazonOpenSearchServerlessRetryOptions struct {
+	DurationInSeconds *int64 `json:"durationInSeconds,omitempty"`
+}
+
+// Describes the buffering to perform before delivering data to the Amazon OpenSearch
+// Service destination.
+type AmazonopensearchserviceBufferingHints struct {
+	IntervalInSeconds *int64 `json:"intervalInSeconds,omitempty"`
+	SizeInMBs         *int64 `json:"sizeInMBs,omitempty"`
+}
+
+// Describes the configuration of a destination in Amazon OpenSearch Service
+type AmazonopensearchserviceDestinationConfiguration struct {
+	// Describes the buffering to perform before delivering data to the Amazon OpenSearch
+	// Service destination.
+	BufferingHints *AmazonopensearchserviceBufferingHints `json:"bufferingHints,omitempty"`
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions *CloudWatchLoggingOptions `json:"cloudWatchLoggingOptions,omitempty"`
+	ClusterEndpoint          *string                   `json:"clusterEndpoint,omitempty"`
+	// Indicates the method for setting up document ID. The supported methods are
+	// Firehose generated document ID and OpenSearch Service generated document
+	// ID.
+	DocumentIDOptions   *DocumentIDOptions `json:"documentIDOptions,omitempty"`
+	DomainARN           *string            `json:"domainARN,omitempty"`
+	IndexName           *string            `json:"indexName,omitempty"`
+	IndexRotationPeriod *string            `json:"indexRotationPeriod,omitempty"`
+	// Describes a data processing configuration.
+	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
+	// Configures retry behavior in case Firehose is unable to deliver documents
+	// to Amazon OpenSearch Service.
+	RetryOptions *AmazonopensearchserviceRetryOptions `json:"retryOptions,omitempty"`
+	RoleARN      *string                              `json:"roleARN,omitempty"`
+	S3BackupMode *string                              `json:"s3BackupMode,omitempty"`
+	// Describes the configuration of a destination in Amazon S3.
+	S3Configuration *S3DestinationConfiguration `json:"s3Configuration,omitempty"`
+	TypeName        *string                     `json:"typeName,omitempty"`
+	// The details of the VPC of the Amazon OpenSearch or Amazon OpenSearch Serverless
+	// destination.
+	VPCConfiguration *VPCConfiguration `json:"vpcConfiguration,omitempty"`
+}
+
+// The destination description in Amazon OpenSearch Service.
+type AmazonopensearchserviceDestinationDescription struct {
+	// Describes the buffering to perform before delivering data to the Amazon OpenSearch
+	// Service destination.
+	BufferingHints *AmazonopensearchserviceBufferingHints `json:"bufferingHints,omitempty"`
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions *CloudWatchLoggingOptions `json:"cloudWatchLoggingOptions,omitempty"`
+	ClusterEndpoint          *string                   `json:"clusterEndpoint,omitempty"`
+	// Indicates the method for setting up document ID. The supported methods are
+	// Firehose generated document ID and OpenSearch Service generated document
+	// ID.
+	DocumentIDOptions   *DocumentIDOptions `json:"documentIDOptions,omitempty"`
+	DomainARN           *string            `json:"domainARN,omitempty"`
+	IndexName           *string            `json:"indexName,omitempty"`
+	IndexRotationPeriod *string            `json:"indexRotationPeriod,omitempty"`
+	// Describes a data processing configuration.
+	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
+	// Configures retry behavior in case Firehose is unable to deliver documents
+	// to Amazon OpenSearch Service.
+	RetryOptions *AmazonopensearchserviceRetryOptions `json:"retryOptions,omitempty"`
+	RoleARN      *string                              `json:"roleARN,omitempty"`
+	S3BackupMode *string                              `json:"s3BackupMode,omitempty"`
+	// Describes a destination in Amazon S3.
+	S3DestinationDescription *S3DestinationDescription `json:"s3DestinationDescription,omitempty"`
+	TypeName                 *string                   `json:"typeName,omitempty"`
+	// The details of the VPC of the Amazon OpenSearch Service destination.
+	VPCConfigurationDescription *VPCConfigurationDescription `json:"vpcConfigurationDescription,omitempty"`
+}
+
+// Describes an update for a destination in Amazon OpenSearch Service.
+type AmazonopensearchserviceDestinationUpdate struct {
+	// Describes the buffering to perform before delivering data to the Amazon OpenSearch
+	// Service destination.
+	BufferingHints *AmazonopensearchserviceBufferingHints `json:"bufferingHints,omitempty"`
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions *CloudWatchLoggingOptions `json:"cloudWatchLoggingOptions,omitempty"`
+	ClusterEndpoint          *string                   `json:"clusterEndpoint,omitempty"`
+	// Indicates the method for setting up document ID. The supported methods are
+	// Firehose generated document ID and OpenSearch Service generated document
+	// ID.
+	DocumentIDOptions   *DocumentIDOptions `json:"documentIDOptions,omitempty"`
+	DomainARN           *string            `json:"domainARN,omitempty"`
+	IndexName           *string            `json:"indexName,omitempty"`
+	IndexRotationPeriod *string            `json:"indexRotationPeriod,omitempty"`
+	// Describes a data processing configuration.
+	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
+	// Configures retry behavior in case Firehose is unable to deliver documents
+	// to Amazon OpenSearch Service.
+	RetryOptions *AmazonopensearchserviceRetryOptions `json:"retryOptions,omitempty"`
+	RoleARN      *string                              `json:"roleARN,omitempty"`
+	TypeName     *string                              `json:"typeName,omitempty"`
+}
+
+// Configures retry behavior in case Firehose is unable to deliver documents
+// to Amazon OpenSearch Service.
+type AmazonopensearchserviceRetryOptions struct {
+	DurationInSeconds *int64 `json:"durationInSeconds,omitempty"`
+}
+
+// The authentication configuration of the Amazon MSK cluster.
+type AuthenticationConfiguration struct {
+	Connectivity *string `json:"connectivity,omitempty"`
+	RoleARN      *string `json:"roleARN,omitempty"`
+}
+
+// Describes hints for the buffering to perform before delivering data to the
+// destination. These options are treated as hints, and therefore Firehose might
+// choose to use different values when it is optimal. The SizeInMBs and IntervalInSeconds
+// parameters are optional. However, if specify a value for one of them, you
+// must also provide a value for the other.
+type BufferingHints struct {
+	IntervalInSeconds *int64 `json:"intervalInSeconds,omitempty"`
+	SizeInMBs         *int64 `json:"sizeInMBs,omitempty"`
+}
+
+// Describes the containers where the destination Apache Iceberg Tables are
+// persisted.
+type CatalogConfiguration struct {
+	CatalogARN        *string `json:"catalogARN,omitempty"`
+	WarehouseLocation *string `json:"warehouseLocation,omitempty"`
+}
+
+// Describes the Amazon CloudWatch logging options for your Firehose stream.
+type CloudWatchLoggingOptions struct {
+	Enabled       *bool   `json:"enabled,omitempty"`
+	LogGroupName  *string `json:"logGroupName,omitempty"`
+	LogStreamName *string `json:"logStreamName,omitempty"`
+}
+
+// Describes a COPY command for Amazon Redshift.
+type CopyCommand struct {
+	CopyOptions      *string `json:"copyOptions,omitempty"`
+	DataTableColumns *string `json:"dataTableColumns,omitempty"`
+	DataTableName    *string `json:"dataTableName,omitempty"`
+}
+
+// Specifies that you want Firehose to convert data from the JSON format to
+// the Parquet or ORC format before writing it to Amazon S3. Firehose uses the
+// serializer and deserializer that you specify, in addition to the column information
+// from the Amazon Web Services Glue table, to deserialize your input data from
+// JSON and then serialize it to the Parquet or ORC format. For more information,
+// see Firehose Record Format Conversion (https://docs.aws.amazon.com/firehose/latest/dev/record-format-conversion.html).
+type DataFormatConversionConfiguration struct {
+	Enabled *bool `json:"enabled,omitempty"`
+	// Specifies the deserializer you want to use to convert the format of the input
+	// data. This parameter is required if Enabled is set to true.
+	InputFormatConfiguration *InputFormatConfiguration `json:"inputFormatConfiguration,omitempty"`
+	// Specifies the serializer that you want Firehose to use to convert the format
+	// of your data before it writes it to Amazon S3. This parameter is required
+	// if Enabled is set to true.
+	OutputFormatConfiguration *OutputFormatConfiguration `json:"outputFormatConfiguration,omitempty"`
+	// Specifies the schema to which you want Firehose to configure your data before
+	// it writes it to Amazon S3. This parameter is required if Enabled is set to
+	// true.
+	SchemaConfiguration *SchemaConfiguration `json:"schemaConfiguration,omitempty"`
+}
+
+// The structure used to configure the list of column patterns in source database
+// endpoint for Firehose to read from.
+//
+// Amazon Data Firehose is in preview release and is subject to change.
+type DatabaseColumnList struct {
+	Exclude []*string `json:"exclude,omitempty"`
+	Include []*string `json:"include,omitempty"`
+}
+
+// The structure used to configure the list of database patterns in source database
+// endpoint for Firehose to read from.
+//
+// Amazon Data Firehose is in preview release and is subject to change.
+type DatabaseList struct {
+	Exclude []*string `json:"exclude,omitempty"`
+	Include []*string `json:"include,omitempty"`
+}
+
+// The structure that describes the snapshot information of a table in source
+// database endpoint that Firehose reads.
+//
+// Amazon Data Firehose is in preview release and is subject to change.
+type DatabaseSnapshotInfo struct {
+	// Provides details in case one of the following operations fails due to an
+	// error related to KMS: CreateDeliveryStream, DeleteDeliveryStream, StartDeliveryStreamEncryption,
+	// StopDeliveryStreamEncryption.
+	FailureDescription *FailureDescription `json:"failureDescription,omitempty"`
+	ID                 *string             `json:"id,omitempty"`
+	RequestTimestamp   *metav1.Time        `json:"requestTimestamp,omitempty"`
+	RequestedBy        *string             `json:"requestedBy,omitempty"`
+	Status             *string             `json:"status,omitempty"`
+	Table              *string             `json:"table,omitempty"`
+}
+
+// The structure to configure the authentication methods for Firehose to connect
+// to source database endpoint.
+//
+// Amazon Data Firehose is in preview release and is subject to change.
+type DatabaseSourceAuthenticationConfiguration struct {
+	// The structure that defines how Firehose accesses the secret.
+	SecretsManagerConfiguration *SecretsManagerConfiguration `json:"secretsManagerConfiguration,omitempty"`
+}
+
+// The top level object for configuring streams with database as a source.
+//
+// Amazon Data Firehose is in preview release and is subject to change.
+type DatabaseSourceConfiguration struct {
+	// The structure used to configure the list of column patterns in source database
+	// endpoint for Firehose to read from.
+	//
+	// Amazon Data Firehose is in preview release and is subject to change.
+	Columns *DatabaseColumnList `json:"columns,omitempty"`
+	// The structure to configure the authentication methods for Firehose to connect
+	// to source database endpoint.
+	//
+	// Amazon Data Firehose is in preview release and is subject to change.
+	DatabaseSourceAuthenticationConfiguration *DatabaseSourceAuthenticationConfiguration `json:"databaseSourceAuthenticationConfiguration,omitempty"`
+	// The structure for details of the VPC Endpoint Service which Firehose uses
+	// to create a PrivateLink to the database.
+	//
+	// Amazon Data Firehose is in preview release and is subject to change.
+	DatabaseSourceVPCConfiguration *DatabaseSourceVPCConfiguration `json:"databaseSourceVPCConfiguration,omitempty"`
+	// The structure used to configure the list of database patterns in source database
+	// endpoint for Firehose to read from.
+	//
+	// Amazon Data Firehose is in preview release and is subject to change.
+	Databases              *DatabaseList `json:"databases,omitempty"`
+	Endpoint               *string       `json:"endpoint,omitempty"`
+	Port                   *int64        `json:"port,omitempty"`
+	SSLMode                *string       `json:"sslMode,omitempty"`
+	SnapshotWatermarkTable *string       `json:"snapshotWatermarkTable,omitempty"`
+	SurrogateKeys          []*string     `json:"surrogateKeys,omitempty"`
+	// The structure used to configure the list of table patterns in source database
+	// endpoint for Firehose to read from.
+	//
+	// Amazon Data Firehose is in preview release and is subject to change.
+	Tables *DatabaseTableList `json:"tables,omitempty"`
+	Type   *string            `json:"type_,omitempty"`
+}
+
+// The top level object for database source description.
+//
+// Amazon Data Firehose is in preview release and is subject to change.
+type DatabaseSourceDescription struct {
+	// The structure used to configure the list of column patterns in source database
+	// endpoint for Firehose to read from.
+	//
+	// Amazon Data Firehose is in preview release and is subject to change.
+	Columns *DatabaseColumnList `json:"columns,omitempty"`
+	// The structure to configure the authentication methods for Firehose to connect
+	// to source database endpoint.
+	//
+	// Amazon Data Firehose is in preview release and is subject to change.
+	DatabaseSourceAuthenticationConfiguration *DatabaseSourceAuthenticationConfiguration `json:"databaseSourceAuthenticationConfiguration,omitempty"`
+	// The structure for details of the VPC Endpoint Service which Firehose uses
+	// to create a PrivateLink to the database.
+	//
+	// Amazon Data Firehose is in preview release and is subject to change.
+	DatabaseSourceVPCConfiguration *DatabaseSourceVPCConfiguration `json:"databaseSourceVPCConfiguration,omitempty"`
+	// The structure used to configure the list of database patterns in source database
+	// endpoint for Firehose to read from.
+	//
+	// Amazon Data Firehose is in preview release and is subject to change.
+	Databases              *DatabaseList           `json:"databases,omitempty"`
+	Endpoint               *string                 `json:"endpoint,omitempty"`
+	Port                   *int64                  `json:"port,omitempty"`
+	SSLMode                *string                 `json:"sslMode,omitempty"`
+	SnapshotInfo           []*DatabaseSnapshotInfo `json:"snapshotInfo,omitempty"`
+	SnapshotWatermarkTable *string                 `json:"snapshotWatermarkTable,omitempty"`
+	SurrogateKeys          []*string               `json:"surrogateKeys,omitempty"`
+	// The structure used to configure the list of table patterns in source database
+	// endpoint for Firehose to read from.
+	//
+	// Amazon Data Firehose is in preview release and is subject to change.
+	Tables *DatabaseTableList `json:"tables,omitempty"`
+	Type   *string            `json:"type_,omitempty"`
+}
+
+// The structure for details of the VPC Endpoint Service which Firehose uses
+// to create a PrivateLink to the database.
+//
+// Amazon Data Firehose is in preview release and is subject to change.
+type DatabaseSourceVPCConfiguration struct {
+	VPCEndpointServiceName *string `json:"vpcEndpointServiceName,omitempty"`
+}
+
+// The structure used to configure the list of table patterns in source database
+// endpoint for Firehose to read from.
+//
+// Amazon Data Firehose is in preview release and is subject to change.
+type DatabaseTableList struct {
+	Exclude []*string `json:"exclude,omitempty"`
+	Include []*string `json:"include,omitempty"`
+}
+
+// Contains information about a Firehose stream.
+type DeliveryStreamDescription struct {
+	CreateTimestamp   *metav1.Time `json:"createTimestamp,omitempty"`
+	DeliveryStreamARN *string      `json:"deliveryStreamARN,omitempty"`
+	// Contains information about the server-side encryption (SSE) status for the
+	// delivery stream, the type customer master key (CMK) in use, if any, and the
+	// ARN of the CMK. You can get DeliveryStreamEncryptionConfiguration by invoking
+	// the DescribeDeliveryStream operation.
+	DeliveryStreamEncryptionConfiguration *DeliveryStreamEncryptionConfiguration `json:"deliveryStreamEncryptionConfiguration,omitempty"`
+	DeliveryStreamName                    *string                                `json:"deliveryStreamName,omitempty"`
+	DeliveryStreamStatus                  *string                                `json:"deliveryStreamStatus,omitempty"`
+	DeliveryStreamType                    *string                                `json:"deliveryStreamType,omitempty"`
+	Destinations                          []*DestinationDescription              `json:"destinations,omitempty"`
+	// Provides details in case one of the following operations fails due to an
+	// error related to KMS: CreateDeliveryStream, DeleteDeliveryStream, StartDeliveryStreamEncryption,
+	// StopDeliveryStreamEncryption.
+	FailureDescription  *FailureDescription `json:"failureDescription,omitempty"`
+	HasMoreDestinations *bool               `json:"hasMoreDestinations,omitempty"`
+	LastUpdateTimestamp *metav1.Time        `json:"lastUpdateTimestamp,omitempty"`
+	// Details about a Kinesis data stream used as the source for a Firehose stream.
+	Source    *SourceDescription `json:"source,omitempty"`
+	VersionID *string            `json:"versionID,omitempty"`
+}
+
+// Contains information about the server-side encryption (SSE) status for the
+// delivery stream, the type customer master key (CMK) in use, if any, and the
+// ARN of the CMK. You can get DeliveryStreamEncryptionConfiguration by invoking
+// the DescribeDeliveryStream operation.
+type DeliveryStreamEncryptionConfiguration struct {
+	// Provides details in case one of the following operations fails due to an
+	// error related to KMS: CreateDeliveryStream, DeleteDeliveryStream, StartDeliveryStreamEncryption,
+	// StopDeliveryStreamEncryption.
+	FailureDescription *FailureDescription `json:"failureDescription,omitempty"`
+	KeyARN             *string             `json:"keyARN,omitempty"`
+	KeyType            *string             `json:"keyType,omitempty"`
+	Status             *string             `json:"status,omitempty"`
+}
+
+// Specifies the type and Amazon Resource Name (ARN) of the CMK to use for Server-Side
+// Encryption (SSE).
+type DeliveryStreamEncryptionConfigurationInput struct {
+	KeyARN  *string `json:"keyARN,omitempty"`
+	KeyType *string `json:"keyType,omitempty"`
+}
+
+// The deserializer you want Firehose to use for converting the input data from
+// JSON. Firehose then serializes the data to its final format using the Serializer.
+// Firehose supports two types of deserializers: the Apache Hive JSON SerDe
+// (https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DDL#LanguageManualDDL-JSON)
+// and the OpenX JSON SerDe (https://github.com/rcongiu/Hive-JSON-Serde).
+type Deserializer struct {
+	// The native Hive / HCatalog JsonSerDe. Used by Firehose for deserializing
+	// data, which means converting it from the JSON format in preparation for serializing
+	// it to the Parquet or ORC format. This is one of two deserializers you can
+	// choose, depending on which one offers the functionality you need. The other
+	// option is the OpenX SerDe.
+	HiveJSONSerDe *HiveJSONSerDe `json:"hiveJSONSerDe,omitempty"`
+	// The OpenX SerDe. Used by Firehose for deserializing data, which means converting
+	// it from the JSON format in preparation for serializing it to the Parquet
+	// or ORC format. This is one of two deserializers you can choose, depending
+	// on which one offers the functionality you need. The other option is the native
+	// Hive / HCatalog JsonSerDe.
+	OpenXJSONSerDe *OpenXJSONSerDe `json:"openXJSONSerDe,omitempty"`
+}
+
+// Describes the destination for a Firehose stream.
+type DestinationDescription struct {
+	// The destination description in the Serverless offering for Amazon OpenSearch
+	// Service.
+	AmazonOpenSearchServerlessDestinationDescription *AmazonOpenSearchServerlessDestinationDescription `json:"amazonOpenSearchServerlessDestinationDescription,omitempty"`
+	// The destination description in Amazon OpenSearch Service.
+	AmazonopensearchserviceDestinationDescription *AmazonopensearchserviceDestinationDescription `json:"amazonopensearchserviceDestinationDescription,omitempty"`
+	DestinationID                                 *string                                        `json:"destinationID,omitempty"`
+	// The destination description in Amazon OpenSearch Service.
+	ElasticsearchDestinationDescription *ElasticsearchDestinationDescription `json:"elasticsearchDestinationDescription,omitempty"`
+	// Describes a destination in Amazon S3.
+	ExtendedS3DestinationDescription *ExtendedS3DestinationDescription `json:"extendedS3DestinationDescription,omitempty"`
+	// Describes the HTTP endpoint destination.
+	HTTPEndpointDestinationDescription *HTTPEndpointDestinationDescription `json:"httpEndpointDestinationDescription,omitempty"`
+	// Describes a destination in Apache Iceberg Tables.
+	IcebergDestinationDescription *IcebergDestinationDescription `json:"icebergDestinationDescription,omitempty"`
+	// Describes a destination in Amazon Redshift.
+	RedshiftDestinationDescription *RedshiftDestinationDescription `json:"redshiftDestinationDescription,omitempty"`
+	// Describes a destination in Amazon S3.
+	S3DestinationDescription *S3DestinationDescription `json:"s3DestinationDescription,omitempty"`
+	// Optional Snowflake destination description
+	SnowflakeDestinationDescription *SnowflakeDestinationDescription `json:"snowflakeDestinationDescription,omitempty"`
+	// Describes a destination in Splunk.
+	SplunkDestinationDescription *SplunkDestinationDescription `json:"splunkDestinationDescription,omitempty"`
+}
+
+// Describes the configuration of a destination in Apache Iceberg Tables.
+type DestinationTableConfiguration struct {
+	DestinationDatabaseName *string `json:"destinationDatabaseName,omitempty"`
+	DestinationTableName    *string `json:"destinationTableName,omitempty"`
+	// Represents how to produce partition data for a table. Partition data is produced
+	// by transforming columns in a table. Each column transform is represented
+	// by a named PartitionField.
+	//
+	// Here is an example of the schema in JSON.
+	//
+	// "partitionSpec": { "identity": [ {"sourceName": "column1"}, {"sourceName":
+	// "column2"}, {"sourceName": "column3"} ] }
+	//
+	// Amazon Data Firehose is in preview release and is subject to change.
+	PartitionSpec       *PartitionSpec `json:"partitionSpec,omitempty"`
+	S3ErrorOutputPrefix *string        `json:"s3ErrorOutputPrefix,omitempty"`
+	UniqueKeys          []*string      `json:"uniqueKeys,omitempty"`
+}
+
+// The structure that configures parameters such as ThroughputHintInMBs for
+// a stream configured with Direct PUT as a source.
+type DirectPutSourceConfiguration struct {
+	ThroughputHintInMBs *int64 `json:"throughputHintInMBs,omitempty"`
+}
+
+// The structure that configures parameters such as ThroughputHintInMBs for
+// a stream configured with Direct PUT as a source.
+type DirectPutSourceDescription struct {
+	ThroughputHintInMBs *int64 `json:"throughputHintInMBs,omitempty"`
+}
+
+// Indicates the method for setting up document ID. The supported methods are
+// Firehose generated document ID and OpenSearch Service generated document
+// ID.
+type DocumentIDOptions struct {
+	DefaultDocumentIDFormat *string `json:"defaultDocumentIDFormat,omitempty"`
+}
+
+// The configuration of the dynamic partitioning mechanism that creates smaller
+// data sets from the streaming data by partitioning it based on partition keys.
+// Currently, dynamic partitioning is only supported for Amazon S3 destinations.
+type DynamicPartitioningConfiguration struct {
+	Enabled *bool `json:"enabled,omitempty"`
+	// The retry behavior in case Firehose is unable to deliver data to a destination.
+	RetryOptions *RetryOptions `json:"retryOptions,omitempty"`
+}
+
+// Describes the buffering to perform before delivering data to the Amazon OpenSearch
+// Service destination.
+type ElasticsearchBufferingHints struct {
+	IntervalInSeconds *int64 `json:"intervalInSeconds,omitempty"`
+	SizeInMBs         *int64 `json:"sizeInMBs,omitempty"`
+}
+
+// Describes the configuration of a destination in Amazon OpenSearch Service.
+type ElasticsearchDestinationConfiguration struct {
+	// Describes the buffering to perform before delivering data to the Amazon OpenSearch
+	// Service destination.
+	BufferingHints *ElasticsearchBufferingHints `json:"bufferingHints,omitempty"`
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions *CloudWatchLoggingOptions `json:"cloudWatchLoggingOptions,omitempty"`
+	ClusterEndpoint          *string                   `json:"clusterEndpoint,omitempty"`
+	// Indicates the method for setting up document ID. The supported methods are
+	// Firehose generated document ID and OpenSearch Service generated document
+	// ID.
+	DocumentIDOptions   *DocumentIDOptions `json:"documentIDOptions,omitempty"`
+	DomainARN           *string            `json:"domainARN,omitempty"`
+	IndexName           *string            `json:"indexName,omitempty"`
+	IndexRotationPeriod *string            `json:"indexRotationPeriod,omitempty"`
+	// Describes a data processing configuration.
+	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
+	// Configures retry behavior in case Firehose is unable to deliver documents
+	// to Amazon OpenSearch Service.
+	RetryOptions *ElasticsearchRetryOptions `json:"retryOptions,omitempty"`
+	RoleARN      *string                    `json:"roleARN,omitempty"`
+	S3BackupMode *string                    `json:"s3BackupMode,omitempty"`
+	// Describes the configuration of a destination in Amazon S3.
+	S3Configuration *S3DestinationConfiguration `json:"s3Configuration,omitempty"`
+	TypeName        *string                     `json:"typeName,omitempty"`
+	// The details of the VPC of the Amazon OpenSearch or Amazon OpenSearch Serverless
+	// destination.
+	VPCConfiguration *VPCConfiguration `json:"vpcConfiguration,omitempty"`
+}
+
+// The destination description in Amazon OpenSearch Service.
+type ElasticsearchDestinationDescription struct {
+	// Describes the buffering to perform before delivering data to the Amazon OpenSearch
+	// Service destination.
+	BufferingHints *ElasticsearchBufferingHints `json:"bufferingHints,omitempty"`
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions *CloudWatchLoggingOptions `json:"cloudWatchLoggingOptions,omitempty"`
+	ClusterEndpoint          *string                   `json:"clusterEndpoint,omitempty"`
+	// Indicates the method for setting up document ID. The supported methods are
+	// Firehose generated document ID and OpenSearch Service generated document
+	// ID.
+	DocumentIDOptions   *DocumentIDOptions `json:"documentIDOptions,omitempty"`
+	DomainARN           *string            `json:"domainARN,omitempty"`
+	IndexName           *string            `json:"indexName,omitempty"`
+	IndexRotationPeriod *string            `json:"indexRotationPeriod,omitempty"`
+	// Describes a data processing configuration.
+	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
+	// Configures retry behavior in case Firehose is unable to deliver documents
+	// to Amazon OpenSearch Service.
+	RetryOptions *ElasticsearchRetryOptions `json:"retryOptions,omitempty"`
+	RoleARN      *string                    `json:"roleARN,omitempty"`
+	S3BackupMode *string                    `json:"s3BackupMode,omitempty"`
+	// Describes a destination in Amazon S3.
+	S3DestinationDescription *S3DestinationDescription `json:"s3DestinationDescription,omitempty"`
+	TypeName                 *string                   `json:"typeName,omitempty"`
+	// The details of the VPC of the Amazon OpenSearch Service destination.
+	VPCConfigurationDescription *VPCConfigurationDescription `json:"vpcConfigurationDescription,omitempty"`
+}
+
+// Describes an update for a destination in Amazon OpenSearch Service.
+type ElasticsearchDestinationUpdate struct {
+	// Describes the buffering to perform before delivering data to the Amazon OpenSearch
+	// Service destination.
+	BufferingHints *ElasticsearchBufferingHints `json:"bufferingHints,omitempty"`
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions *CloudWatchLoggingOptions `json:"cloudWatchLoggingOptions,omitempty"`
+	ClusterEndpoint          *string                   `json:"clusterEndpoint,omitempty"`
+	// Indicates the method for setting up document ID. The supported methods are
+	// Firehose generated document ID and OpenSearch Service generated document
+	// ID.
+	DocumentIDOptions   *DocumentIDOptions `json:"documentIDOptions,omitempty"`
+	DomainARN           *string            `json:"domainARN,omitempty"`
+	IndexName           *string            `json:"indexName,omitempty"`
+	IndexRotationPeriod *string            `json:"indexRotationPeriod,omitempty"`
+	// Describes a data processing configuration.
+	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
+	// Configures retry behavior in case Firehose is unable to deliver documents
+	// to Amazon OpenSearch Service.
+	RetryOptions *ElasticsearchRetryOptions `json:"retryOptions,omitempty"`
+	RoleARN      *string                    `json:"roleARN,omitempty"`
+	TypeName     *string                    `json:"typeName,omitempty"`
+}
+
+// Configures retry behavior in case Firehose is unable to deliver documents
+// to Amazon OpenSearch Service.
+type ElasticsearchRetryOptions struct {
+	DurationInSeconds *int64 `json:"durationInSeconds,omitempty"`
+}
+
+// Describes the encryption for a destination in Amazon S3.
+type EncryptionConfiguration struct {
+	// Describes an encryption key for a destination in Amazon S3.
+	KMSEncryptionConfig *KMSEncryptionConfig `json:"kmsEncryptionConfig,omitempty"`
+	NoEncryptionConfig  *string              `json:"noEncryptionConfig,omitempty"`
+}
+
+// Describes the configuration of a destination in Amazon S3.
+type ExtendedS3DestinationConfiguration struct {
+	BucketARN *string `json:"bucketARN,omitempty"`
+	// Describes hints for the buffering to perform before delivering data to the
+	// destination. These options are treated as hints, and therefore Firehose might
+	// choose to use different values when it is optimal. The SizeInMBs and IntervalInSeconds
+	// parameters are optional. However, if specify a value for one of them, you
+	// must also provide a value for the other.
+	BufferingHints *BufferingHints `json:"bufferingHints,omitempty"`
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions *CloudWatchLoggingOptions `json:"cloudWatchLoggingOptions,omitempty"`
+	CompressionFormat        *string                   `json:"compressionFormat,omitempty"`
+	CustomTimeZone           *string                   `json:"customTimeZone,omitempty"`
+	// Specifies that you want Firehose to convert data from the JSON format to
+	// the Parquet or ORC format before writing it to Amazon S3. Firehose uses the
+	// serializer and deserializer that you specify, in addition to the column information
+	// from the Amazon Web Services Glue table, to deserialize your input data from
+	// JSON and then serialize it to the Parquet or ORC format. For more information,
+	// see Firehose Record Format Conversion (https://docs.aws.amazon.com/firehose/latest/dev/record-format-conversion.html).
+	DataFormatConversionConfiguration *DataFormatConversionConfiguration `json:"dataFormatConversionConfiguration,omitempty"`
+	// The configuration of the dynamic partitioning mechanism that creates smaller
+	// data sets from the streaming data by partitioning it based on partition keys.
+	// Currently, dynamic partitioning is only supported for Amazon S3 destinations.
+	DynamicPartitioningConfiguration *DynamicPartitioningConfiguration `json:"dynamicPartitioningConfiguration,omitempty"`
+	// Describes the encryption for a destination in Amazon S3.
+	EncryptionConfiguration *EncryptionConfiguration `json:"encryptionConfiguration,omitempty"`
+	ErrorOutputPrefix       *string                  `json:"errorOutputPrefix,omitempty"`
+	FileExtension           *string                  `json:"fileExtension,omitempty"`
+	Prefix                  *string                  `json:"prefix,omitempty"`
+	// Describes a data processing configuration.
+	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
+	RoleARN                 *string                  `json:"roleARN,omitempty"`
+	// Describes the configuration of a destination in Amazon S3.
+	S3BackupConfiguration *S3DestinationConfiguration `json:"s3BackupConfiguration,omitempty"`
+	S3BackupMode          *string                     `json:"s3BackupMode,omitempty"`
+}
+
+// Describes a destination in Amazon S3.
+type ExtendedS3DestinationDescription struct {
+	BucketARN *string `json:"bucketARN,omitempty"`
+	// Describes hints for the buffering to perform before delivering data to the
+	// destination. These options are treated as hints, and therefore Firehose might
+	// choose to use different values when it is optimal. The SizeInMBs and IntervalInSeconds
+	// parameters are optional. However, if specify a value for one of them, you
+	// must also provide a value for the other.
+	BufferingHints *BufferingHints `json:"bufferingHints,omitempty"`
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions *CloudWatchLoggingOptions `json:"cloudWatchLoggingOptions,omitempty"`
+	CompressionFormat        *string                   `json:"compressionFormat,omitempty"`
+	CustomTimeZone           *string                   `json:"customTimeZone,omitempty"`
+	// Specifies that you want Firehose to convert data from the JSON format to
+	// the Parquet or ORC format before writing it to Amazon S3. Firehose uses the
+	// serializer and deserializer that you specify, in addition to the column information
+	// from the Amazon Web Services Glue table, to deserialize your input data from
+	// JSON and then serialize it to the Parquet or ORC format. For more information,
+	// see Firehose Record Format Conversion (https://docs.aws.amazon.com/firehose/latest/dev/record-format-conversion.html).
+	DataFormatConversionConfiguration *DataFormatConversionConfiguration `json:"dataFormatConversionConfiguration,omitempty"`
+	// The configuration of the dynamic partitioning mechanism that creates smaller
+	// data sets from the streaming data by partitioning it based on partition keys.
+	// Currently, dynamic partitioning is only supported for Amazon S3 destinations.
+	DynamicPartitioningConfiguration *DynamicPartitioningConfiguration `json:"dynamicPartitioningConfiguration,omitempty"`
+	// Describes the encryption for a destination in Amazon S3.
+	EncryptionConfiguration *EncryptionConfiguration `json:"encryptionConfiguration,omitempty"`
+	ErrorOutputPrefix       *string                  `json:"errorOutputPrefix,omitempty"`
+	FileExtension           *string                  `json:"fileExtension,omitempty"`
+	Prefix                  *string                  `json:"prefix,omitempty"`
+	// Describes a data processing configuration.
+	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
+	RoleARN                 *string                  `json:"roleARN,omitempty"`
+	// Describes a destination in Amazon S3.
+	S3BackupDescription *S3DestinationDescription `json:"s3BackupDescription,omitempty"`
+	S3BackupMode        *string                   `json:"s3BackupMode,omitempty"`
+}
+
+// Describes an update for a destination in Amazon S3.
+type ExtendedS3DestinationUpdate struct {
+	BucketARN *string `json:"bucketARN,omitempty"`
+	// Describes hints for the buffering to perform before delivering data to the
+	// destination. These options are treated as hints, and therefore Firehose might
+	// choose to use different values when it is optimal. The SizeInMBs and IntervalInSeconds
+	// parameters are optional. However, if specify a value for one of them, you
+	// must also provide a value for the other.
+	BufferingHints *BufferingHints `json:"bufferingHints,omitempty"`
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions *CloudWatchLoggingOptions `json:"cloudWatchLoggingOptions,omitempty"`
+	CompressionFormat        *string                   `json:"compressionFormat,omitempty"`
+	CustomTimeZone           *string                   `json:"customTimeZone,omitempty"`
+	// Specifies that you want Firehose to convert data from the JSON format to
+	// the Parquet or ORC format before writing it to Amazon S3. Firehose uses the
+	// serializer and deserializer that you specify, in addition to the column information
+	// from the Amazon Web Services Glue table, to deserialize your input data from
+	// JSON and then serialize it to the Parquet or ORC format. For more information,
+	// see Firehose Record Format Conversion (https://docs.aws.amazon.com/firehose/latest/dev/record-format-conversion.html).
+	DataFormatConversionConfiguration *DataFormatConversionConfiguration `json:"dataFormatConversionConfiguration,omitempty"`
+	// The configuration of the dynamic partitioning mechanism that creates smaller
+	// data sets from the streaming data by partitioning it based on partition keys.
+	// Currently, dynamic partitioning is only supported for Amazon S3 destinations.
+	DynamicPartitioningConfiguration *DynamicPartitioningConfiguration `json:"dynamicPartitioningConfiguration,omitempty"`
+	// Describes the encryption for a destination in Amazon S3.
+	EncryptionConfiguration *EncryptionConfiguration `json:"encryptionConfiguration,omitempty"`
+	ErrorOutputPrefix       *string                  `json:"errorOutputPrefix,omitempty"`
+	FileExtension           *string                  `json:"fileExtension,omitempty"`
+	Prefix                  *string                  `json:"prefix,omitempty"`
+	// Describes a data processing configuration.
+	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
+	RoleARN                 *string                  `json:"roleARN,omitempty"`
+	S3BackupMode            *string                  `json:"s3BackupMode,omitempty"`
+}
+
+// Provides details in case one of the following operations fails due to an
+// error related to KMS: CreateDeliveryStream, DeleteDeliveryStream, StartDeliveryStreamEncryption,
+// StopDeliveryStreamEncryption.
+type FailureDescription struct {
+	Details *string `json:"details,omitempty"`
+	Type    *string `json:"type_,omitempty"`
+}
+
+// Describes the buffering options that can be applied before data is delivered
+// to the HTTP endpoint destination. Firehose treats these options as hints,
+// and it might choose to use more optimal values. The SizeInMBs and IntervalInSeconds
+// parameters are optional. However, if specify a value for one of them, you
+// must also provide a value for the other.
+type HTTPEndpointBufferingHints struct {
+	IntervalInSeconds *int64 `json:"intervalInSeconds,omitempty"`
+	SizeInMBs         *int64 `json:"sizeInMBs,omitempty"`
+}
+
+// Describes the metadata that's delivered to the specified HTTP endpoint destination.
+type HTTPEndpointCommonAttribute struct {
+	AttributeName  *string `json:"attributeName,omitempty"`
+	AttributeValue *string `json:"attributeValue,omitempty"`
+}
+
+// Describes the configuration of the HTTP endpoint to which Kinesis Firehose
+// delivers data.
+type HTTPEndpointConfiguration struct {
+	AccessKey *string `json:"accessKey,omitempty"`
+	Name      *string `json:"name,omitempty"`
+	URL       *string `json:"url,omitempty"`
+}
+
+// Describes the HTTP endpoint selected as the destination.
+type HTTPEndpointDescription struct {
+	Name *string `json:"name,omitempty"`
+	URL  *string `json:"url,omitempty"`
+}
+
+// Describes the configuration of the HTTP endpoint destination.
+type HTTPEndpointDestinationConfiguration struct {
+	// Describes the buffering options that can be applied before data is delivered
+	// to the HTTP endpoint destination. Firehose treats these options as hints,
+	// and it might choose to use more optimal values. The SizeInMBs and IntervalInSeconds
+	// parameters are optional. However, if specify a value for one of them, you
+	// must also provide a value for the other.
+	BufferingHints *HTTPEndpointBufferingHints `json:"bufferingHints,omitempty"`
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions *CloudWatchLoggingOptions `json:"cloudWatchLoggingOptions,omitempty"`
+	// Describes the configuration of the HTTP endpoint to which Kinesis Firehose
+	// delivers data.
+	EndpointConfiguration *HTTPEndpointConfiguration `json:"endpointConfiguration,omitempty"`
+	// Describes a data processing configuration.
+	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
+	// The configuration of the HTTP endpoint request.
+	RequestConfiguration *HTTPEndpointRequestConfiguration `json:"requestConfiguration,omitempty"`
+	// Describes the retry behavior in case Firehose is unable to deliver data to
+	// the specified HTTP endpoint destination, or if it doesn't receive a valid
+	// acknowledgment of receipt from the specified HTTP endpoint destination.
+	RetryOptions *HTTPEndpointRetryOptions `json:"retryOptions,omitempty"`
+	RoleARN      *string                   `json:"roleARN,omitempty"`
+	S3BackupMode *string                   `json:"s3BackupMode,omitempty"`
+	// Describes the configuration of a destination in Amazon S3.
+	S3Configuration *S3DestinationConfiguration `json:"s3Configuration,omitempty"`
+	// The structure that defines how Firehose accesses the secret.
+	SecretsManagerConfiguration *SecretsManagerConfiguration `json:"secretsManagerConfiguration,omitempty"`
+}
+
+// Describes the HTTP endpoint destination.
+type HTTPEndpointDestinationDescription struct {
+	// Describes the buffering options that can be applied before data is delivered
+	// to the HTTP endpoint destination. Firehose treats these options as hints,
+	// and it might choose to use more optimal values. The SizeInMBs and IntervalInSeconds
+	// parameters are optional. However, if specify a value for one of them, you
+	// must also provide a value for the other.
+	BufferingHints *HTTPEndpointBufferingHints `json:"bufferingHints,omitempty"`
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions *CloudWatchLoggingOptions `json:"cloudWatchLoggingOptions,omitempty"`
+	// Describes the HTTP endpoint selected as the destination.
+	EndpointConfiguration *HTTPEndpointDescription `json:"endpointConfiguration,omitempty"`
+	// Describes a data processing configuration.
+	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
+	// The configuration of the HTTP endpoint request.
+	RequestConfiguration *HTTPEndpointRequestConfiguration `json:"requestConfiguration,omitempty"`
+	// Describes the retry behavior in case Firehose is unable to deliver data to
+	// the specified HTTP endpoint destination, or if it doesn't receive a valid
+	// acknowledgment of receipt from the specified HTTP endpoint destination.
+	RetryOptions *HTTPEndpointRetryOptions `json:"retryOptions,omitempty"`
+	RoleARN      *string                   `json:"roleARN,omitempty"`
+	S3BackupMode *string                   `json:"s3BackupMode,omitempty"`
+	// Describes a destination in Amazon S3.
+	S3DestinationDescription *S3DestinationDescription `json:"s3DestinationDescription,omitempty"`
+	// The structure that defines how Firehose accesses the secret.
+	SecretsManagerConfiguration *SecretsManagerConfiguration `json:"secretsManagerConfiguration,omitempty"`
+}
+
+// Updates the specified HTTP endpoint destination.
+type HTTPEndpointDestinationUpdate struct {
+	// Describes the buffering options that can be applied before data is delivered
+	// to the HTTP endpoint destination. Firehose treats these options as hints,
+	// and it might choose to use more optimal values. The SizeInMBs and IntervalInSeconds
+	// parameters are optional. However, if specify a value for one of them, you
+	// must also provide a value for the other.
+	BufferingHints *HTTPEndpointBufferingHints `json:"bufferingHints,omitempty"`
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions *CloudWatchLoggingOptions `json:"cloudWatchLoggingOptions,omitempty"`
+	// Describes the configuration of the HTTP endpoint to which Kinesis Firehose
+	// delivers data.
+	EndpointConfiguration *HTTPEndpointConfiguration `json:"endpointConfiguration,omitempty"`
+	// Describes a data processing configuration.
+	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
+	// The configuration of the HTTP endpoint request.
+	RequestConfiguration *HTTPEndpointRequestConfiguration `json:"requestConfiguration,omitempty"`
+	// Describes the retry behavior in case Firehose is unable to deliver data to
+	// the specified HTTP endpoint destination, or if it doesn't receive a valid
+	// acknowledgment of receipt from the specified HTTP endpoint destination.
+	RetryOptions *HTTPEndpointRetryOptions `json:"retryOptions,omitempty"`
+	RoleARN      *string                   `json:"roleARN,omitempty"`
+	S3BackupMode *string                   `json:"s3BackupMode,omitempty"`
+	// The structure that defines how Firehose accesses the secret.
+	SecretsManagerConfiguration *SecretsManagerConfiguration `json:"secretsManagerConfiguration,omitempty"`
+}
+
+// The configuration of the HTTP endpoint request.
+type HTTPEndpointRequestConfiguration struct {
+	CommonAttributes []*HTTPEndpointCommonAttribute `json:"commonAttributes,omitempty"`
+	ContentEncoding  *string                        `json:"contentEncoding,omitempty"`
+}
+
+// Describes the retry behavior in case Firehose is unable to deliver data to
+// the specified HTTP endpoint destination, or if it doesn't receive a valid
+// acknowledgment of receipt from the specified HTTP endpoint destination.
+type HTTPEndpointRetryOptions struct {
+	DurationInSeconds *int64 `json:"durationInSeconds,omitempty"`
+}
+
+// The native Hive / HCatalog JsonSerDe. Used by Firehose for deserializing
+// data, which means converting it from the JSON format in preparation for serializing
+// it to the Parquet or ORC format. This is one of two deserializers you can
+// choose, depending on which one offers the functionality you need. The other
+// option is the OpenX SerDe.
+type HiveJSONSerDe struct {
+	TimestampFormats []*string `json:"timestampFormats,omitempty"`
+}
+
+// Specifies the destination configure settings for Apache Iceberg Table.
+type IcebergDestinationConfiguration struct {
+	AppendOnly *bool `json:"appendOnly,omitempty"`
+	// Describes hints for the buffering to perform before delivering data to the
+	// destination. These options are treated as hints, and therefore Firehose might
+	// choose to use different values when it is optimal. The SizeInMBs and IntervalInSeconds
+	// parameters are optional. However, if specify a value for one of them, you
+	// must also provide a value for the other.
+	BufferingHints *BufferingHints `json:"bufferingHints,omitempty"`
+	// Describes the containers where the destination Apache Iceberg Tables are
+	// persisted.
+	CatalogConfiguration *CatalogConfiguration `json:"catalogConfiguration,omitempty"`
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions          *CloudWatchLoggingOptions        `json:"cloudWatchLoggingOptions,omitempty"`
+	DestinationTableConfigurationList []*DestinationTableConfiguration `json:"destinationTableConfigurationList,omitempty"`
+	// Describes a data processing configuration.
+	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
+	// The retry behavior in case Firehose is unable to deliver data to a destination.
+	RetryOptions *RetryOptions `json:"retryOptions,omitempty"`
+	RoleARN      *string       `json:"roleARN,omitempty"`
+	S3BackupMode *string       `json:"s3BackupMode,omitempty"`
+	// Describes the configuration of a destination in Amazon S3.
+	S3Configuration *S3DestinationConfiguration `json:"s3Configuration,omitempty"`
+	// The configuration to enable schema evolution.
+	//
+	// Amazon Data Firehose is in preview release and is subject to change.
+	SchemaEvolutionConfiguration *SchemaEvolutionConfiguration `json:"schemaEvolutionConfiguration,omitempty"`
+	// The configuration to enable automatic table creation.
+	//
+	// Amazon Data Firehose is in preview release and is subject to change.
+	TableCreationConfiguration *TableCreationConfiguration `json:"tableCreationConfiguration,omitempty"`
+}
+
+// Describes a destination in Apache Iceberg Tables.
+type IcebergDestinationDescription struct {
+	AppendOnly *bool `json:"appendOnly,omitempty"`
+	// Describes hints for the buffering to perform before delivering data to the
+	// destination. These options are treated as hints, and therefore Firehose might
+	// choose to use different values when it is optimal. The SizeInMBs and IntervalInSeconds
+	// parameters are optional. However, if specify a value for one of them, you
+	// must also provide a value for the other.
+	BufferingHints *BufferingHints `json:"bufferingHints,omitempty"`
+	// Describes the containers where the destination Apache Iceberg Tables are
+	// persisted.
+	CatalogConfiguration *CatalogConfiguration `json:"catalogConfiguration,omitempty"`
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions          *CloudWatchLoggingOptions        `json:"cloudWatchLoggingOptions,omitempty"`
+	DestinationTableConfigurationList []*DestinationTableConfiguration `json:"destinationTableConfigurationList,omitempty"`
+	// Describes a data processing configuration.
+	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
+	// The retry behavior in case Firehose is unable to deliver data to a destination.
+	RetryOptions *RetryOptions `json:"retryOptions,omitempty"`
+	RoleARN      *string       `json:"roleARN,omitempty"`
+	S3BackupMode *string       `json:"s3BackupMode,omitempty"`
+	// Describes a destination in Amazon S3.
+	S3DestinationDescription *S3DestinationDescription `json:"s3DestinationDescription,omitempty"`
+	// The configuration to enable schema evolution.
+	//
+	// Amazon Data Firehose is in preview release and is subject to change.
+	SchemaEvolutionConfiguration *SchemaEvolutionConfiguration `json:"schemaEvolutionConfiguration,omitempty"`
+	// The configuration to enable automatic table creation.
+	//
+	// Amazon Data Firehose is in preview release and is subject to change.
+	TableCreationConfiguration *TableCreationConfiguration `json:"tableCreationConfiguration,omitempty"`
+}
+
+// Describes an update for a destination in Apache Iceberg Tables.
+type IcebergDestinationUpdate struct {
+	AppendOnly *bool `json:"appendOnly,omitempty"`
+	// Describes hints for the buffering to perform before delivering data to the
+	// destination. These options are treated as hints, and therefore Firehose might
+	// choose to use different values when it is optimal. The SizeInMBs and IntervalInSeconds
+	// parameters are optional. However, if specify a value for one of them, you
+	// must also provide a value for the other.
+	BufferingHints *BufferingHints `json:"bufferingHints,omitempty"`
+	// Describes the containers where the destination Apache Iceberg Tables are
+	// persisted.
+	CatalogConfiguration *CatalogConfiguration `json:"catalogConfiguration,omitempty"`
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions          *CloudWatchLoggingOptions        `json:"cloudWatchLoggingOptions,omitempty"`
+	DestinationTableConfigurationList []*DestinationTableConfiguration `json:"destinationTableConfigurationList,omitempty"`
+	// Describes a data processing configuration.
+	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
+	// The retry behavior in case Firehose is unable to deliver data to a destination.
+	RetryOptions *RetryOptions `json:"retryOptions,omitempty"`
+	RoleARN      *string       `json:"roleARN,omitempty"`
+	S3BackupMode *string       `json:"s3BackupMode,omitempty"`
+	// Describes the configuration of a destination in Amazon S3.
+	S3Configuration *S3DestinationConfiguration `json:"s3Configuration,omitempty"`
+	// The configuration to enable schema evolution.
+	//
+	// Amazon Data Firehose is in preview release and is subject to change.
+	SchemaEvolutionConfiguration *SchemaEvolutionConfiguration `json:"schemaEvolutionConfiguration,omitempty"`
+	// The configuration to enable automatic table creation.
+	//
+	// Amazon Data Firehose is in preview release and is subject to change.
+	TableCreationConfiguration *TableCreationConfiguration `json:"tableCreationConfiguration,omitempty"`
+}
+
+// Specifies the deserializer you want to use to convert the format of the input
+// data. This parameter is required if Enabled is set to true.
+type InputFormatConfiguration struct {
+	// The deserializer you want Firehose to use for converting the input data from
+	// JSON. Firehose then serializes the data to its final format using the Serializer.
+	// Firehose supports two types of deserializers: the Apache Hive JSON SerDe
+	// (https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DDL#LanguageManualDDL-JSON)
+	// and the OpenX JSON SerDe (https://github.com/rcongiu/Hive-JSON-Serde).
+	Deserializer *Deserializer `json:"deserializer,omitempty"`
+}
+
+// Describes an encryption key for a destination in Amazon S3.
+type KMSEncryptionConfig struct {
+	AWSKMSKeyARN *string `json:"awsKMSKeyARN,omitempty"`
+}
+
+// The stream and role Amazon Resource Names (ARNs) for a Kinesis data stream
+// used as the source for a Firehose stream.
+type KinesisStreamSourceConfiguration struct {
+	KinesisStreamARN *string `json:"kinesisStreamARN,omitempty"`
+	RoleARN          *string `json:"roleARN,omitempty"`
+}
+
+// Details about a Kinesis data stream used as the source for a Firehose stream.
+type KinesisStreamSourceDescription struct {
+	DeliveryStartTimestamp *metav1.Time `json:"deliveryStartTimestamp,omitempty"`
+	KinesisStreamARN       *string      `json:"kinesisStreamARN,omitempty"`
+	RoleARN                *string      `json:"roleARN,omitempty"`
+}
+
+// The configuration for the Amazon MSK cluster to be used as the source for
+// a delivery stream.
+type MSKSourceConfiguration struct {
+	// The authentication configuration of the Amazon MSK cluster.
+	AuthenticationConfiguration *AuthenticationConfiguration `json:"authenticationConfiguration,omitempty"`
+	MSKClusterARN               *string                      `json:"mSKClusterARN,omitempty"`
+	ReadFromTimestamp           *metav1.Time                 `json:"readFromTimestamp,omitempty"`
+	TopicName                   *string                      `json:"topicName,omitempty"`
+}
+
+// Details about the Amazon MSK cluster used as the source for a Firehose stream.
+type MSKSourceDescription struct {
+	// The authentication configuration of the Amazon MSK cluster.
+	AuthenticationConfiguration *AuthenticationConfiguration `json:"authenticationConfiguration,omitempty"`
+	DeliveryStartTimestamp      *metav1.Time                 `json:"deliveryStartTimestamp,omitempty"`
+	MSKClusterARN               *string                      `json:"mSKClusterARN,omitempty"`
+	ReadFromTimestamp           *metav1.Time                 `json:"readFromTimestamp,omitempty"`
+	TopicName                   *string                      `json:"topicName,omitempty"`
+}
+
+// The OpenX SerDe. Used by Firehose for deserializing data, which means converting
+// it from the JSON format in preparation for serializing it to the Parquet
+// or ORC format. This is one of two deserializers you can choose, depending
+// on which one offers the functionality you need. The other option is the native
+// Hive / HCatalog JsonSerDe.
+type OpenXJSONSerDe struct {
+	CaseInsensitive                    *bool              `json:"caseInsensitive,omitempty"`
+	ColumnToJSONKeyMappings            map[string]*string `json:"columnToJSONKeyMappings,omitempty"`
+	ConvertDotsInJSONKeysToUnderscores *bool              `json:"convertDotsInJSONKeysToUnderscores,omitempty"`
+}
+
+// A serializer to use for converting data to the ORC format before storing
+// it in Amazon S3. For more information, see Apache ORC (https://orc.apache.org/docs/).
+type OrcSerDe struct {
+	BlockSizeBytes                      *int64    `json:"blockSizeBytes,omitempty"`
+	BloomFilterColumns                  []*string `json:"bloomFilterColumns,omitempty"`
+	BloomFilterFalsePositiveProbability *float64  `json:"bloomFilterFalsePositiveProbability,omitempty"`
+	Compression                         *string   `json:"compression,omitempty"`
+	DictionaryKeyThreshold              *float64  `json:"dictionaryKeyThreshold,omitempty"`
+	EnablePadding                       *bool     `json:"enablePadding,omitempty"`
+	FormatVersion                       *string   `json:"formatVersion,omitempty"`
+	PaddingTolerance                    *float64  `json:"paddingTolerance,omitempty"`
+	RowIndexStride                      *int64    `json:"rowIndexStride,omitempty"`
+	StripeSizeBytes                     *int64    `json:"stripeSizeBytes,omitempty"`
+}
+
+// Specifies the serializer that you want Firehose to use to convert the format
+// of your data before it writes it to Amazon S3. This parameter is required
+// if Enabled is set to true.
+type OutputFormatConfiguration struct {
+	// The serializer that you want Firehose to use to convert data to the target
+	// format before writing it to Amazon S3. Firehose supports two types of serializers:
+	// the ORC SerDe and the Parquet SerDe.
+	Serializer *Serializer `json:"serializer,omitempty"`
+}
+
+// A serializer to use for converting data to the Parquet format before storing
+// it in Amazon S3. For more information, see Apache Parquet (https://parquet.apache.org/docs/).
+type ParquetSerDe struct {
+	BlockSizeBytes              *int64  `json:"blockSizeBytes,omitempty"`
+	Compression                 *string `json:"compression,omitempty"`
+	EnableDictionaryCompression *bool   `json:"enableDictionaryCompression,omitempty"`
+	MaxPaddingBytes             *int64  `json:"maxPaddingBytes,omitempty"`
+	PageSizeBytes               *int64  `json:"pageSizeBytes,omitempty"`
+	WriterVersion               *string `json:"writerVersion,omitempty"`
+}
+
+// Represents a single field in a PartitionSpec.
+//
+// Amazon Data Firehose is in preview release and is subject to change.
+type PartitionField struct {
+	SourceName *string `json:"sourceName,omitempty"`
+}
+
+// Represents how to produce partition data for a table. Partition data is produced
+// by transforming columns in a table. Each column transform is represented
+// by a named PartitionField.
+//
+// Here is an example of the schema in JSON.
+//
+// "partitionSpec": { "identity": [ {"sourceName": "column1"}, {"sourceName":
+// "column2"}, {"sourceName": "column3"} ] }
+//
+// Amazon Data Firehose is in preview release and is subject to change.
+type PartitionSpec struct {
+	Identity []*PartitionField `json:"identity,omitempty"`
+}
+
+// Describes a data processing configuration.
+type ProcessingConfiguration struct {
+	Enabled    *bool        `json:"enabled,omitempty"`
+	Processors []*Processor `json:"processors,omitempty"`
+}
+
+// Describes a data processor.
+//
+// If you want to add a new line delimiter between records in objects that are
+// delivered to Amazon S3, choose AppendDelimiterToRecord as a processor type.
+// You don’t have to put a processor parameter when you select AppendDelimiterToRecord.
+type Processor struct {
+	Parameters []*ProcessorParameter `json:"parameters,omitempty"`
+	Type       *string               `json:"type_,omitempty"`
+}
+
+// Describes the processor parameter.
+type ProcessorParameter struct {
+	ParameterName  *string `json:"parameterName,omitempty"`
+	ParameterValue *string `json:"parameterValue,omitempty"`
+}
+
+// Describes the configuration of a destination in Amazon Redshift.
+type RedshiftDestinationConfiguration struct {
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions *CloudWatchLoggingOptions `json:"cloudWatchLoggingOptions,omitempty"`
+	ClusterJDBCURL           *string                   `json:"clusterJDBCURL,omitempty"`
+	// Describes a COPY command for Amazon Redshift.
+	CopyCommand *CopyCommand `json:"copyCommand,omitempty"`
+	Password    *string      `json:"password,omitempty"`
+	// Describes a data processing configuration.
+	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
+	// Configures retry behavior in case Firehose is unable to deliver documents
+	// to Amazon Redshift.
+	RetryOptions *RedshiftRetryOptions `json:"retryOptions,omitempty"`
+	RoleARN      *string               `json:"roleARN,omitempty"`
+	// Describes the configuration of a destination in Amazon S3.
+	S3BackupConfiguration *S3DestinationConfiguration `json:"s3BackupConfiguration,omitempty"`
+	S3BackupMode          *string                     `json:"s3BackupMode,omitempty"`
+	// Describes the configuration of a destination in Amazon S3.
+	S3Configuration *S3DestinationConfiguration `json:"s3Configuration,omitempty"`
+	// The structure that defines how Firehose accesses the secret.
+	SecretsManagerConfiguration *SecretsManagerConfiguration `json:"secretsManagerConfiguration,omitempty"`
+	Username                    *string                      `json:"username,omitempty"`
+}
+
+// Describes a destination in Amazon Redshift.
+type RedshiftDestinationDescription struct {
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions *CloudWatchLoggingOptions `json:"cloudWatchLoggingOptions,omitempty"`
+	ClusterJDBCURL           *string                   `json:"clusterJDBCURL,omitempty"`
+	// Describes a COPY command for Amazon Redshift.
+	CopyCommand *CopyCommand `json:"copyCommand,omitempty"`
+	// Describes a data processing configuration.
+	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
+	// Configures retry behavior in case Firehose is unable to deliver documents
+	// to Amazon Redshift.
+	RetryOptions *RedshiftRetryOptions `json:"retryOptions,omitempty"`
+	RoleARN      *string               `json:"roleARN,omitempty"`
+	// Describes a destination in Amazon S3.
+	S3BackupDescription *S3DestinationDescription `json:"s3BackupDescription,omitempty"`
+	S3BackupMode        *string                   `json:"s3BackupMode,omitempty"`
+	// Describes a destination in Amazon S3.
+	S3DestinationDescription *S3DestinationDescription `json:"s3DestinationDescription,omitempty"`
+	// The structure that defines how Firehose accesses the secret.
+	SecretsManagerConfiguration *SecretsManagerConfiguration `json:"secretsManagerConfiguration,omitempty"`
+	Username                    *string                      `json:"username,omitempty"`
+}
+
+// Describes an update for a destination in Amazon Redshift.
+type RedshiftDestinationUpdate struct {
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions *CloudWatchLoggingOptions `json:"cloudWatchLoggingOptions,omitempty"`
+	ClusterJDBCURL           *string                   `json:"clusterJDBCURL,omitempty"`
+	// Describes a COPY command for Amazon Redshift.
+	CopyCommand *CopyCommand `json:"copyCommand,omitempty"`
+	Password    *string      `json:"password,omitempty"`
+	// Describes a data processing configuration.
+	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
+	// Configures retry behavior in case Firehose is unable to deliver documents
+	// to Amazon Redshift.
+	RetryOptions *RedshiftRetryOptions `json:"retryOptions,omitempty"`
+	RoleARN      *string               `json:"roleARN,omitempty"`
+	S3BackupMode *string               `json:"s3BackupMode,omitempty"`
+	// The structure that defines how Firehose accesses the secret.
+	SecretsManagerConfiguration *SecretsManagerConfiguration `json:"secretsManagerConfiguration,omitempty"`
+	Username                    *string                      `json:"username,omitempty"`
+}
+
+// Configures retry behavior in case Firehose is unable to deliver documents
+// to Amazon Redshift.
+type RedshiftRetryOptions struct {
+	DurationInSeconds *int64 `json:"durationInSeconds,omitempty"`
+}
+
+// The retry behavior in case Firehose is unable to deliver data to a destination.
+type RetryOptions struct {
+	DurationInSeconds *int64 `json:"durationInSeconds,omitempty"`
+}
+
+// Describes the configuration of a destination in Amazon S3.
+type S3DestinationConfiguration struct {
+	BucketARN *string `json:"bucketARN,omitempty"`
+	// Describes hints for the buffering to perform before delivering data to the
+	// destination. These options are treated as hints, and therefore Firehose might
+	// choose to use different values when it is optimal. The SizeInMBs and IntervalInSeconds
+	// parameters are optional. However, if specify a value for one of them, you
+	// must also provide a value for the other.
+	BufferingHints *BufferingHints `json:"bufferingHints,omitempty"`
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions *CloudWatchLoggingOptions `json:"cloudWatchLoggingOptions,omitempty"`
+	CompressionFormat        *string                   `json:"compressionFormat,omitempty"`
+	// Describes the encryption for a destination in Amazon S3.
+	EncryptionConfiguration *EncryptionConfiguration `json:"encryptionConfiguration,omitempty"`
+	ErrorOutputPrefix       *string                  `json:"errorOutputPrefix,omitempty"`
+	Prefix                  *string                  `json:"prefix,omitempty"`
+	RoleARN                 *string                  `json:"roleARN,omitempty"`
+}
+
+// Describes a destination in Amazon S3.
+type S3DestinationDescription struct {
+	BucketARN *string `json:"bucketARN,omitempty"`
+	// Describes hints for the buffering to perform before delivering data to the
+	// destination. These options are treated as hints, and therefore Firehose might
+	// choose to use different values when it is optimal. The SizeInMBs and IntervalInSeconds
+	// parameters are optional. However, if specify a value for one of them, you
+	// must also provide a value for the other.
+	BufferingHints *BufferingHints `json:"bufferingHints,omitempty"`
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions *CloudWatchLoggingOptions `json:"cloudWatchLoggingOptions,omitempty"`
+	CompressionFormat        *string                   `json:"compressionFormat,omitempty"`
+	// Describes the encryption for a destination in Amazon S3.
+	EncryptionConfiguration *EncryptionConfiguration `json:"encryptionConfiguration,omitempty"`
+	ErrorOutputPrefix       *string                  `json:"errorOutputPrefix,omitempty"`
+	Prefix                  *string                  `json:"prefix,omitempty"`
+	RoleARN                 *string                  `json:"roleARN,omitempty"`
+}
+
+// Describes an update for a destination in Amazon S3.
+type S3DestinationUpdate struct {
+	BucketARN *string `json:"bucketARN,omitempty"`
+	// Describes hints for the buffering to perform before delivering data to the
+	// destination. These options are treated as hints, and therefore Firehose might
+	// choose to use different values when it is optimal. The SizeInMBs and IntervalInSeconds
+	// parameters are optional. However, if specify a value for one of them, you
+	// must also provide a value for the other.
+	BufferingHints *BufferingHints `json:"bufferingHints,omitempty"`
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions *CloudWatchLoggingOptions `json:"cloudWatchLoggingOptions,omitempty"`
+	CompressionFormat        *string                   `json:"compressionFormat,omitempty"`
+	// Describes the encryption for a destination in Amazon S3.
+	EncryptionConfiguration *EncryptionConfiguration `json:"encryptionConfiguration,omitempty"`
+	ErrorOutputPrefix       *string                  `json:"errorOutputPrefix,omitempty"`
+	Prefix                  *string                  `json:"prefix,omitempty"`
+	RoleARN                 *string                  `json:"roleARN,omitempty"`
+}
+
+// Specifies the schema to which you want Firehose to configure your data before
+// it writes it to Amazon S3. This parameter is required if Enabled is set to
+// true.
+type SchemaConfiguration struct {
+	CatalogID    *string `json:"catalogID,omitempty"`
+	DatabaseName *string `json:"databaseName,omitempty"`
+	Region       *string `json:"region,omitempty"`
+	RoleARN      *string `json:"roleARN,omitempty"`
+	TableName    *string `json:"tableName,omitempty"`
+	VersionID    *string `json:"versionID,omitempty"`
+}
+
+// The configuration to enable schema evolution.
+//
+// Amazon Data Firehose is in preview release and is subject to change.
+type SchemaEvolutionConfiguration struct {
+	Enabled *bool `json:"enabled,omitempty"`
+}
+
+// The structure that defines how Firehose accesses the secret.
+type SecretsManagerConfiguration struct {
+	Enabled   *bool   `json:"enabled,omitempty"`
+	RoleARN   *string `json:"roleARN,omitempty"`
+	SecretARN *string `json:"secretARN,omitempty"`
+}
+
+// The serializer that you want Firehose to use to convert data to the target
+// format before writing it to Amazon S3. Firehose supports two types of serializers:
+// the ORC SerDe and the Parquet SerDe.
+type Serializer struct {
+	// A serializer to use for converting data to the ORC format before storing
+	// it in Amazon S3. For more information, see Apache ORC (https://orc.apache.org/docs/).
+	OrcSerDe *OrcSerDe `json:"orcSerDe,omitempty"`
+	// A serializer to use for converting data to the Parquet format before storing
+	// it in Amazon S3. For more information, see Apache Parquet (https://parquet.apache.org/docs/).
+	ParquetSerDe *ParquetSerDe `json:"parquetSerDe,omitempty"`
+}
+
+// Describes the buffering to perform before delivering data to the Snowflake
+// destination. If you do not specify any value, Firehose uses the default values.
+type SnowflakeBufferingHints struct {
+	IntervalInSeconds *int64 `json:"intervalInSeconds,omitempty"`
+	SizeInMBs         *int64 `json:"sizeInMBs,omitempty"`
+}
+
+// Configure Snowflake destination
+type SnowflakeDestinationConfiguration struct {
+	AccountURL *string `json:"accountURL,omitempty"`
+	// Describes the buffering to perform before delivering data to the Snowflake
+	// destination. If you do not specify any value, Firehose uses the default values.
+	BufferingHints *SnowflakeBufferingHints `json:"bufferingHints,omitempty"`
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions *CloudWatchLoggingOptions `json:"cloudWatchLoggingOptions,omitempty"`
+	ContentColumnName        *string                   `json:"contentColumnName,omitempty"`
+	DataLoadingOption        *string                   `json:"dataLoadingOption,omitempty"`
+	Database                 *string                   `json:"database,omitempty"`
+	KeyPassphrase            *string                   `json:"keyPassphrase,omitempty"`
+	MetaDataColumnName       *string                   `json:"metaDataColumnName,omitempty"`
+	PrivateKey               *string                   `json:"privateKey,omitempty"`
+	// Describes a data processing configuration.
+	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
+	// Specify how long Firehose retries sending data to the New Relic HTTP endpoint.
+	// After sending data, Firehose first waits for an acknowledgment from the HTTP
+	// endpoint. If an error occurs or the acknowledgment doesn’t arrive within
+	// the acknowledgment timeout period, Firehose starts the retry duration counter.
+	// It keeps retrying until the retry duration expires. After that, Firehose
+	// considers it a data delivery failure and backs up the data to your Amazon
+	// S3 bucket. Every time that Firehose sends data to the HTTP endpoint (either
+	// the initial attempt or a retry), it restarts the acknowledgement timeout
+	// counter and waits for an acknowledgement from the HTTP endpoint. Even if
+	// the retry duration expires, Firehose still waits for the acknowledgment until
+	// it receives it or the acknowledgement timeout period is reached. If the acknowledgment
+	// times out, Firehose determines whether there's time left in the retry counter.
+	// If there is time left, it retries again and repeats the logic until it receives
+	// an acknowledgment or determines that the retry time has expired. If you don't
+	// want Firehose to retry sending data, set this value to 0.
+	RetryOptions *SnowflakeRetryOptions `json:"retryOptions,omitempty"`
+	RoleARN      *string                `json:"roleARN,omitempty"`
+	S3BackupMode *string                `json:"s3BackupMode,omitempty"`
+	// Describes the configuration of a destination in Amazon S3.
+	S3Configuration *S3DestinationConfiguration `json:"s3Configuration,omitempty"`
+	Schema          *string                     `json:"schema,omitempty"`
+	// The structure that defines how Firehose accesses the secret.
+	SecretsManagerConfiguration *SecretsManagerConfiguration `json:"secretsManagerConfiguration,omitempty"`
+	// Optionally configure a Snowflake role. Otherwise the default user role will
+	// be used.
+	SnowflakeRoleConfiguration *SnowflakeRoleConfiguration `json:"snowflakeRoleConfiguration,omitempty"`
+	// Configure a Snowflake VPC
+	SnowflakeVPCConfiguration *SnowflakeVPCConfiguration `json:"snowflakeVPCConfiguration,omitempty"`
+	Table                     *string                    `json:"table,omitempty"`
+	User                      *string                    `json:"user,omitempty"`
+}
+
+// Optional Snowflake destination description
+type SnowflakeDestinationDescription struct {
+	AccountURL *string `json:"accountURL,omitempty"`
+	// Describes the buffering to perform before delivering data to the Snowflake
+	// destination. If you do not specify any value, Firehose uses the default values.
+	BufferingHints *SnowflakeBufferingHints `json:"bufferingHints,omitempty"`
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions *CloudWatchLoggingOptions `json:"cloudWatchLoggingOptions,omitempty"`
+	ContentColumnName        *string                   `json:"contentColumnName,omitempty"`
+	DataLoadingOption        *string                   `json:"dataLoadingOption,omitempty"`
+	Database                 *string                   `json:"database,omitempty"`
+	MetaDataColumnName       *string                   `json:"metaDataColumnName,omitempty"`
+	// Describes a data processing configuration.
+	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
+	// Specify how long Firehose retries sending data to the New Relic HTTP endpoint.
+	// After sending data, Firehose first waits for an acknowledgment from the HTTP
+	// endpoint. If an error occurs or the acknowledgment doesn’t arrive within
+	// the acknowledgment timeout period, Firehose starts the retry duration counter.
+	// It keeps retrying until the retry duration expires. After that, Firehose
+	// considers it a data delivery failure and backs up the data to your Amazon
+	// S3 bucket. Every time that Firehose sends data to the HTTP endpoint (either
+	// the initial attempt or a retry), it restarts the acknowledgement timeout
+	// counter and waits for an acknowledgement from the HTTP endpoint. Even if
+	// the retry duration expires, Firehose still waits for the acknowledgment until
+	// it receives it or the acknowledgement timeout period is reached. If the acknowledgment
+	// times out, Firehose determines whether there's time left in the retry counter.
+	// If there is time left, it retries again and repeats the logic until it receives
+	// an acknowledgment or determines that the retry time has expired. If you don't
+	// want Firehose to retry sending data, set this value to 0.
+	RetryOptions *SnowflakeRetryOptions `json:"retryOptions,omitempty"`
+	RoleARN      *string                `json:"roleARN,omitempty"`
+	S3BackupMode *string                `json:"s3BackupMode,omitempty"`
+	// Describes a destination in Amazon S3.
+	S3DestinationDescription *S3DestinationDescription `json:"s3DestinationDescription,omitempty"`
+	Schema                   *string                   `json:"schema,omitempty"`
+	// The structure that defines how Firehose accesses the secret.
+	SecretsManagerConfiguration *SecretsManagerConfiguration `json:"secretsManagerConfiguration,omitempty"`
+	// Optionally configure a Snowflake role. Otherwise the default user role will
+	// be used.
+	SnowflakeRoleConfiguration *SnowflakeRoleConfiguration `json:"snowflakeRoleConfiguration,omitempty"`
+	// Configure a Snowflake VPC
+	SnowflakeVPCConfiguration *SnowflakeVPCConfiguration `json:"snowflakeVPCConfiguration,omitempty"`
+	Table                     *string                    `json:"table,omitempty"`
+	User                      *string                    `json:"user,omitempty"`
+}
+
+// Update to configuration settings
+type SnowflakeDestinationUpdate struct {
+	AccountURL *string `json:"accountURL,omitempty"`
+	// Describes the buffering to perform before delivering data to the Snowflake
+	// destination. If you do not specify any value, Firehose uses the default values.
+	BufferingHints *SnowflakeBufferingHints `json:"bufferingHints,omitempty"`
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions *CloudWatchLoggingOptions `json:"cloudWatchLoggingOptions,omitempty"`
+	ContentColumnName        *string                   `json:"contentColumnName,omitempty"`
+	DataLoadingOption        *string                   `json:"dataLoadingOption,omitempty"`
+	Database                 *string                   `json:"database,omitempty"`
+	KeyPassphrase            *string                   `json:"keyPassphrase,omitempty"`
+	MetaDataColumnName       *string                   `json:"metaDataColumnName,omitempty"`
+	PrivateKey               *string                   `json:"privateKey,omitempty"`
+	// Describes a data processing configuration.
+	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
+	// Specify how long Firehose retries sending data to the New Relic HTTP endpoint.
+	// After sending data, Firehose first waits for an acknowledgment from the HTTP
+	// endpoint. If an error occurs or the acknowledgment doesn’t arrive within
+	// the acknowledgment timeout period, Firehose starts the retry duration counter.
+	// It keeps retrying until the retry duration expires. After that, Firehose
+	// considers it a data delivery failure and backs up the data to your Amazon
+	// S3 bucket. Every time that Firehose sends data to the HTTP endpoint (either
+	// the initial attempt or a retry), it restarts the acknowledgement timeout
+	// counter and waits for an acknowledgement from the HTTP endpoint. Even if
+	// the retry duration expires, Firehose still waits for the acknowledgment until
+	// it receives it or the acknowledgement timeout period is reached. If the acknowledgment
+	// times out, Firehose determines whether there's time left in the retry counter.
+	// If there is time left, it retries again and repeats the logic until it receives
+	// an acknowledgment or determines that the retry time has expired. If you don't
+	// want Firehose to retry sending data, set this value to 0.
+	RetryOptions *SnowflakeRetryOptions `json:"retryOptions,omitempty"`
+	RoleARN      *string                `json:"roleARN,omitempty"`
+	S3BackupMode *string                `json:"s3BackupMode,omitempty"`
+	Schema       *string                `json:"schema,omitempty"`
+	// The structure that defines how Firehose accesses the secret.
+	SecretsManagerConfiguration *SecretsManagerConfiguration `json:"secretsManagerConfiguration,omitempty"`
+	// Optionally configure a Snowflake role. Otherwise the default user role will
+	// be used.
+	SnowflakeRoleConfiguration *SnowflakeRoleConfiguration `json:"snowflakeRoleConfiguration,omitempty"`
+	Table                      *string                     `json:"table,omitempty"`
+	User                       *string                     `json:"user,omitempty"`
+}
+
+// Specify how long Firehose retries sending data to the New Relic HTTP endpoint.
+// After sending data, Firehose first waits for an acknowledgment from the HTTP
+// endpoint. If an error occurs or the acknowledgment doesn’t arrive within
+// the acknowledgment timeout period, Firehose starts the retry duration counter.
+// It keeps retrying until the retry duration expires. After that, Firehose
+// considers it a data delivery failure and backs up the data to your Amazon
+// S3 bucket. Every time that Firehose sends data to the HTTP endpoint (either
+// the initial attempt or a retry), it restarts the acknowledgement timeout
+// counter and waits for an acknowledgement from the HTTP endpoint. Even if
+// the retry duration expires, Firehose still waits for the acknowledgment until
+// it receives it or the acknowledgement timeout period is reached. If the acknowledgment
+// times out, Firehose determines whether there's time left in the retry counter.
+// If there is time left, it retries again and repeats the logic until it receives
+// an acknowledgment or determines that the retry time has expired. If you don't
+// want Firehose to retry sending data, set this value to 0.
+type SnowflakeRetryOptions struct {
+	DurationInSeconds *int64 `json:"durationInSeconds,omitempty"`
+}
+
+// Optionally configure a Snowflake role. Otherwise the default user role will
+// be used.
+type SnowflakeRoleConfiguration struct {
+	Enabled       *bool   `json:"enabled,omitempty"`
+	SnowflakeRole *string `json:"snowflakeRole,omitempty"`
+}
+
+// Configure a Snowflake VPC
+type SnowflakeVPCConfiguration struct {
+	PrivateLinkVPCeID *string `json:"privateLinkVPCeID,omitempty"`
+}
+
+// Details about a Kinesis data stream used as the source for a Firehose stream.
+type SourceDescription struct {
+	// The top level object for database source description.
+	//
+	// Amazon Data Firehose is in preview release and is subject to change.
+	DatabaseSourceDescription *DatabaseSourceDescription `json:"databaseSourceDescription,omitempty"`
+	// The structure that configures parameters such as ThroughputHintInMBs for
+	// a stream configured with Direct PUT as a source.
+	DirectPutSourceDescription *DirectPutSourceDescription `json:"directPutSourceDescription,omitempty"`
+	// Details about a Kinesis data stream used as the source for a Firehose stream.
+	KinesisStreamSourceDescription *KinesisStreamSourceDescription `json:"kinesisStreamSourceDescription,omitempty"`
+	// Details about the Amazon MSK cluster used as the source for a Firehose stream.
+	MSKSourceDescription *MSKSourceDescription `json:"mSKSourceDescription,omitempty"`
+}
+
+// The buffering options. If no value is specified, the default values for Splunk
+// are used.
+type SplunkBufferingHints struct {
+	IntervalInSeconds *int64 `json:"intervalInSeconds,omitempty"`
+	SizeInMBs         *int64 `json:"sizeInMBs,omitempty"`
+}
+
+// Describes the configuration of a destination in Splunk.
+type SplunkDestinationConfiguration struct {
+	// The buffering options. If no value is specified, the default values for Splunk
+	// are used.
+	BufferingHints *SplunkBufferingHints `json:"bufferingHints,omitempty"`
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions          *CloudWatchLoggingOptions `json:"cloudWatchLoggingOptions,omitempty"`
+	HECAcknowledgmentTimeoutInSeconds *int64                    `json:"hECAcknowledgmentTimeoutInSeconds,omitempty"`
+	HECEndpoint                       *string                   `json:"hECEndpoint,omitempty"`
+	HECEndpointType                   *string                   `json:"hECEndpointType,omitempty"`
+	HECToken                          *string                   `json:"hECToken,omitempty"`
+	// Describes a data processing configuration.
+	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
+	// Configures retry behavior in case Firehose is unable to deliver documents
+	// to Splunk, or if it doesn't receive an acknowledgment from Splunk.
+	RetryOptions *SplunkRetryOptions `json:"retryOptions,omitempty"`
+	S3BackupMode *string             `json:"s3BackupMode,omitempty"`
+	// Describes the configuration of a destination in Amazon S3.
+	S3Configuration *S3DestinationConfiguration `json:"s3Configuration,omitempty"`
+	// The structure that defines how Firehose accesses the secret.
+	SecretsManagerConfiguration *SecretsManagerConfiguration `json:"secretsManagerConfiguration,omitempty"`
+}
+
+// Describes a destination in Splunk.
+type SplunkDestinationDescription struct {
+	// The buffering options. If no value is specified, the default values for Splunk
+	// are used.
+	BufferingHints *SplunkBufferingHints `json:"bufferingHints,omitempty"`
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions          *CloudWatchLoggingOptions `json:"cloudWatchLoggingOptions,omitempty"`
+	HECAcknowledgmentTimeoutInSeconds *int64                    `json:"hECAcknowledgmentTimeoutInSeconds,omitempty"`
+	HECEndpoint                       *string                   `json:"hECEndpoint,omitempty"`
+	HECEndpointType                   *string                   `json:"hECEndpointType,omitempty"`
+	HECToken                          *string                   `json:"hECToken,omitempty"`
+	// Describes a data processing configuration.
+	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
+	// Configures retry behavior in case Firehose is unable to deliver documents
+	// to Splunk, or if it doesn't receive an acknowledgment from Splunk.
+	RetryOptions *SplunkRetryOptions `json:"retryOptions,omitempty"`
+	S3BackupMode *string             `json:"s3BackupMode,omitempty"`
+	// Describes a destination in Amazon S3.
+	S3DestinationDescription *S3DestinationDescription `json:"s3DestinationDescription,omitempty"`
+	// The structure that defines how Firehose accesses the secret.
+	SecretsManagerConfiguration *SecretsManagerConfiguration `json:"secretsManagerConfiguration,omitempty"`
+}
+
+// Describes an update for a destination in Splunk.
+type SplunkDestinationUpdate struct {
+	// The buffering options. If no value is specified, the default values for Splunk
+	// are used.
+	BufferingHints *SplunkBufferingHints `json:"bufferingHints,omitempty"`
+	// Describes the Amazon CloudWatch logging options for your Firehose stream.
+	CloudWatchLoggingOptions          *CloudWatchLoggingOptions `json:"cloudWatchLoggingOptions,omitempty"`
+	HECAcknowledgmentTimeoutInSeconds *int64                    `json:"hECAcknowledgmentTimeoutInSeconds,omitempty"`
+	HECEndpoint                       *string                   `json:"hECEndpoint,omitempty"`
+	HECEndpointType                   *string                   `json:"hECEndpointType,omitempty"`
+	HECToken                          *string                   `json:"hECToken,omitempty"`
+	// Describes a data processing configuration.
+	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
+	// Configures retry behavior in case Firehose is unable to deliver documents
+	// to Splunk, or if it doesn't receive an acknowledgment from Splunk.
+	RetryOptions *SplunkRetryOptions `json:"retryOptions,omitempty"`
+	S3BackupMode *string             `json:"s3BackupMode,omitempty"`
+	// The structure that defines how Firehose accesses the secret.
+	SecretsManagerConfiguration *SecretsManagerConfiguration `json:"secretsManagerConfiguration,omitempty"`
+}
+
+// Configures retry behavior in case Firehose is unable to deliver documents
+// to Splunk, or if it doesn't receive an acknowledgment from Splunk.
+type SplunkRetryOptions struct {
+	DurationInSeconds *int64 `json:"durationInSeconds,omitempty"`
+}
+
+// The configuration to enable automatic table creation.
+//
+// Amazon Data Firehose is in preview release and is subject to change.
+type TableCreationConfiguration struct {
+	Enabled *bool `json:"enabled,omitempty"`
+}
+
+// Metadata that you can assign to a Firehose stream, consisting of a key-value
+// pair.
+type Tag struct {
+	Key   *string `json:"key,omitempty"`
+	Value *string `json:"value,omitempty"`
+}
+
+// The details of the VPC of the Amazon OpenSearch or Amazon OpenSearch Serverless
+// destination.
+type VPCConfiguration struct {
+	RoleARN          *string   `json:"roleARN,omitempty"`
+	SecurityGroupIDs []*string `json:"securityGroupIDs,omitempty"`
+	SubnetIDs        []*string `json:"subnetIDs,omitempty"`
+}
+
+// The details of the VPC of the Amazon OpenSearch Service destination.
+type VPCConfigurationDescription struct {
+	RoleARN          *string   `json:"roleARN,omitempty"`
+	SecurityGroupIDs []*string `json:"securityGroupIDs,omitempty"`
+	SubnetIDs        []*string `json:"subnetIDs,omitempty"`
+	VPCID            *string   `json:"vpcID,omitempty"`
+}

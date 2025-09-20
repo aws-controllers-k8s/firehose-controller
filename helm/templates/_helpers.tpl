@@ -70,6 +70,26 @@ rules:
   - list
   - watch
 - apiGroups:
+  - firehose.services.k8s.aws
+  resources:
+  - deliverystreams
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - firehose.services.k8s.aws
+  resources:
+  - deliverystreams/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
   - services.k8s.aws
   resources:
   - adoptedresources
