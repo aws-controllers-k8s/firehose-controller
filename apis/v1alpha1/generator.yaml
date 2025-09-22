@@ -22,11 +22,8 @@ ignore:
 resources:
   DeliveryStream:
     fields:
-      #AmazonOpenSearchServerlessDestinationConfiguration:
-        # from:
-        #   operation: DescribeDeliveryStream
-        #   path:  DeliveryStreamDescription.Destinations.AmazonOpenSearchServerlessDestinationDescription
-
+      # CreateDeliveryStream only returns the ARN of the created the Delivery Stream.
+      # Need to set Status fields based on shape of DescribeDeliveryStream.
       DeliveryStreamStatus:
         is_read_only: true
         from:
@@ -51,17 +48,28 @@ resources:
           operation: DescribeDeliveryStream
           path: DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.Status
       
-      DeliveryStreamEncryptionConfiguration.FailureDescription :
+      DeliveryStreamEncryptionConfiguration.FailureDescription:
         is_read_only: true
         from:
           operation: DescribeDeliveryStream
-          path: DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.FailureDescription 
+          path: DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.FailureDescription
 
       VersionId:
         is_read_only: true
         from:
           operation: DescribeDeliveryStream
           path: DeliveryStreamDescription.VersionId
+    
+    synced:
+      when:
+        - path: Status.DeliveryStreamStatus
+          in:
+            - ACTIVE
+            - CREATING_FAILED
+    exceptions:
+      errors:
+        404:
+          code: ResourceNotFoundException
         
 
 
