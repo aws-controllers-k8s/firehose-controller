@@ -103,6 +103,18 @@ func (rm *resourceManager) sdkFind(
 		arn := ackv1alpha1.AWSResourceName(*resp.DeliveryStreamDescription.DeliveryStreamARN)
 		ko.Status.ACKResourceMetadata.ARN = &arn
 	}
+	if resp.DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration != nil {
+		f2 := &svcapitypes.DeliveryStreamEncryptionConfigurationInput{}
+		if resp.DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.KeyARN != nil {
+			f2.KeyARN = resp.DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.KeyARN
+		}
+		if resp.DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.KeyType != "" {
+			f2.KeyType = aws.String(string(resp.DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.KeyType))
+		}
+		ko.Spec.DeliveryStreamEncryptionConfiguration = f2
+	} else {
+		ko.Spec.DeliveryStreamEncryptionConfiguration = nil
+	}
 	if resp.DeliveryStreamDescription.DeliveryStreamName != nil {
 		ko.Spec.DeliveryStreamName = resp.DeliveryStreamDescription.DeliveryStreamName
 	} else {
@@ -205,13 +217,13 @@ func (rm *resourceManager) newCreateRequestPayload(
 ) (*svcsdk.CreateDeliveryStreamInput, error) {
 	res := &svcsdk.CreateDeliveryStreamInput{}
 
-	if r.ko.Spec.DeliveryStreamEncryptionConfigurationInput != nil {
+	if r.ko.Spec.DeliveryStreamEncryptionConfiguration != nil {
 		f0 := &svcsdktypes.DeliveryStreamEncryptionConfigurationInput{}
-		if r.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyARN != nil {
-			f0.KeyARN = r.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyARN
+		if r.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyARN != nil {
+			f0.KeyARN = r.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyARN
 		}
-		if r.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyType != nil {
-			f0.KeyType = svcsdktypes.KeyType(*r.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyType)
+		if r.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyType != nil {
+			f0.KeyType = svcsdktypes.KeyType(*r.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyType)
 		}
 		res.DeliveryStreamEncryptionConfigurationInput = f0
 	}

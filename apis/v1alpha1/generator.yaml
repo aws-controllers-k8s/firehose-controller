@@ -21,7 +21,15 @@ ignore:
 
 resources:
   DeliveryStream:
+    renames:
+      operations:
+        CreateDeliveryStream:
+          input_fields:
+            DeliveryStreamEncryptionConfigurationInput: DeliveryStreamEncryptionConfiguration
+
     fields:
+
+
       # CreateDeliveryStream only returns the ARN of the created the Delivery Stream.
       # Need to set Status fields based on shape of DescribeDeliveryStream.
       DeliveryStreamStatus:
@@ -42,17 +50,17 @@ resources:
           operation: DescribeDeliveryStream
           path: DeliveryStreamDescription.LastUpdateTimestamp
       
-      DeliveryStreamEncryptionConfiguration.Status:
-        is_read_only: true
-        from:
-          operation: DescribeDeliveryStream
-          path: DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.Status
+      # DeliveryStreamEncryptionConfiguration.Status:
+      #   is_read_only: true
+      #   from:
+      #     operation: DescribeDeliveryStream
+      #     path: DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.Status
       
-      DeliveryStreamEncryptionConfiguration.FailureDescription:
-        is_read_only: true
-        from:
-          operation: DescribeDeliveryStream
-          path: DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.FailureDescription
+      # DeliveryStreamEncryptionConfiguration.FailureDescription:
+      #   is_read_only: true
+      #   from:
+      #     operation: DescribeDeliveryStream
+      #     path: DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.FailureDescription
 
       VersionId:
         is_read_only: true

@@ -43,21 +43,21 @@ func newResourceDelta(
 		return delta
 	}
 
-	if ackcompare.HasNilDifference(a.ko.Spec.DeliveryStreamEncryptionConfigurationInput, b.ko.Spec.DeliveryStreamEncryptionConfigurationInput) {
-		delta.Add("Spec.DeliveryStreamEncryptionConfigurationInput", a.ko.Spec.DeliveryStreamEncryptionConfigurationInput, b.ko.Spec.DeliveryStreamEncryptionConfigurationInput)
-	} else if a.ko.Spec.DeliveryStreamEncryptionConfigurationInput != nil && b.ko.Spec.DeliveryStreamEncryptionConfigurationInput != nil {
-		if ackcompare.HasNilDifference(a.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyARN, b.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyARN) {
-			delta.Add("Spec.DeliveryStreamEncryptionConfigurationInput.KeyARN", a.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyARN, b.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyARN)
-		} else if a.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyARN != nil && b.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyARN != nil {
-			if *a.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyARN != *b.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyARN {
-				delta.Add("Spec.DeliveryStreamEncryptionConfigurationInput.KeyARN", a.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyARN, b.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyARN)
+	if ackcompare.HasNilDifference(a.ko.Spec.DeliveryStreamEncryptionConfiguration, b.ko.Spec.DeliveryStreamEncryptionConfiguration) {
+		delta.Add("Spec.DeliveryStreamEncryptionConfiguration", a.ko.Spec.DeliveryStreamEncryptionConfiguration, b.ko.Spec.DeliveryStreamEncryptionConfiguration)
+	} else if a.ko.Spec.DeliveryStreamEncryptionConfiguration != nil && b.ko.Spec.DeliveryStreamEncryptionConfiguration != nil {
+		if ackcompare.HasNilDifference(a.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyARN, b.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyARN) {
+			delta.Add("Spec.DeliveryStreamEncryptionConfiguration.KeyARN", a.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyARN, b.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyARN)
+		} else if a.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyARN != nil && b.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyARN != nil {
+			if *a.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyARN != *b.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyARN {
+				delta.Add("Spec.DeliveryStreamEncryptionConfiguration.KeyARN", a.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyARN, b.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyARN)
 			}
 		}
-		if ackcompare.HasNilDifference(a.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyType, b.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyType) {
-			delta.Add("Spec.DeliveryStreamEncryptionConfigurationInput.KeyType", a.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyType, b.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyType)
-		} else if a.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyType != nil && b.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyType != nil {
-			if *a.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyType != *b.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyType {
-				delta.Add("Spec.DeliveryStreamEncryptionConfigurationInput.KeyType", a.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyType, b.ko.Spec.DeliveryStreamEncryptionConfigurationInput.KeyType)
+		if ackcompare.HasNilDifference(a.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyType, b.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyType) {
+			delta.Add("Spec.DeliveryStreamEncryptionConfiguration.KeyType", a.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyType, b.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyType)
+		} else if a.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyType != nil && b.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyType != nil {
+			if *a.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyType != *b.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyType {
+				delta.Add("Spec.DeliveryStreamEncryptionConfiguration.KeyType", a.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyType, b.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyType)
 			}
 		}
 	}

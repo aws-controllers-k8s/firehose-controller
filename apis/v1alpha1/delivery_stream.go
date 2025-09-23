@@ -25,7 +25,7 @@ type DeliveryStreamSpec struct {
 
 	// Used to specify the type and Amazon Resource Name (ARN) of the KMS key needed
 	// for Server-Side Encryption (SSE).
-	DeliveryStreamEncryptionConfigurationInput *DeliveryStreamEncryptionConfigurationInput `json:"deliveryStreamEncryptionConfigurationInput,omitempty"`
+	DeliveryStreamEncryptionConfiguration *DeliveryStreamEncryptionConfigurationInput `json:"deliveryStreamEncryptionConfiguration,omitempty"`
 	// The name of the Firehose stream. This name must be unique per Amazon Web
 	// Services account in the same Amazon Web Services Region. If the Firehose
 	// streams are in different accounts or different Regions, you can have multiple
@@ -85,17 +85,6 @@ type DeliveryStreamStatus struct {
 	// The date and time that the Firehose stream was created.
 	// +kubebuilder:validation:Optional
 	CreateTimestamp *metav1.Time `json:"createTimestamp,omitempty"`
-	// Provides details in case one of the following operations fails due to an
-	// error related to KMS: CreateDeliveryStream, DeleteDeliveryStream, StartDeliveryStreamEncryption,
-	// StopDeliveryStreamEncryption.
-	// +kubebuilder:validation:Optional
-	DeliveryStreamEncryptionConfigurationFailureDescription *FailureDescription `json:"deliveryStreamEncryptionConfigurationFailureDescription,omitempty"`
-	// This is the server-side encryption (SSE) status for the Firehose stream.
-	// For a full description of the different values of this status, see StartDeliveryStreamEncryption
-	// and StopDeliveryStreamEncryption. If this status is ENABLING_FAILED or DISABLING_FAILED,
-	// it is the status of the most recent attempt to enable or disable SSE, respectively.
-	// +kubebuilder:validation:Optional
-	DeliveryStreamEncryptionConfigurationStatus *string `json:"deliveryStreamEncryptionConfigurationStatus,omitempty"`
 	// The status of the Firehose stream. If the status of a Firehose stream is
 	// CREATING_FAILED, this status doesn't change, and you can't invoke CreateDeliveryStream
 	// again on it. However, you can invoke the DeleteDeliveryStream operation to
