@@ -19,6 +19,12 @@ ignore:
     - CreateDeliveryStreamInput.S3DestinationConfiguration
 
 
+operations:
+  UpdateDestination:
+    resource_name: DeliveryStream
+    operation_type: 
+      - Update
+
 resources:
   DeliveryStream:
     renames:
@@ -26,9 +32,109 @@ resources:
         CreateDeliveryStream:
           input_fields:
             DeliveryStreamEncryptionConfigurationInput: DeliveryStreamEncryptionConfiguration
+        UpdateDestination:
+          input_fields:
+            HttpEndpointDestinationUpdate: HttpEndpointDestinationConfiguration
+            HttpEndpointDestinationConfiguration.S3Update: S3Configuration
+            S3Update: S3Configuration
 
     fields:
 
+      HTTPEndpointDestinationConfiguration:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+      
+
+      HTTPEndpointDestinationConfiguration.EndpointConfiguration:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      HTTPEndpointDestinationConfiguration.S3Configuration:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+        set:
+          - method: Update
+            to: S3Update
+
+      HTTPEndpointDestinationConfiguration.S3Configuration.BufferingHints:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      HTTPEndpointDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      HTTPEndpointDestinationConfiguration.S3Configuration.CompressionFormat:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      HTTPEndpointDestinationConfiguration.S3Configuration.ErrorOutputPrefix:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      HTTPEndpointDestinationConfiguration.S3Configuration.Prefix:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      HTTPEndpointDestinationConfiguration.BufferingHints:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      HTTPEndpointDestinationConfiguration.CloudWatchLoggingOptions:
+          late_initialize: {
+            skip_incomplete_check: {}
+          }
+
+
+      HTTPEndpointDestinationConfiguration.ProcessingConfiguration:
+          late_initialize: {
+            skip_incomplete_check: {}
+          }
+
+
+      HTTPEndpointDestinationConfiguration.RequestConfiguration:
+          late_initialize: {
+            skip_incomplete_check: {}
+          }
+
+      HTTPEndpointDestinationConfiguration.RetryOptions:
+          late_initialize: {
+            skip_incomplete_check: {}
+          }
+
+      HTTPEndpointDestinationConfiguration.RoleARN:
+          late_initialize: {
+            skip_incomplete_check: {}
+          }
+
+      HTTPEndpointDestinationConfiguration.S3BackupMode:
+          late_initialize: {
+            skip_incomplete_check: {}
+          }
+
+      HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration:
+          late_initialize: {
+            skip_incomplete_check: {}
+          }
+
+      DeliveryStreamEncryptionConfiguration:
+        late_initialize: {}
+        compare:
+          nil_equals_zero_value: true
 
       # CreateDeliveryStream only returns the ARN of the created the Delivery Stream.
       # Need to set Status fields based on shape of DescribeDeliveryStream.
@@ -37,6 +143,12 @@ resources:
         from:
           operation: DescribeDeliveryStream
           path: DeliveryStreamDescription.DeliveryStreamStatus
+        
+      DestinationId:
+        is_read_only: true
+        from:
+          operation: DescribeDeliveryStream
+          path: DeliveryStreamDescription.Destinations.DestinationId
 
       CreateTimestamp:
         is_read_only: true
@@ -50,30 +162,46 @@ resources:
           operation: DescribeDeliveryStream
           path: DeliveryStreamDescription.LastUpdateTimestamp
       
-      # DeliveryStreamEncryptionConfiguration.Status:
-      #   is_read_only: true
-      #   from:
-      #     operation: DescribeDeliveryStream
-      #     path: DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.Status
+      DeliveryStreamEncryptionConfiguration.Status:
+        is_read_only: true
+        from:
+          operation: DescribeDeliveryStream
+          path: DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.Status
       
-      # DeliveryStreamEncryptionConfiguration.FailureDescription:
-      #   is_read_only: true
-      #   from:
-      #     operation: DescribeDeliveryStream
-      #     path: DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.FailureDescription
+      DeliveryStreamEncryptionConfiguration.FailureDescription:
+        is_read_only: true
+        from:
+          operation: DescribeDeliveryStream
+          path: DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.FailureDescription
 
       VersionId:
         is_read_only: true
         from:
           operation: DescribeDeliveryStream
           path: DeliveryStreamDescription.VersionId
-    
+        set:
+          - method: Update
+            to: CurrentDeliveryStreamVersionId
+      
+    hooks:
+      delta_pre_compare:
+        template_path: hooks/delivery_stream/delta_pre_compare.go.tpl
+      sdk_read_one_post_set_output:
+        template_path: hooks/delivery_stream/sdk_read_one_post_set_output.go.tpl
+      sdk_update_pre_build_request:
+        template_path: hooks/delivery_stream/sdk_update_pre_build_request.go.tpl
+      sdk_update_post_build_request:
+        template_path: hooks/delivery_stream/sdk_update_post_build_request.go.tpl
     synced:
       when:
         - path: Status.DeliveryStreamStatus
           in:
             - ACTIVE
             - CREATING_FAILED
+        - path: Status.DeliveryStreamEncryptionConfigurationStatus
+          in: 
+            - ENABLED
+            - DISABLED
     exceptions:
       errors:
         404:

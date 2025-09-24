@@ -42,6 +42,11 @@ func newResourceDelta(
 		delta.Add("", a, b)
 		return delta
 	}
+	// When server-side encryption is disabled DescribeDeliveryStream will return an empty DeliveryStreamEncryptionConfiguration
+	// object.
+	if deliveryStreamEncryptionDisabled(a) && deliveryStreamEncryptionDisabled(b) {
+		a.ko.Spec.DeliveryStreamEncryptionConfiguration = b.ko.Spec.DeliveryStreamEncryptionConfiguration
+	}
 
 	if ackcompare.HasNilDifference(a.ko.Spec.DeliveryStreamEncryptionConfiguration, b.ko.Spec.DeliveryStreamEncryptionConfiguration) {
 		delta.Add("Spec.DeliveryStreamEncryptionConfiguration", a.ko.Spec.DeliveryStreamEncryptionConfiguration, b.ko.Spec.DeliveryStreamEncryptionConfiguration)

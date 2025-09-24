@@ -95,6 +95,8 @@ type AmazonOpenSearchServerlessDestinationUpdate struct {
 	// to the Serverless offering for Amazon OpenSearch Service.
 	RetryOptions *AmazonOpenSearchServerlessRetryOptions `json:"retryOptions,omitempty"`
 	RoleARN      *string                                 `json:"roleARN,omitempty"`
+	// Describes an update for a destination in Amazon S3.
+	S3Update *S3DestinationUpdate `json:"s3Update,omitempty"`
 }
 
 // Configures retry behavior in case Firehose is unable to deliver documents
@@ -187,7 +189,9 @@ type AmazonopensearchserviceDestinationUpdate struct {
 	// to Amazon OpenSearch Service.
 	RetryOptions *AmazonopensearchserviceRetryOptions `json:"retryOptions,omitempty"`
 	RoleARN      *string                              `json:"roleARN,omitempty"`
-	TypeName     *string                              `json:"typeName,omitempty"`
+	// Describes an update for a destination in Amazon S3.
+	S3Update *S3DestinationUpdate `json:"s3Update,omitempty"`
+	TypeName *string              `json:"typeName,omitempty"`
 }
 
 // Configures retry behavior in case Firehose is unable to deliver documents
@@ -610,7 +614,9 @@ type ElasticsearchDestinationUpdate struct {
 	// to Amazon OpenSearch Service.
 	RetryOptions *ElasticsearchRetryOptions `json:"retryOptions,omitempty"`
 	RoleARN      *string                    `json:"roleARN,omitempty"`
-	TypeName     *string                    `json:"typeName,omitempty"`
+	// Describes an update for a destination in Amazon S3.
+	S3Update *S3DestinationUpdate `json:"s3Update,omitempty"`
+	TypeName *string              `json:"typeName,omitempty"`
 }
 
 // Configures retry behavior in case Firehose is unable to deliver documents
@@ -733,6 +739,8 @@ type ExtendedS3DestinationUpdate struct {
 	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
 	RoleARN                 *string                  `json:"roleARN,omitempty"`
 	S3BackupMode            *string                  `json:"s3BackupMode,omitempty"`
+	// Describes an update for a destination in Amazon S3.
+	S3BackupUpdate *S3DestinationUpdate `json:"s3BackupUpdate,omitempty"`
 }
 
 // Provides details in case one of the following operations fails due to an
@@ -853,6 +861,8 @@ type HTTPEndpointDestinationUpdate struct {
 	RetryOptions *HTTPEndpointRetryOptions `json:"retryOptions,omitempty"`
 	RoleARN      *string                   `json:"roleARN,omitempty"`
 	S3BackupMode *string                   `json:"s3BackupMode,omitempty"`
+	// Describes an update for a destination in Amazon S3.
+	S3Update *S3DestinationUpdate `json:"s3Update,omitempty"`
 	// The structure that defines how Firehose accesses the secret.
 	SecretsManagerConfiguration *SecretsManagerConfiguration `json:"secretsManagerConfiguration,omitempty"`
 }
@@ -1125,6 +1135,7 @@ type RedshiftDestinationConfiguration struct {
 	ClusterJDBCURL           *string                   `json:"clusterJDBCURL,omitempty"`
 	// Describes a COPY command for Amazon Redshift.
 	CopyCommand *CopyCommand `json:"copyCommand,omitempty"`
+	Password    *string      `json:"password,omitempty"`
 	// Describes a data processing configuration.
 	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
 	// Configures retry behavior in case Firehose is unable to deliver documents
@@ -1171,6 +1182,7 @@ type RedshiftDestinationUpdate struct {
 	ClusterJDBCURL           *string                   `json:"clusterJDBCURL,omitempty"`
 	// Describes a COPY command for Amazon Redshift.
 	CopyCommand *CopyCommand `json:"copyCommand,omitempty"`
+	Password    *string      `json:"password,omitempty"`
 	// Describes a data processing configuration.
 	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
 	// Configures retry behavior in case Firehose is unable to deliver documents
@@ -1178,6 +1190,10 @@ type RedshiftDestinationUpdate struct {
 	RetryOptions *RedshiftRetryOptions `json:"retryOptions,omitempty"`
 	RoleARN      *string               `json:"roleARN,omitempty"`
 	S3BackupMode *string               `json:"s3BackupMode,omitempty"`
+	// Describes an update for a destination in Amazon S3.
+	S3BackupUpdate *S3DestinationUpdate `json:"s3BackupUpdate,omitempty"`
+	// Describes an update for a destination in Amazon S3.
+	S3Update *S3DestinationUpdate `json:"s3Update,omitempty"`
 	// The structure that defines how Firehose accesses the secret.
 	SecretsManagerConfiguration *SecretsManagerConfiguration `json:"secretsManagerConfiguration,omitempty"`
 	Username                    *string                      `json:"username,omitempty"`
@@ -1307,7 +1323,9 @@ type SnowflakeDestinationConfiguration struct {
 	ContentColumnName        *string                   `json:"contentColumnName,omitempty"`
 	DataLoadingOption        *string                   `json:"dataLoadingOption,omitempty"`
 	Database                 *string                   `json:"database,omitempty"`
+	KeyPassphrase            *string                   `json:"keyPassphrase,omitempty"`
 	MetaDataColumnName       *string                   `json:"metaDataColumnName,omitempty"`
+	PrivateKey               *string                   `json:"privateKey,omitempty"`
 	// Describes a data processing configuration.
 	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
 	// Specify how long Firehose retries sending data to the New Relic HTTP endpoint.
@@ -1399,7 +1417,9 @@ type SnowflakeDestinationUpdate struct {
 	ContentColumnName        *string                   `json:"contentColumnName,omitempty"`
 	DataLoadingOption        *string                   `json:"dataLoadingOption,omitempty"`
 	Database                 *string                   `json:"database,omitempty"`
+	KeyPassphrase            *string                   `json:"keyPassphrase,omitempty"`
 	MetaDataColumnName       *string                   `json:"metaDataColumnName,omitempty"`
+	PrivateKey               *string                   `json:"privateKey,omitempty"`
 	// Describes a data processing configuration.
 	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
 	// Specify how long Firehose retries sending data to the New Relic HTTP endpoint.
@@ -1420,7 +1440,9 @@ type SnowflakeDestinationUpdate struct {
 	RetryOptions *SnowflakeRetryOptions `json:"retryOptions,omitempty"`
 	RoleARN      *string                `json:"roleARN,omitempty"`
 	S3BackupMode *string                `json:"s3BackupMode,omitempty"`
-	Schema       *string                `json:"schema,omitempty"`
+	// Describes an update for a destination in Amazon S3.
+	S3Update *S3DestinationUpdate `json:"s3Update,omitempty"`
+	Schema   *string              `json:"schema,omitempty"`
 	// The structure that defines how Firehose accesses the secret.
 	SecretsManagerConfiguration *SecretsManagerConfiguration `json:"secretsManagerConfiguration,omitempty"`
 	// Optionally configure a Snowflake role. Otherwise the default user role will
@@ -1546,6 +1568,8 @@ type SplunkDestinationUpdate struct {
 	// to Splunk, or if it doesn't receive an acknowledgment from Splunk.
 	RetryOptions *SplunkRetryOptions `json:"retryOptions,omitempty"`
 	S3BackupMode *string             `json:"s3BackupMode,omitempty"`
+	// Describes an update for a destination in Amazon S3.
+	S3Update *S3DestinationUpdate `json:"s3Update,omitempty"`
 	// The structure that defines how Firehose accesses the secret.
 	SecretsManagerConfiguration *SecretsManagerConfiguration `json:"secretsManagerConfiguration,omitempty"`
 }

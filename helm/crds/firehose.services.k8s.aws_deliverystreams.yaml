@@ -346,12 +346,36 @@ spec:
                 description: The date and time that the Firehose stream was created.
                 format: date-time
                 type: string
+              deliveryStreamEncryptionConfigurationFailureDescription:
+                description: |-
+                  Provides details in case one of the following operations fails due to an
+                  error related to KMS: CreateDeliveryStream, DeleteDeliveryStream, StartDeliveryStreamEncryption,
+                  StopDeliveryStreamEncryption.
+                properties:
+                  details:
+                    type: string
+                  type_:
+                    type: string
+                type: object
+              deliveryStreamEncryptionConfigurationStatus:
+                description: |-
+                  This is the server-side encryption (SSE) status for the Firehose stream.
+                  For a full description of the different values of this status, see StartDeliveryStreamEncryption
+                  and StopDeliveryStreamEncryption. If this status is ENABLING_FAILED or DISABLING_FAILED,
+                  it is the status of the most recent attempt to enable or disable SSE, respectively.
+                type: string
               deliveryStreamStatus:
                 description: |-
                   The status of the Firehose stream. If the status of a Firehose stream is
                   CREATING_FAILED, this status doesn't change, and you can't invoke CreateDeliveryStream
                   again on it. However, you can invoke the DeleteDeliveryStream operation to
                   delete it.
+                type: string
+              destinationID:
+                description: |-
+                  The ID of the destination.
+
+                  Regex Pattern: `^[a-zA-Z0-9-]+$`
                 type: string
               lastUpdateTimestamp:
                 description: The date and time that the Firehose stream was last updated.

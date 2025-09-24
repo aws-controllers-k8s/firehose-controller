@@ -50,7 +50,7 @@ var (
 // +kubebuilder:rbac:groups=firehose.services.k8s.aws,resources=deliverystreams,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=firehose.services.k8s.aws,resources=deliverystreams/status,verbs=get;update;patch
 
-var lateInitializeFieldNames = []string{}
+var lateInitializeFieldNames = []string{"DeliveryStreamEncryptionConfiguration", "HTTPEndpointDestinationConfiguration", "HTTPEndpointDestinationConfiguration.BufferingHints", "HTTPEndpointDestinationConfiguration.CloudWatchLoggingOptions", "HTTPEndpointDestinationConfiguration.EndpointConfiguration", "HTTPEndpointDestinationConfiguration.ProcessingConfiguration", "HTTPEndpointDestinationConfiguration.RequestConfiguration", "HTTPEndpointDestinationConfiguration.RetryOptions", "HTTPEndpointDestinationConfiguration.RoleARN", "HTTPEndpointDestinationConfiguration.S3BackupMode", "HTTPEndpointDestinationConfiguration.S3Configuration", "HTTPEndpointDestinationConfiguration.S3Configuration.BufferingHints", "HTTPEndpointDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions", "HTTPEndpointDestinationConfiguration.S3Configuration.CompressionFormat", "HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration", "HTTPEndpointDestinationConfiguration.S3Configuration.ErrorOutputPrefix", "HTTPEndpointDestinationConfiguration.S3Configuration.Prefix", "HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration"}
 
 // resourceManager is responsible for providing a consistent way to perform
 // CRUD operations in a backend AWS service API for Book custom resources.
@@ -248,6 +248,10 @@ func (rm *resourceManager) LateInitialize(
 func (rm *resourceManager) incompleteLateInitialization(
 	res acktypes.AWSResource,
 ) bool {
+	ko := rm.concreteResource(res).ko.DeepCopy()
+	if ko.Spec.DeliveryStreamEncryptionConfiguration == nil {
+		return true
+	}
 	return false
 }
 
@@ -257,7 +261,107 @@ func (rm *resourceManager) lateInitializeFromReadOneOutput(
 	observed acktypes.AWSResource,
 	latest acktypes.AWSResource,
 ) acktypes.AWSResource {
-	return latest
+	observedKo := rm.concreteResource(observed).ko.DeepCopy()
+	latestKo := rm.concreteResource(latest).ko.DeepCopy()
+	if observedKo.Spec.DeliveryStreamEncryptionConfiguration != nil && latestKo.Spec.DeliveryStreamEncryptionConfiguration == nil {
+		latestKo.Spec.DeliveryStreamEncryptionConfiguration = observedKo.Spec.DeliveryStreamEncryptionConfiguration
+	}
+	if observedKo.Spec.HTTPEndpointDestinationConfiguration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration == nil {
+		latestKo.Spec.HTTPEndpointDestinationConfiguration = observedKo.Spec.HTTPEndpointDestinationConfiguration
+	}
+	if observedKo.Spec.HTTPEndpointDestinationConfiguration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration != nil {
+		if observedKo.Spec.HTTPEndpointDestinationConfiguration.BufferingHints != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration.BufferingHints == nil {
+			latestKo.Spec.HTTPEndpointDestinationConfiguration.BufferingHints = observedKo.Spec.HTTPEndpointDestinationConfiguration.BufferingHints
+		}
+	}
+	if observedKo.Spec.HTTPEndpointDestinationConfiguration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration != nil {
+		if observedKo.Spec.HTTPEndpointDestinationConfiguration.CloudWatchLoggingOptions != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration.CloudWatchLoggingOptions == nil {
+			latestKo.Spec.HTTPEndpointDestinationConfiguration.CloudWatchLoggingOptions = observedKo.Spec.HTTPEndpointDestinationConfiguration.CloudWatchLoggingOptions
+		}
+	}
+	if observedKo.Spec.HTTPEndpointDestinationConfiguration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration != nil {
+		if observedKo.Spec.HTTPEndpointDestinationConfiguration.EndpointConfiguration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration.EndpointConfiguration == nil {
+			latestKo.Spec.HTTPEndpointDestinationConfiguration.EndpointConfiguration = observedKo.Spec.HTTPEndpointDestinationConfiguration.EndpointConfiguration
+		}
+	}
+	if observedKo.Spec.HTTPEndpointDestinationConfiguration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration != nil {
+		if observedKo.Spec.HTTPEndpointDestinationConfiguration.ProcessingConfiguration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration.ProcessingConfiguration == nil {
+			latestKo.Spec.HTTPEndpointDestinationConfiguration.ProcessingConfiguration = observedKo.Spec.HTTPEndpointDestinationConfiguration.ProcessingConfiguration
+		}
+	}
+	if observedKo.Spec.HTTPEndpointDestinationConfiguration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration != nil {
+		if observedKo.Spec.HTTPEndpointDestinationConfiguration.RequestConfiguration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration.RequestConfiguration == nil {
+			latestKo.Spec.HTTPEndpointDestinationConfiguration.RequestConfiguration = observedKo.Spec.HTTPEndpointDestinationConfiguration.RequestConfiguration
+		}
+	}
+	if observedKo.Spec.HTTPEndpointDestinationConfiguration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration != nil {
+		if observedKo.Spec.HTTPEndpointDestinationConfiguration.RetryOptions != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration.RetryOptions == nil {
+			latestKo.Spec.HTTPEndpointDestinationConfiguration.RetryOptions = observedKo.Spec.HTTPEndpointDestinationConfiguration.RetryOptions
+		}
+	}
+	if observedKo.Spec.HTTPEndpointDestinationConfiguration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration != nil {
+		if observedKo.Spec.HTTPEndpointDestinationConfiguration.RoleARN != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration.RoleARN == nil {
+			latestKo.Spec.HTTPEndpointDestinationConfiguration.RoleARN = observedKo.Spec.HTTPEndpointDestinationConfiguration.RoleARN
+		}
+	}
+	if observedKo.Spec.HTTPEndpointDestinationConfiguration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration != nil {
+		if observedKo.Spec.HTTPEndpointDestinationConfiguration.S3BackupMode != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration.S3BackupMode == nil {
+			latestKo.Spec.HTTPEndpointDestinationConfiguration.S3BackupMode = observedKo.Spec.HTTPEndpointDestinationConfiguration.S3BackupMode
+		}
+	}
+	if observedKo.Spec.HTTPEndpointDestinationConfiguration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration != nil {
+		if observedKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration == nil {
+			latestKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration = observedKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration
+		}
+	}
+	if observedKo.Spec.HTTPEndpointDestinationConfiguration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration != nil {
+		if observedKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration != nil {
+			if observedKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.BufferingHints != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.BufferingHints == nil {
+				latestKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.BufferingHints = observedKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.BufferingHints
+			}
+		}
+	}
+	if observedKo.Spec.HTTPEndpointDestinationConfiguration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration != nil {
+		if observedKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration != nil {
+			if observedKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions == nil {
+				latestKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions = observedKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions
+			}
+		}
+	}
+	if observedKo.Spec.HTTPEndpointDestinationConfiguration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration != nil {
+		if observedKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration != nil {
+			if observedKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.CompressionFormat != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.CompressionFormat == nil {
+				latestKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.CompressionFormat = observedKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.CompressionFormat
+			}
+		}
+	}
+	if observedKo.Spec.HTTPEndpointDestinationConfiguration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration != nil {
+		if observedKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration != nil {
+			if observedKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration == nil {
+				latestKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration = observedKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration
+			}
+		}
+	}
+	if observedKo.Spec.HTTPEndpointDestinationConfiguration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration != nil {
+		if observedKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration != nil {
+			if observedKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.ErrorOutputPrefix != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.ErrorOutputPrefix == nil {
+				latestKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.ErrorOutputPrefix = observedKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.ErrorOutputPrefix
+			}
+		}
+	}
+	if observedKo.Spec.HTTPEndpointDestinationConfiguration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration != nil {
+		if observedKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration != nil {
+			if observedKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.Prefix != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.Prefix == nil {
+				latestKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.Prefix = observedKo.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.Prefix
+			}
+		}
+	}
+	if observedKo.Spec.HTTPEndpointDestinationConfiguration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration != nil {
+		if observedKo.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration == nil {
+			latestKo.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration = observedKo.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration
+		}
+	}
+	return &resource{latestKo}
 }
 
 // IsSynced returns true if the resource is synced.
@@ -273,6 +377,13 @@ func (rm *resourceManager) IsSynced(ctx context.Context, res acktypes.AWSResourc
 	}
 	deliveryStreamStatusCandidates := []string{"ACTIVE", "CREATING_FAILED"}
 	if !ackutil.InStrings(*r.ko.Status.DeliveryStreamStatus, deliveryStreamStatusCandidates) {
+		return false, nil
+	}
+	if r.ko.Status.DeliveryStreamEncryptionConfigurationStatus == nil {
+		return false, nil
+	}
+	deliveryStreamEncryptionConfigurationStatusCandidates := []string{"ENABLED", "DISABLED"}
+	if !ackutil.InStrings(*r.ko.Status.DeliveryStreamEncryptionConfigurationStatus, deliveryStreamEncryptionConfigurationStatusCandidates) {
 		return false, nil
 	}
 
