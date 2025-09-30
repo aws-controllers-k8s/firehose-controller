@@ -250,6 +250,8 @@ resources:
       errors:
         404:
           code: ResourceNotFoundException
+      terminal_codes:
+        -  InvalidArgumentException
         
 
 
