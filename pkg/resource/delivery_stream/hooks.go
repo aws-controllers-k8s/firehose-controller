@@ -6,12 +6,37 @@ import (
 	"time"
 
 	svcapitypes "github.com/aws-controllers-k8s/firehose-controller/apis/v1alpha1"
+	"github.com/aws-controllers-k8s/firehose-controller/pkg/resource/tags"
 	ackrequeue "github.com/aws-controllers-k8s/runtime/pkg/requeue"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	svcsdk "github.com/aws/aws-sdk-go-v2/service/firehose"
 	"github.com/aws/aws-sdk-go-v2/service/firehose/types"
 	svcsdktypes "github.com/aws/aws-sdk-go-v2/service/firehose/types"
 )
+
+// getTags retrieves the resource's associated tags.
+func (rm *resourceManager) getTags(
+	ctx context.Context,
+	resourceARN string,
+) ([]*svcapitypes.Tag, error) {
+	return tags.GetResourceTags(ctx, rm.sdkapi, rm.metrics, resourceARN)
+}
+
+// syncTags keeps the resource's tags in sync.
+func (rm *resourceManager) syncTags(
+	ctx context.Context,
+	desired *resource,
+	latest *resource,
+) (err error) {
+	return tags.SyncResourceTags(
+		ctx,
+		rm.sdkapi,
+		rm.metrics,
+		string(*latest.ko.Spec.DeliveryStreamName),
+		desired.ko.Spec.Tags,
+		latest.ko.Spec.Tags,
+	)
+}
 
 // deliveryStreamEncryptionDisabled checks whether or not server-side encryption is disabled or not.
 func deliveryStreamEncryptionDisabled(r *resource) bool {

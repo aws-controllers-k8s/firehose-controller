@@ -180,7 +180,7 @@ func TestDeliveryStreamEncryptionConfigurationComparison(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			delta := newResourceDelta(tt.a, tt.b)
 			hasDifference := delta.DifferentAt("Spec.DeliveryStreamEncryptionConfiguration")
-			
+
 			if hasDifference != tt.expected {
 				t.Errorf("Expected difference: %v, got: %v", tt.expected, hasDifference)
 			}

@@ -5,6 +5,7 @@ import logging
 from typing import Dict, Tuple
 
 from acktest.resources import random_suffix_name
+from acktest.tags import assert_equal_without_ack_tags
 from acktest.k8s import resource as k8s, condition as condition
 from e2e import (
     service_marker,
@@ -136,37 +137,51 @@ class TestDeliveryStream:
         assert delivery_stream["DeliveryStreamDescription"]["DeliveryStreamEncryptionConfiguration"]["Status"] == "DISABLED"
         
 
-        
-
     def test_create_delete_http_dest_delivery_stream(self, http_dest_delivery_stream, firehose_client):
         (ref, cr) = http_dest_delivery_stream
 
         k8s.wait_on_condition(ref, condition.CONDITION_TYPE_RESOURCE_SYNCED, "True")
         cr = k8s.get_resource(ref)
-        print(cr)
         condition.assert_synced(ref)
 
         assert cr["spec"]["deliveryStreamName"] is not None
         assert cr["status"]["deliveryStreamStatus"] == "ACTIVE"
         assert cr["spec"]["httpEndpointDestinationConfiguration"]["endpointConfiguration"]["name"] is not None
-        dsName = cr["spec"]["deliveryStreamName"]
-        httpDestName = cr["spec"]["httpEndpointDestinationConfiguration"]["endpointConfiguration"]["name"]
 
-        delivery_stream = firehose_client.describe_delivery_stream(DeliveryStreamName=dsName)
+        assert len(cr["spec"]["tags"]) == 2
+        assert cr["spec"]["tags"][0]["key"] == "environment"
+        assert cr["spec"]["tags"][0]["value"] == "dev"
+        assert cr["spec"]["tags"][1]["key"] == "team"
+        assert cr["spec"]["tags"][1]["value"] == "finops"
+
+        ds_name = cr["spec"]["deliveryStreamName"]
+        http_dest_name = cr["spec"]["httpEndpointDestinationConfiguration"]["endpointConfiguration"]["name"]
+
+        delivery_stream = firehose_client.describe_delivery_stream(DeliveryStreamName=ds_name)
         assert delivery_stream is not None
         assert delivery_stream["DeliveryStreamDescription"]["DeliveryStreamStatus"] == "ACTIVE"
         assert delivery_stream["DeliveryStreamDescription"]["DeliveryStreamType"] == "DirectPut"
         assert len(delivery_stream["DeliveryStreamDescription"]["Destinations"]) == 1
-        assert delivery_stream["DeliveryStreamDescription"]["Destinations"][0]["HttpEndpointDestinationDescription"]["EndpointConfiguration"]["Name"] == httpDestName
+        assert delivery_stream["DeliveryStreamDescription"]["Destinations"][0]["HttpEndpointDestinationDescription"]["EndpointConfiguration"]["Name"] == http_dest_name
 
-        updatedDestName = random_suffix_name("http-dest-updated", 32)
+
+        expected_tags = [{"Key": "environment", "Value": "dev"}, {"Key": "team", "Value": "finops"}]
+        stream_tags = firehose_client.list_tags_for_delivery_stream(DeliveryStreamName=ds_name)
+        assert_equal_without_ack_tags(expected_tags, stream_tags["Tags"])
+        
+
+        updated_dest_name = random_suffix_name("http-dest-updated", 32)
         updates = {
             "spec": {
                 "httpEndpointDestinationConfiguration": {
                     "endpointConfiguration": {
-                        "name": updatedDestName
+                        "name": updated_dest_name
                     }
-                }
+                },
+                "tags": [
+                    {"key": "environment", "value": "staging"}, 
+                    {"key": "department", "value": "finance"}
+                ]
             }
         }
 
@@ -179,15 +194,27 @@ class TestDeliveryStream:
         cr = k8s.get_resource(ref)
         assert cr is not None
         assert cr["status"]["deliveryStreamStatus"] == "ACTIVE"
-        assert cr["spec"]["httpEndpointDestinationConfiguration"]["endpointConfiguration"]["name"] == updatedDestName
+        assert cr["spec"]["httpEndpointDestinationConfiguration"]["endpointConfiguration"]["name"] == updated_dest_name
+
+        assert len(cr["spec"]["tags"]) == 2
+        assert cr["spec"]["tags"][0]["key"] == "environment"
+        assert cr["spec"]["tags"][0]["value"] == "staging"
+        assert cr["spec"]["tags"][1]["key"] == "department"
+        assert cr["spec"]["tags"][1]["value"] == "finance"
 
 
-        updated_delivery_stream = firehose_client.describe_delivery_stream(DeliveryStreamName=dsName)
+        updated_delivery_stream = firehose_client.describe_delivery_stream(DeliveryStreamName=ds_name)
         assert updated_delivery_stream is not None
         assert updated_delivery_stream["DeliveryStreamDescription"]["DeliveryStreamStatus"] == "ACTIVE"
         assert updated_delivery_stream["DeliveryStreamDescription"]["DeliveryStreamType"] == "DirectPut"
         assert len(updated_delivery_stream["DeliveryStreamDescription"]["Destinations"]) == 1
-        assert updated_delivery_stream["DeliveryStreamDescription"]["Destinations"][0]["HttpEndpointDestinationDescription"]["EndpointConfiguration"]["Name"] == updatedDestName
+        assert updated_delivery_stream["DeliveryStreamDescription"]["Destinations"][0]["HttpEndpointDestinationDescription"]["EndpointConfiguration"]["Name"] == updated_dest_name
+
+
+        updated_tags = [{"Key": "environment", "Value": "staging"}, {"Key": "department", "Value": "finance"}]
+        updated_stream_tags = firehose_client.list_tags_for_delivery_stream(DeliveryStreamName=ds_name)
+        assert_equal_without_ack_tags(updated_tags, updated_stream_tags["Tags"])
+
 
 
 

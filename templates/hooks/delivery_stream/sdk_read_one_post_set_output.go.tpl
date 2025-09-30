@@ -19,3 +19,5 @@
 	}
 
 	setDestinations(ko, resp)
+
+	ko.Spec.Tags, err = rm.getTags(ctx, *r.ko.Spec.DeliveryStreamName)

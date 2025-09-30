@@ -13,3 +13,8 @@ spec:
     s3Configuration:
         bucketARN: $S3_BUCKET_ARN
         roleARN: $S3_ROLE_ARN
+  tags:
+    - key: environment
+      value: dev
+    - key: team
+      value: finops

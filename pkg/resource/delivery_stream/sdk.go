@@ -163,6 +163,8 @@ func (rm *resourceManager) sdkFind(
 	}
 
 	setDestinations(ko, resp)
+
+	ko.Spec.Tags, err = rm.getTags(ctx, *r.ko.Spec.DeliveryStreamName)
 	return &resource{ko}, nil
 }
 
@@ -495,6 +497,17 @@ func (rm *resourceManager) sdkUpdate(
 		if err != nil {
 			return nil, err
 		}
+	}
+
+	if delta.DifferentAt("Spec.Tags") {
+		err = rm.syncTags(ctx, desired, latest)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	if !delta.DifferentExcept("Spec.DeliveryStreamEncryptionConfiguration", "Spec.Tags") {
+		return desired, nil
 	}
 	input, err := rm.newUpdateRequestPayload(ctx, desired, delta)
 	if err != nil {
