@@ -433,8 +433,10 @@ type DeliveryStreamEncryptionConfiguration struct {
 // Specifies the type and Amazon Resource Name (ARN) of the CMK to use for Server-Side
 // Encryption (SSE).
 type DeliveryStreamEncryptionConfigurationInput struct {
-	KeyARN  *string `json:"keyARN,omitempty"`
-	KeyType *string `json:"keyType,omitempty"`
+	KeyARN *string `json:"keyARN,omitempty"`
+	// Reference field for KeyARN
+	KeyRef  *ackv1alpha1.AWSResourceReferenceWrapper `json:"keyRef,omitempty"`
+	KeyType *string                                  `json:"keyType,omitempty"`
 }
 
 // The deserializer you want Firehose to use for converting the input data from
@@ -770,9 +772,9 @@ type HTTPEndpointCommonAttribute struct {
 // Describes the configuration of the HTTP endpoint to which Kinesis Firehose
 // delivers data.
 type HTTPEndpointConfiguration struct {
-	AccessKey *string `json:"accessKey,omitempty"`
-	Name      *string `json:"name,omitempty"`
-	URL       *string `json:"url,omitempty"`
+	AccessKey *ackv1alpha1.SecretKeyReference `json:"accessKey,omitempty"`
+	Name      *string                         `json:"name,omitempty"`
+	URL       *string                         `json:"url,omitempty"`
 }
 
 // Describes the HTTP endpoint selected as the destination.
@@ -803,7 +805,9 @@ type HTTPEndpointDestinationConfiguration struct {
 	// acknowledgment of receipt from the specified HTTP endpoint destination.
 	RetryOptions *HTTPEndpointRetryOptions `json:"retryOptions,omitempty"`
 	RoleARN      *string                   `json:"roleARN,omitempty"`
-	S3BackupMode *string                   `json:"s3BackupMode,omitempty"`
+	// Reference field for RoleARN
+	RoleRef      *ackv1alpha1.AWSResourceReferenceWrapper `json:"roleRef,omitempty"`
+	S3BackupMode *string                                  `json:"s3BackupMode,omitempty"`
 	// Describes the configuration of a destination in Amazon S3.
 	S3Configuration *S3DestinationConfiguration `json:"s3Configuration,omitempty"`
 	// The structure that defines how Firehose accesses the secret.
@@ -1002,6 +1006,8 @@ type InputFormatConfiguration struct {
 // Describes an encryption key for a destination in Amazon S3.
 type KMSEncryptionConfig struct {
 	AWSKMSKeyARN *string `json:"awsKMSKeyARN,omitempty"`
+	// Reference field for AWSKMSKeyARN
+	AWSKMSKeyRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"awsKMSKeyRef,omitempty"`
 }
 
 // The stream and role Amazon Resource Names (ARNs) for a Kinesis data stream
@@ -1213,6 +1219,8 @@ type RetryOptions struct {
 // Describes the configuration of a destination in Amazon S3.
 type S3DestinationConfiguration struct {
 	BucketARN *string `json:"bucketARN,omitempty"`
+	// Reference field for BucketARN
+	BucketRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"bucketRef,omitempty"`
 	// Describes hints for the buffering to perform before delivering data to the
 	// destination. These options are treated as hints, and therefore Firehose might
 	// choose to use different values when it is optimal. The SizeInMBs and IntervalInSeconds
@@ -1227,6 +1235,8 @@ type S3DestinationConfiguration struct {
 	ErrorOutputPrefix       *string                  `json:"errorOutputPrefix,omitempty"`
 	Prefix                  *string                  `json:"prefix,omitempty"`
 	RoleARN                 *string                  `json:"roleARN,omitempty"`
+	// Reference field for RoleARN
+	RoleRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"roleRef,omitempty"`
 }
 
 // Describes a destination in Amazon S3.
@@ -1288,9 +1298,13 @@ type SchemaEvolutionConfiguration struct {
 
 // The structure that defines how Firehose accesses the secret.
 type SecretsManagerConfiguration struct {
-	Enabled   *bool   `json:"enabled,omitempty"`
-	RoleARN   *string `json:"roleARN,omitempty"`
-	SecretARN *string `json:"secretARN,omitempty"`
+	Enabled *bool   `json:"enabled,omitempty"`
+	RoleARN *string `json:"roleARN,omitempty"`
+	// Reference field for RoleARN
+	RoleRef   *ackv1alpha1.AWSResourceReferenceWrapper `json:"roleRef,omitempty"`
+	SecretARN *string                                  `json:"secretARN,omitempty"`
+	// Reference field for SecretARN
+	SecretRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"secretRef,omitempty"`
 }
 
 // The serializer that you want Firehose to use to convert data to the target

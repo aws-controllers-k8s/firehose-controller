@@ -46,6 +46,20 @@ spec:
                 properties:
                   keyARN:
                     type: string
+                  keyRef:
+                    description: Reference field for KeyARN
+                    properties:
+                      from:
+                        description: |-
+                          AWSResourceReference provides all the values necessary to reference another
+                          k8s resource for finding the identifier(Id/ARN/Name)
+                        properties:
+                          name:
+                            type: string
+                          namespace:
+                            type: string
+                        type: object
+                    type: object
                   keyType:
                     type: string
                 type: object
@@ -104,7 +118,25 @@ spec:
                       delivers data.
                     properties:
                       accessKey:
-                        type: string
+                        description: |-
+                          SecretKeyReference combines a k8s corev1.SecretReference with a
+                          specific key within the referred-to Secret
+                        properties:
+                          key:
+                            description: Key is the key within the secret
+                            type: string
+                          name:
+                            description: name is unique within a namespace to reference
+                              a secret resource.
+                            type: string
+                          namespace:
+                            description: namespace defines the space within which
+                              the secret name must be unique.
+                            type: string
+                        required:
+                        - key
+                        type: object
+                        x-kubernetes-map-type: atomic
                       name:
                         type: string
                       url:
@@ -168,6 +200,20 @@ spec:
                     type: object
                   roleARN:
                     type: string
+                  roleRef:
+                    description: Reference field for RoleARN
+                    properties:
+                      from:
+                        description: |-
+                          AWSResourceReference provides all the values necessary to reference another
+                          k8s resource for finding the identifier(Id/ARN/Name)
+                        properties:
+                          name:
+                            type: string
+                          namespace:
+                            type: string
+                        type: object
+                    type: object
                   s3BackupMode:
                     type: string
                   s3Configuration:
@@ -176,6 +222,20 @@ spec:
                     properties:
                       bucketARN:
                         type: string
+                      bucketRef:
+                        description: Reference field for BucketARN
+                        properties:
+                          from:
+                            description: |-
+                              AWSResourceReference provides all the values necessary to reference another
+                              k8s resource for finding the identifier(Id/ARN/Name)
+                            properties:
+                              name:
+                                type: string
+                              namespace:
+                                type: string
+                            type: object
+                        type: object
                       bufferingHints:
                         description: |-
                           Describes hints for the buffering to perform before delivering data to the
@@ -214,6 +274,20 @@ spec:
                             properties:
                               awsKMSKeyARN:
                                 type: string
+                              awsKMSKeyRef:
+                                description: Reference field for AWSKMSKeyARN
+                                properties:
+                                  from:
+                                    description: |-
+                                      AWSResourceReference provides all the values necessary to reference another
+                                      k8s resource for finding the identifier(Id/ARN/Name)
+                                    properties:
+                                      name:
+                                        type: string
+                                      namespace:
+                                        type: string
+                                    type: object
+                                type: object
                             type: object
                           noEncryptionConfig:
                             type: string
@@ -224,6 +298,20 @@ spec:
                         type: string
                       roleARN:
                         type: string
+                      roleRef:
+                        description: Reference field for RoleARN
+                        properties:
+                          from:
+                            description: |-
+                              AWSResourceReference provides all the values necessary to reference another
+                              k8s resource for finding the identifier(Id/ARN/Name)
+                            properties:
+                              name:
+                                type: string
+                              namespace:
+                                type: string
+                            type: object
+                        type: object
                     type: object
                   secretsManagerConfiguration:
                     description: The structure that defines how Firehose accesses
@@ -233,8 +321,36 @@ spec:
                         type: boolean
                       roleARN:
                         type: string
+                      roleRef:
+                        description: Reference field for RoleARN
+                        properties:
+                          from:
+                            description: |-
+                              AWSResourceReference provides all the values necessary to reference another
+                              k8s resource for finding the identifier(Id/ARN/Name)
+                            properties:
+                              name:
+                                type: string
+                              namespace:
+                                type: string
+                            type: object
+                        type: object
                       secretARN:
                         type: string
+                      secretRef:
+                        description: Reference field for SecretARN
+                        properties:
+                          from:
+                            description: |-
+                              AWSResourceReference provides all the values necessary to reference another
+                              k8s resource for finding the identifier(Id/ARN/Name)
+                            properties:
+                              name:
+                                type: string
+                              namespace:
+                                type: string
+                            type: object
+                        type: object
                     type: object
                 type: object
               tags:

@@ -39,102 +39,16 @@ resources:
             S3Update: S3Configuration
 
     fields:
-
-      HTTPEndpointDestinationConfiguration:
-        late_initialize: {
-          skip_incomplete_check: {}
-        }
-      
-
-      HTTPEndpointDestinationConfiguration.EndpointConfiguration:
-        late_initialize: {
-          skip_incomplete_check: {}
-        }
-
-      HTTPEndpointDestinationConfiguration.S3Configuration:
-        late_initialize: {
-          skip_incomplete_check: {}
-        }
-        set:
-          - method: Update
-            to: S3Update
-
-      HTTPEndpointDestinationConfiguration.S3Configuration.BufferingHints:
-        late_initialize: {
-          skip_incomplete_check: {}
-        }
-
-      HTTPEndpointDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions:
-        late_initialize: {
-          skip_incomplete_check: {}
-        }
-
-      HTTPEndpointDestinationConfiguration.S3Configuration.CompressionFormat:
-        late_initialize: {
-          skip_incomplete_check: {}
-        }
-
-      HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration:
-        late_initialize: {
-          skip_incomplete_check: {}
-        }
-
-      HTTPEndpointDestinationConfiguration.S3Configuration.ErrorOutputPrefix:
-        late_initialize: {
-          skip_incomplete_check: {}
-        }
-
-      HTTPEndpointDestinationConfiguration.S3Configuration.Prefix:
-        late_initialize: {
-          skip_incomplete_check: {}
-        }
-
-      HTTPEndpointDestinationConfiguration.BufferingHints:
-        late_initialize: {
-          skip_incomplete_check: {}
-        }
-
-      HTTPEndpointDestinationConfiguration.CloudWatchLoggingOptions:
-          late_initialize: {
-            skip_incomplete_check: {}
-          }
-
-
-      HTTPEndpointDestinationConfiguration.ProcessingConfiguration:
-          late_initialize: {
-            skip_incomplete_check: {}
-          }
-
-
-      HTTPEndpointDestinationConfiguration.RequestConfiguration:
-          late_initialize: {
-            skip_incomplete_check: {}
-          }
-
-      HTTPEndpointDestinationConfiguration.RetryOptions:
-          late_initialize: {
-            skip_incomplete_check: {}
-          }
-
-      HTTPEndpointDestinationConfiguration.RoleARN:
-          late_initialize: {
-            skip_incomplete_check: {}
-          }
-
-      HTTPEndpointDestinationConfiguration.S3BackupMode:
-          late_initialize: {
-            skip_incomplete_check: {}
-          }
-
-      HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration:
-          late_initialize: {
-            skip_incomplete_check: {}
-          }
-
       DeliveryStreamEncryptionConfiguration:
-        late_initialize: {}
-        compare:
-          nil_equals_zero_value: true
+          late_initialize: {}
+          compare:
+            nil_equals_zero_value: true
+
+      DeliveryStreamEncryptionConfiguration.KeyARN:
+        references:
+          resource: Key
+          service_name: kms
+          path: Status.ACKResourceMetadata.ARN
 
       # CreateDeliveryStream only returns the ARN of the created the Delivery Stream.
       # Need to set Status fields based on shape of DescribeDeliveryStream.
@@ -182,6 +96,136 @@ resources:
         set:
           - method: Update
             to: CurrentDeliveryStreamVersionId
+
+      HTTPEndpointDestinationConfiguration:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+      
+
+      HTTPEndpointDestinationConfiguration.EndpointConfiguration:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      HTTPEndpointDestinationConfiguration.EndpointConfiguration.AccessKey:
+        is_secret: true
+        
+
+      HTTPEndpointDestinationConfiguration.S3Configuration:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+        set:
+          - method: Update
+            to: S3Update
+
+      HTTPEndpointDestinationConfiguration.S3Configuration.BufferingHints:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      HTTPEndpointDestinationConfiguration.S3Configuration.BucketARN:
+        references:
+          resource: Bucket
+          service_name: s3
+          path: Status.ACKResourceMetadata.ARN
+
+      HTTPEndpointDestinationConfiguration.S3Configuration.RoleARN:
+        references:
+          resource: Role
+          service_name: iam
+          path: Status.ACKResourceMetadata.ARN
+
+      HTTPEndpointDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      HTTPEndpointDestinationConfiguration.S3Configuration.CompressionFormat:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN:
+        references:
+          resource: Key
+          service_name: kms
+          path: Status.ACKResourceMetadata.ARN
+
+      HTTPEndpointDestinationConfiguration.S3Configuration.ErrorOutputPrefix:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      HTTPEndpointDestinationConfiguration.S3Configuration.Prefix:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      HTTPEndpointDestinationConfiguration.BufferingHints:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      HTTPEndpointDestinationConfiguration.CloudWatchLoggingOptions:
+          late_initialize: {
+            skip_incomplete_check: {}
+          }
+
+
+      HTTPEndpointDestinationConfiguration.ProcessingConfiguration:
+          late_initialize: {
+            skip_incomplete_check: {}
+          }
+
+
+      HTTPEndpointDestinationConfiguration.RequestConfiguration:
+          late_initialize: {
+            skip_incomplete_check: {}
+          }
+
+      HTTPEndpointDestinationConfiguration.RetryOptions:
+          late_initialize: {
+            skip_incomplete_check: {}
+          }
+
+      HTTPEndpointDestinationConfiguration.RoleARN:
+          late_initialize: {
+            skip_incomplete_check: {}
+          }
+          references:
+            resource: Role
+            service_name: iam
+            path: Status.ACKResourceMetadata.ARN
+
+      HTTPEndpointDestinationConfiguration.S3BackupMode:
+          late_initialize: {
+            skip_incomplete_check: {}
+          }
+
+      HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration:
+          late_initialize: {
+            skip_incomplete_check: {}
+          }
+
+      HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.RoleARN:
+          references:
+            resource: Role
+            service_name: iam
+            path: Status.ACKResourceMetadata.ARN
+
+      HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.SecretARN:
+          references:
+            resource: Secret
+            service_name: secretsmanager
+            path: Status.ACKResourceMetadata.ARN
+
       
     hooks:
       delta_pre_compare:

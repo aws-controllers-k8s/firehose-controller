@@ -294,7 +294,13 @@ func (rm *resourceManager) newCreateRequestPayload(
 		if r.ko.Spec.HTTPEndpointDestinationConfiguration.EndpointConfiguration != nil {
 			f3f2 := &svcsdktypes.HttpEndpointConfiguration{}
 			if r.ko.Spec.HTTPEndpointDestinationConfiguration.EndpointConfiguration.AccessKey != nil {
-				f3f2.AccessKey = r.ko.Spec.HTTPEndpointDestinationConfiguration.EndpointConfiguration.AccessKey
+				tmpSecret, err := rm.rr.SecretValueFromReference(ctx, r.ko.Spec.HTTPEndpointDestinationConfiguration.EndpointConfiguration.AccessKey)
+				if err != nil {
+					return nil, ackrequeue.Needed(err)
+				}
+				if tmpSecret != "" {
+					f3f2.AccessKey = aws.String(tmpSecret)
+				}
 			}
 			if r.ko.Spec.HTTPEndpointDestinationConfiguration.EndpointConfiguration.Name != nil {
 				f3f2.Name = r.ko.Spec.HTTPEndpointDestinationConfiguration.EndpointConfiguration.Name
@@ -487,9 +493,16 @@ func (rm *resourceManager) sdkUpdate(
 	defer func() {
 		exit(err)
 	}()
-	err = requeueNeededForDeliveryStreamEncryptionModifying(latest)
-	if err != nil {
-		return nil, err
+	if isDeliveryStreamCreating(latest) {
+		return desired, requeueWhileCreating
+	}
+
+	if isDeliveryStreamEncryptionEnabling(latest) {
+		return desired, requeueWhileEncryptionEnabling
+	}
+
+	if isDeliveryStreamEncryptionDisabling(latest) {
+		return desired, requeueWhileEncryptionDisabling
 	}
 
 	if delta.DifferentAt("Spec.DeliveryStreamEncryptionConfiguration") {
@@ -592,7 +605,13 @@ func (rm *resourceManager) newUpdateRequestPayload(
 		if r.ko.Spec.HTTPEndpointDestinationConfiguration.EndpointConfiguration != nil {
 			f7f2 := &svcsdktypes.HttpEndpointConfiguration{}
 			if r.ko.Spec.HTTPEndpointDestinationConfiguration.EndpointConfiguration.AccessKey != nil {
-				f7f2.AccessKey = r.ko.Spec.HTTPEndpointDestinationConfiguration.EndpointConfiguration.AccessKey
+				tmpSecret, err := rm.rr.SecretValueFromReference(ctx, r.ko.Spec.HTTPEndpointDestinationConfiguration.EndpointConfiguration.AccessKey)
+				if err != nil {
+					return nil, ackrequeue.Needed(err)
+				}
+				if tmpSecret != "" {
+					f7f2.AccessKey = aws.String(tmpSecret)
+				}
 			}
 			if r.ko.Spec.HTTPEndpointDestinationConfiguration.EndpointConfiguration.Name != nil {
 				f7f2.Name = r.ko.Spec.HTTPEndpointDestinationConfiguration.EndpointConfiguration.Name

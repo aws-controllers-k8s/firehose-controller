@@ -1,6 +1,13 @@
-    err = requeueNeededForDeliveryStreamEncryptionModifying(latest)
-	if err != nil {
-		return nil, err
+    if isDeliveryStreamCreating(latest) {
+		return desired, requeueWhileCreating
+	}
+
+	if isDeliveryStreamEncryptionEnabling(latest) {
+		return desired, requeueWhileEncryptionEnabling
+	}
+
+	if isDeliveryStreamEncryptionDisabling(latest) {
+		return desired, requeueWhileEncryptionDisabling
 	}
 
 	if delta.DifferentAt("Spec.DeliveryStreamEncryptionConfiguration") {

@@ -1200,6 +1200,11 @@ func (in *DeliveryStreamEncryptionConfigurationInput) DeepCopyInto(out *Delivery
 		*out = new(string)
 		**out = **in
 	}
+	if in.KeyRef != nil {
+		in, out := &in.KeyRef, &out.KeyRef
+		*out = new(corev1alpha1.AWSResourceReferenceWrapper)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.KeyType != nil {
 		in, out := &in.KeyType, &out.KeyType
 		*out = new(string)
@@ -2245,7 +2250,7 @@ func (in *HTTPEndpointConfiguration) DeepCopyInto(out *HTTPEndpointConfiguration
 	*out = *in
 	if in.AccessKey != nil {
 		in, out := &in.AccessKey, &out.AccessKey
-		*out = new(string)
+		*out = new(corev1alpha1.SecretKeyReference)
 		**out = **in
 	}
 	if in.Name != nil {
@@ -2332,6 +2337,11 @@ func (in *HTTPEndpointDestinationConfiguration) DeepCopyInto(out *HTTPEndpointDe
 		in, out := &in.RoleARN, &out.RoleARN
 		*out = new(string)
 		**out = **in
+	}
+	if in.RoleRef != nil {
+		in, out := &in.RoleRef, &out.RoleRef
+		*out = new(corev1alpha1.AWSResourceReferenceWrapper)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.S3BackupMode != nil {
 		in, out := &in.S3BackupMode, &out.S3BackupMode
@@ -2837,6 +2847,11 @@ func (in *KMSEncryptionConfig) DeepCopyInto(out *KMSEncryptionConfig) {
 		in, out := &in.AWSKMSKeyARN, &out.AWSKMSKeyARN
 		*out = new(string)
 		**out = **in
+	}
+	if in.AWSKMSKeyRef != nil {
+		in, out := &in.AWSKMSKeyRef, &out.AWSKMSKeyRef
+		*out = new(corev1alpha1.AWSResourceReferenceWrapper)
+		(*in).DeepCopyInto(*out)
 	}
 }
 
@@ -3554,6 +3569,11 @@ func (in *S3DestinationConfiguration) DeepCopyInto(out *S3DestinationConfigurati
 		*out = new(string)
 		**out = **in
 	}
+	if in.BucketRef != nil {
+		in, out := &in.BucketRef, &out.BucketRef
+		*out = new(corev1alpha1.AWSResourceReferenceWrapper)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.BufferingHints != nil {
 		in, out := &in.BufferingHints, &out.BufferingHints
 		*out = new(BufferingHints)
@@ -3588,6 +3608,11 @@ func (in *S3DestinationConfiguration) DeepCopyInto(out *S3DestinationConfigurati
 		in, out := &in.RoleARN, &out.RoleARN
 		*out = new(string)
 		**out = **in
+	}
+	if in.RoleRef != nil {
+		in, out := &in.RoleRef, &out.RoleRef
+		*out = new(corev1alpha1.AWSResourceReferenceWrapper)
+		(*in).DeepCopyInto(*out)
 	}
 }
 
@@ -3789,10 +3814,20 @@ func (in *SecretsManagerConfiguration) DeepCopyInto(out *SecretsManagerConfigura
 		*out = new(string)
 		**out = **in
 	}
+	if in.RoleRef != nil {
+		in, out := &in.RoleRef, &out.RoleRef
+		*out = new(corev1alpha1.AWSResourceReferenceWrapper)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.SecretARN != nil {
 		in, out := &in.SecretARN, &out.SecretARN
 		*out = new(string)
 		**out = **in
+	}
+	if in.SecretRef != nil {
+		in, out := &in.SecretRef, &out.SecretRef
+		*out = new(corev1alpha1.AWSResourceReferenceWrapper)
+		(*in).DeepCopyInto(*out)
 	}
 }
 

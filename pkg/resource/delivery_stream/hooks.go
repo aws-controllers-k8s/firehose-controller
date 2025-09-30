@@ -14,6 +14,36 @@ import (
 	svcsdktypes "github.com/aws/aws-sdk-go-v2/service/firehose/types"
 )
 
+var (
+	ErrDeliveryStreamCreating = fmt.Errorf(
+		"delivery stream in %v state, cannot be modified",
+		svcsdktypes.DeliveryStreamStatusCreating,
+	)
+	ErrDeliveryStreamEncryptionEnabling = fmt.Errorf(
+		"delivery stream cannot be modified while server-side encryption %v",
+		svcsdktypes.DeliveryStreamEncryptionStatusEnabling,
+	)
+	ErrDeliveryStreamEncryptionDisabling = fmt.Errorf(
+		"delivery stream cannot be modified while server-side encryption %v",
+		svcsdktypes.DeliveryStreamEncryptionStatusDisabling,
+	)
+)
+
+var (
+	requeueWhileCreating = ackrequeue.NeededAfter(
+		ErrDeliveryStreamCreating,
+		5*time.Second,
+	)
+	requeueWhileEncryptionEnabling = ackrequeue.NeededAfter(
+		ErrDeliveryStreamEncryptionEnabling,
+		5*time.Second,
+	)
+	requeueWhileEncryptionDisabling = ackrequeue.NeededAfter(
+		ErrDeliveryStreamEncryptionDisabling,
+		5*time.Second,
+	)
+)
+
 // getTags retrieves the resource's associated tags.
 func (rm *resourceManager) getTags(
 	ctx context.Context,
@@ -44,26 +74,22 @@ func deliveryStreamEncryptionDisabled(r *resource) bool {
 		(r.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyARN == nil && r.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyType == nil)
 }
 
-// requeueNeededForDeliveryStreamEncryptionModifying checks if the Delivery Stream's encryption status is in
-// a transitory state and if it is returns a requeue error.
-func requeueNeededForDeliveryStreamEncryptionModifying(latest *resource) (err error) {
-	if latest.ko.Status.DeliveryStreamEncryptionConfigurationStatus == nil {
-		return nil
-	}
+// isDeliveryStreamCreating checks whether or not the delivery stream is in the creating state.
+func isDeliveryStreamCreating(r *resource) bool {
+	return r.ko.Status.DeliveryStreamStatus != nil &&
+		*r.ko.Status.DeliveryStreamStatus == *aws.String(string(svcsdktypes.DeliveryStreamStatusCreating))
+}
 
-	encryptionStatus := *latest.ko.Status.DeliveryStreamEncryptionConfigurationStatus
-	if encryptionStatus == *aws.String(string(svcsdktypes.DeliveryStreamEncryptionStatusEnabling)) ||
-		encryptionStatus == *aws.String(string(svcsdktypes.DeliveryStreamEncryptionStatusDisabling)) {
-		return ackrequeue.NeededAfter(
-			fmt.Errorf(
-				"delivery stream cannot be modified while server-side encryption %v",
-				encryptionStatus,
-			),
-			5*time.Second,
-		)
-	}
+// isDeliveryStreamEncryptionEnabling checks whether or not the delivery stream's server-side encryption is enabling
+func isDeliveryStreamEncryptionEnabling(r *resource) bool {
+	return r.ko.Status.DeliveryStreamEncryptionConfigurationStatus != nil &&
+		*r.ko.Status.DeliveryStreamEncryptionConfigurationStatus == *aws.String(string(svcsdktypes.DeliveryStreamEncryptionStatusEnabling))
+}
 
-	return nil
+// isDeliveryStreamEncryptionDisabling checks whether or not the delivery stream's server-side encryption is enabling
+func isDeliveryStreamEncryptionDisabling(r *resource) bool {
+	return r.ko.Status.DeliveryStreamEncryptionConfigurationStatus != nil &&
+		*r.ko.Status.DeliveryStreamEncryptionConfigurationStatus == *aws.String(string(svcsdktypes.DeliveryStreamEncryptionStatusDisabling))
 }
 
 type metricsRecorder interface {
