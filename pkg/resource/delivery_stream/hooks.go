@@ -23,7 +23,6 @@ import (
 	ackrequeue "github.com/aws-controllers-k8s/runtime/pkg/requeue"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	svcsdk "github.com/aws/aws-sdk-go-v2/service/firehose"
-	"github.com/aws/aws-sdk-go-v2/service/firehose/types"
 	svcsdktypes "github.com/aws/aws-sdk-go-v2/service/firehose/types"
 )
 
@@ -177,9 +176,9 @@ func setDestinations(ko *svcapitypes.DeliveryStream, resp *svcsdk.DescribeDelive
 }
 
 // Maps an HttpEndpointDestinationDescription to relevant Spec and Status fields.
-func readHttpDestinationDescription(ko *svcapitypes.DeliveryStream, respHttpDest *types.HttpEndpointDestinationDescription) (err error) {
+func readHttpDestinationDescription(ko *svcapitypes.DeliveryStream, respHttpDest *svcsdktypes.HttpEndpointDestinationDescription) {
 	if respHttpDest == nil {
-		return nil
+		return
 	}
 
 	if ko.Spec.HTTPEndpointDestinationConfiguration == nil {
@@ -357,5 +356,5 @@ func readHttpDestinationDescription(ko *svcapitypes.DeliveryStream, respHttpDest
 		}
 	}
 
-	return nil
+	return
 }
