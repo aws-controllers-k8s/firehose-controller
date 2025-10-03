@@ -143,17 +143,19 @@ func (rm *resourceManager) sdkFind(
 
 	rm.setStatusDefaults(ko)
 
-	if resp.DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.Status != "" {
-		ko.Status.DeliveryStreamEncryptionConfigurationStatus = aws.String(string(resp.DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.Status))
-	}
-
-	if resp.DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.FailureDescription != nil {
-		ko.Status.DeliveryStreamEncryptionConfigurationFailureDescription = &svcapitypes.FailureDescription{}
-		if resp.DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.FailureDescription.Type != "" {
-			ko.Status.DeliveryStreamEncryptionConfigurationFailureDescription.Type = aws.String(string(resp.DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.FailureDescription.Type))
+	if resp.DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration != nil {
+		if resp.DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.Status != "" {
+			ko.Status.DeliveryStreamEncryptionConfigurationStatus = aws.String(string(resp.DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.Status))
 		}
-		if resp.DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.FailureDescription.Details != nil {
-			ko.Status.DeliveryStreamEncryptionConfigurationFailureDescription.Details = resp.DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.FailureDescription.Details
+
+		if resp.DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.FailureDescription != nil {
+			ko.Status.DeliveryStreamEncryptionConfigurationFailureDescription = &svcapitypes.FailureDescription{}
+			if resp.DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.FailureDescription.Type != "" {
+				ko.Status.DeliveryStreamEncryptionConfigurationFailureDescription.Type = aws.String(string(resp.DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.FailureDescription.Type))
+			}
+			if resp.DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.FailureDescription.Details != nil {
+				ko.Status.DeliveryStreamEncryptionConfigurationFailureDescription.Details = resp.DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.FailureDescription.Details
+			}
 		}
 	}
 
@@ -165,6 +167,9 @@ func (rm *resourceManager) sdkFind(
 	setDestinations(ko, resp)
 
 	ko.Spec.Tags, err = rm.getTags(ctx, *r.ko.Spec.DeliveryStreamName)
+	if err != nil {
+		return nil, err
+	}
 	return &resource{ko}, nil
 }
 
