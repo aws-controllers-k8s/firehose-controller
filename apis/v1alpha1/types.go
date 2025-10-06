@@ -750,7 +750,7 @@ type ExtendedS3DestinationUpdate struct {
 // StopDeliveryStreamEncryption.
 type FailureDescription struct {
 	Details *string `json:"details,omitempty"`
-	Type    *string `json:"type_,omitempty"`
+	Type    *string `json:"type,omitempty"`
 }
 
 // Describes the buffering options that can be applied before data is delivered
@@ -1125,7 +1125,7 @@ type ProcessingConfiguration struct {
 // You don’t have to put a processor parameter when you select AppendDelimiterToRecord.
 type Processor struct {
 	Parameters []*ProcessorParameter `json:"parameters,omitempty"`
-	Type       *string               `json:"type_,omitempty"`
+	Type       *string               `json:"type,omitempty"`
 }
 
 // Describes the processor parameter.

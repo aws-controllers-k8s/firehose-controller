@@ -82,11 +82,15 @@ resources:
           operation: DescribeDeliveryStream
           path: DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.Status
       
-      DeliveryStreamEncryptionConfiguration.FailureDescription:
+      DeliveryStreamEncryptionConfigurationFailureDescription:
         is_read_only: true
         from:
           operation: DescribeDeliveryStream
           path: DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.FailureDescription
+
+      DeliveryStreamEncryptionConfigurationFailureDescription.Type:
+        go_tag: 'json:"type,omitempty"'
+
 
       VersionId:
         is_read_only: true
@@ -183,6 +187,9 @@ resources:
           late_initialize: {
             skip_incomplete_check: {}
           }
+      
+      HTTPEndpointDestinationConfiguration.ProcessingConfiguration.Processors.Type:
+          go_tag: 'json:"type,omitempty"'
 
 
       HTTPEndpointDestinationConfiguration.RequestConfiguration:

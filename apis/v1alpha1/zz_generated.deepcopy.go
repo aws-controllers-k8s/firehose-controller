@@ -1323,15 +1323,15 @@ func (in *DeliveryStreamStatus) DeepCopyInto(out *DeliveryStreamStatus) {
 		in, out := &in.CreateTimestamp, &out.CreateTimestamp
 		*out = (*in).DeepCopy()
 	}
-	if in.DeliveryStreamEncryptionConfigurationFailureDescription != nil {
-		in, out := &in.DeliveryStreamEncryptionConfigurationFailureDescription, &out.DeliveryStreamEncryptionConfigurationFailureDescription
-		*out = new(FailureDescription)
-		(*in).DeepCopyInto(*out)
-	}
 	if in.DeliveryStreamEncryptionConfigurationStatus != nil {
 		in, out := &in.DeliveryStreamEncryptionConfigurationStatus, &out.DeliveryStreamEncryptionConfigurationStatus
 		*out = new(string)
 		**out = **in
+	}
+	if in.DeliveryStreamEncryptionConfigurationFailureDescription != nil {
+		in, out := &in.DeliveryStreamEncryptionConfigurationFailureDescription, &out.DeliveryStreamEncryptionConfigurationFailureDescription
+		*out = new(FailureDescription)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.DeliveryStreamStatus != nil {
 		in, out := &in.DeliveryStreamStatus, &out.DeliveryStreamStatus

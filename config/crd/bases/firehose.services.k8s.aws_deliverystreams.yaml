@@ -166,7 +166,7 @@ spec:
                                     type: string
                                 type: object
                               type: array
-                            type_:
+                            type:
                               type: string
                           type: object
                         type: array
@@ -470,7 +470,7 @@ spec:
                 properties:
                   details:
                     type: string
-                  type_:
+                  type:
                     type: string
                 type: object
               deliveryStreamEncryptionConfigurationStatus:
