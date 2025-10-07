@@ -16,6 +16,7 @@ rules:
 - apiGroups:
   - firehose.services.k8s.aws
   resources:
+  - deliverystreams
   verbs:
   - create
   - delete
@@ -27,6 +28,7 @@ rules:
 - apiGroups:
   - firehose.services.k8s.aws
   resources:
+  - deliverystreams
   verbs:
   - get
   - patch

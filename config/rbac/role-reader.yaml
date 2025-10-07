@@ -9,6 +9,7 @@ rules:
 - apiGroups:
   - firehose.services.k8s.aws
   resources:
+  - deliverystreams
   verbs:
   - get
   - list

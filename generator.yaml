@@ -1,4 +1,264 @@
+model_name: firehose
 ignore:
   resource_names:
-      - DeliveryStream
-model_name: firehose
+     # - DeliveryStream
+  field_paths:
+    - CreateDeliveryStreamInput.AmazonOpenSearchServerlessDestinationConfiguration
+    - CreateDeliveryStreamInput.AmazonopensearchserviceDestinationConfiguration
+    - CreateDeliveryStreamInput.DatabaseSourceConfiguration
+    - CreateDeliveryStreamInput.DirectPutSourceConfiguration
+    - CreateDeliveryStreamInput.ElasticsearchDestinationConfiguration
+    - CreateDeliveryStreamInput.ExtendedS3DestinationConfiguration
+    #- CreateDeliveryStreamInput.HttpEndpointDestinationConfiguration
+    - CreateDeliveryStreamInput.IcebergDestinationConfiguration
+    - CreateDeliveryStreamInput.KinesisStreamSourceConfiguration
+    - CreateDeliveryStreamInput.MSKSourceConfiguration
+    - CreateDeliveryStreamInput.RedshiftDestinationConfiguration
+    - CreateDeliveryStreamInput.SnowflakeDestinationConfiguration
+    - CreateDeliveryStreamInput.SplunkDestinationConfiguration
+    - CreateDeliveryStreamInput.S3DestinationConfiguration
+
+
+operations:
+  UpdateDestination:
+    resource_name: DeliveryStream
+    operation_type: 
+      - Update
+
+resources:
+  DeliveryStream:
+    renames:
+      operations:
+        CreateDeliveryStream:
+          input_fields:
+            DeliveryStreamEncryptionConfigurationInput: DeliveryStreamEncryptionConfiguration
+        UpdateDestination:
+          input_fields:
+            HttpEndpointDestinationUpdate: HttpEndpointDestinationConfiguration
+            HttpEndpointDestinationConfiguration.S3Update: S3Configuration
+            S3Update: S3Configuration
+
+    fields:
+      DeliveryStreamEncryptionConfiguration:
+          late_initialize: {}
+          compare:
+            nil_equals_zero_value: true
+
+      DeliveryStreamEncryptionConfiguration.KeyARN:
+        references:
+          resource: Key
+          service_name: kms
+          path: Status.ACKResourceMetadata.ARN
+
+      # CreateDeliveryStream only returns the ARN of the created the Delivery Stream.
+      # Need to set Status fields based on shape of DescribeDeliveryStream.
+      DeliveryStreamStatus:
+        is_read_only: true
+        from:
+          operation: DescribeDeliveryStream
+          path: DeliveryStreamDescription.DeliveryStreamStatus
+        
+      DestinationId:
+        is_read_only: true
+        from:
+          operation: DescribeDeliveryStream
+          path: DeliveryStreamDescription.Destinations.DestinationId
+
+      CreateTimestamp:
+        is_read_only: true
+        from:
+          operation: DescribeDeliveryStream
+          path: DeliveryStreamDescription.CreateTimestamp
+
+      LastUpdateTimestamp:
+        is_read_only: true
+        from:
+          operation: DescribeDeliveryStream
+          path: DeliveryStreamDescription.LastUpdateTimestamp
+      
+      DeliveryStreamEncryptionConfiguration.Status:
+        is_read_only: true
+        from:
+          operation: DescribeDeliveryStream
+          path: DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.Status
+      
+      DeliveryStreamEncryptionConfigurationFailureDescription:
+        is_read_only: true
+        from:
+          operation: DescribeDeliveryStream
+          path: DeliveryStreamDescription.DeliveryStreamEncryptionConfiguration.FailureDescription
+
+      DeliveryStreamEncryptionConfigurationFailureDescription.Type:
+        go_tag: 'json:"type,omitempty"'
+
+
+      VersionId:
+        is_read_only: true
+        from:
+          operation: DescribeDeliveryStream
+          path: DeliveryStreamDescription.VersionId
+        set:
+          - method: Update
+            to: CurrentDeliveryStreamVersionId
+
+      HTTPEndpointDestinationConfiguration:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+      
+
+      HTTPEndpointDestinationConfiguration.EndpointConfiguration:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      HTTPEndpointDestinationConfiguration.EndpointConfiguration.AccessKey:
+        is_secret: true
+        
+
+      HTTPEndpointDestinationConfiguration.S3Configuration:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+        set:
+          - method: Update
+            to: S3Update
+
+      HTTPEndpointDestinationConfiguration.S3Configuration.BufferingHints:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      HTTPEndpointDestinationConfiguration.S3Configuration.BucketARN:
+        references:
+          resource: Bucket
+          service_name: s3
+          path: Status.ACKResourceMetadata.ARN
+
+      HTTPEndpointDestinationConfiguration.S3Configuration.RoleARN:
+        references:
+          resource: Role
+          service_name: iam
+          path: Status.ACKResourceMetadata.ARN
+
+      HTTPEndpointDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      HTTPEndpointDestinationConfiguration.S3Configuration.CompressionFormat:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN:
+        references:
+          resource: Key
+          service_name: kms
+          path: Status.ACKResourceMetadata.ARN
+
+      HTTPEndpointDestinationConfiguration.S3Configuration.ErrorOutputPrefix:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      HTTPEndpointDestinationConfiguration.S3Configuration.Prefix:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      HTTPEndpointDestinationConfiguration.BufferingHints:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      HTTPEndpointDestinationConfiguration.CloudWatchLoggingOptions:
+          late_initialize: {
+            skip_incomplete_check: {}
+          }
+
+
+      HTTPEndpointDestinationConfiguration.ProcessingConfiguration:
+          late_initialize: {
+            skip_incomplete_check: {}
+          }
+      
+      HTTPEndpointDestinationConfiguration.ProcessingConfiguration.Processors.Type:
+          go_tag: 'json:"type,omitempty"'
+
+
+      HTTPEndpointDestinationConfiguration.RequestConfiguration:
+          late_initialize: {
+            skip_incomplete_check: {}
+          }
+
+      HTTPEndpointDestinationConfiguration.RetryOptions:
+          late_initialize: {
+            skip_incomplete_check: {}
+          }
+
+      HTTPEndpointDestinationConfiguration.RoleARN:
+          late_initialize: {
+            skip_incomplete_check: {}
+          }
+          references:
+            resource: Role
+            service_name: iam
+            path: Status.ACKResourceMetadata.ARN
+
+      HTTPEndpointDestinationConfiguration.S3BackupMode:
+          late_initialize: {
+            skip_incomplete_check: {}
+          }
+
+      HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration:
+          late_initialize: {
+            skip_incomplete_check: {}
+          }
+
+      HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.RoleARN:
+          references:
+            resource: Role
+            service_name: iam
+            path: Status.ACKResourceMetadata.ARN
+
+      HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.SecretARN:
+          references:
+            resource: Secret
+            service_name: secretsmanager
+            path: Status.ACKResourceMetadata.ARN
+
+      
+    hooks:
+      delta_pre_compare:
+        template_path: hooks/delivery_stream/delta_pre_compare.go.tpl
+      sdk_read_one_post_set_output:
+        template_path: hooks/delivery_stream/sdk_read_one_post_set_output.go.tpl
+      sdk_update_pre_build_request:
+        template_path: hooks/delivery_stream/sdk_update_pre_build_request.go.tpl
+      sdk_update_post_build_request:
+        template_path: hooks/delivery_stream/sdk_update_post_build_request.go.tpl
+    synced:
+      when:
+        - path: Status.DeliveryStreamStatus
+          in:
+            - ACTIVE
+            - CREATING_FAILED
+        - path: Status.DeliveryStreamEncryptionConfigurationStatus
+          in: 
+            - ENABLED
+            - DISABLED
+    exceptions:
+      errors:
+        404:
+          code: ResourceNotFoundException
+      terminal_codes:
+        -  InvalidArgumentException
+        
+
+

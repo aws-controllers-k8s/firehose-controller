@@ -17,11 +17,14 @@ for them.
 
 from dataclasses import dataclass
 from acktest.bootstrapping import Resources
+from acktest.bootstrapping.s3 import Bucket
+from acktest.bootstrapping.iam import Role
 from e2e import bootstrap_directory
 
 @dataclass
 class BootstrapResources(Resources):
-    pass
+    HttpDestBucket: Bucket
+    HttpDestBucketRole: Role
 
 _bootstrap_resources = None
 

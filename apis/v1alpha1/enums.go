@@ -110,14 +110,14 @@ const (
 	DeliveryStreamFailureType_VPC_INTERFACE_ENDPOINT_SERVICE_ACCESS_DENIED DeliveryStreamFailureType = "VPC_INTERFACE_ENDPOINT_SERVICE_ACCESS_DENIED"
 )
 
-type DeliveryStreamStatus string
+type DeliveryStreamStatus_SDK string
 
 const (
-	DeliveryStreamStatus_ACTIVE          DeliveryStreamStatus = "ACTIVE"
-	DeliveryStreamStatus_CREATING        DeliveryStreamStatus = "CREATING"
-	DeliveryStreamStatus_CREATING_FAILED DeliveryStreamStatus = "CREATING_FAILED"
-	DeliveryStreamStatus_DELETING        DeliveryStreamStatus = "DELETING"
-	DeliveryStreamStatus_DELETING_FAILED DeliveryStreamStatus = "DELETING_FAILED"
+	DeliveryStreamStatus_SDK_ACTIVE          DeliveryStreamStatus_SDK = "ACTIVE"
+	DeliveryStreamStatus_SDK_CREATING        DeliveryStreamStatus_SDK = "CREATING"
+	DeliveryStreamStatus_SDK_CREATING_FAILED DeliveryStreamStatus_SDK = "CREATING_FAILED"
+	DeliveryStreamStatus_SDK_DELETING        DeliveryStreamStatus_SDK = "DELETING"
+	DeliveryStreamStatus_SDK_DELETING_FAILED DeliveryStreamStatus_SDK = "DELETING_FAILED"
 )
 
 type DeliveryStreamType string

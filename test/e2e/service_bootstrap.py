@@ -15,15 +15,25 @@
 import logging
 
 from acktest.bootstrapping import Resources, BootstrapFailureException
+from acktest.bootstrapping.s3 import Bucket
+from acktest.bootstrapping.iam import Role
 
 from e2e import bootstrap_directory
 from e2e.bootstrap_resources import BootstrapResources
+
+S3_ACCESS_ROLE_ARN = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+FIREHOSE_SERVICE_PRINCIPAL = "firehose.amazonaws.com"
 
 def service_bootstrap() -> Resources:
     logging.getLogger().setLevel(logging.INFO)
 
     resources = BootstrapResources(
-        # TODO: Add bootstrapping when you have defined the resources
+        HttpDestBucket=Bucket("firehose-http-dest"),
+        HttpDestBucketRole=Role(
+            "firehose-http-dest-role", 
+            principal_service=FIREHOSE_SERVICE_PRINCIPAL, 
+            managed_policies=[S3_ACCESS_ROLE_ARN]
+        )
     )
 
     try:

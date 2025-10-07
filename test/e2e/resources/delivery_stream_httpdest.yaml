@@ -1,0 +1,20 @@
+apiVersion: firehose.services.k8s.aws/v1alpha1
+kind: DeliveryStream
+metadata:
+  name: $DELIVERY_STREAM_NAME
+  namespace: default
+spec:
+  deliveryStreamName: $DELIVERY_STREAM_NAME
+  deliveryStreamType: $DELIVERY_STREAM_TYPE
+  httpEndpointDestinationConfiguration:
+    endpointConfiguration:
+      url: $HTTP_DEST_URL
+      name: $HTTP_DEST_NAME
+    s3Configuration:
+        bucketARN: $S3_BUCKET_ARN
+        roleARN: $S3_ROLE_ARN
+  tags:
+    - key: environment
+      value: dev
+    - key: team
+      value: finops
