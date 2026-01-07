@@ -1494,7 +1494,7 @@ type SnowflakeRoleConfiguration struct {
 
 // Configure a Snowflake VPC
 type SnowflakeVPCConfiguration struct {
-	PrivateLinkVPCeID *string `json:"privateLinkVPCeID,omitempty"`
+	PrivateLinkVPCEID *string `json:"privateLinkVPCEID,omitempty"`
 }
 
 // Details about a Kinesis data stream used as the source for a Firehose stream.
