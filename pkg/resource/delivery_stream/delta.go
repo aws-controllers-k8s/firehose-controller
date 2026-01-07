@@ -17,16 +17,15 @@ package delivery_stream
 
 import (
 	"bytes"
-	"reflect"
 
 	ackcompare "github.com/aws-controllers-k8s/runtime/pkg/compare"
 	acktags "github.com/aws-controllers-k8s/runtime/pkg/tags"
+	"k8s.io/apimachinery/pkg/api/equality"
 )
 
 // Hack to avoid import errors during build...
 var (
 	_ = &bytes.Buffer{}
-	_ = &reflect.Method{}
 	_ = &acktags.Tags{}
 )
 
@@ -164,7 +163,7 @@ func newResourceDelta(
 			if len(a.ko.Spec.HTTPEndpointDestinationConfiguration.ProcessingConfiguration.Processors) != len(b.ko.Spec.HTTPEndpointDestinationConfiguration.ProcessingConfiguration.Processors) {
 				delta.Add("Spec.HTTPEndpointDestinationConfiguration.ProcessingConfiguration.Processors", a.ko.Spec.HTTPEndpointDestinationConfiguration.ProcessingConfiguration.Processors, b.ko.Spec.HTTPEndpointDestinationConfiguration.ProcessingConfiguration.Processors)
 			} else if len(a.ko.Spec.HTTPEndpointDestinationConfiguration.ProcessingConfiguration.Processors) > 0 {
-				if !reflect.DeepEqual(a.ko.Spec.HTTPEndpointDestinationConfiguration.ProcessingConfiguration.Processors, b.ko.Spec.HTTPEndpointDestinationConfiguration.ProcessingConfiguration.Processors) {
+				if !equality.Semantic.Equalities.DeepEqual(a.ko.Spec.HTTPEndpointDestinationConfiguration.ProcessingConfiguration.Processors, b.ko.Spec.HTTPEndpointDestinationConfiguration.ProcessingConfiguration.Processors) {
 					delta.Add("Spec.HTTPEndpointDestinationConfiguration.ProcessingConfiguration.Processors", a.ko.Spec.HTTPEndpointDestinationConfiguration.ProcessingConfiguration.Processors, b.ko.Spec.HTTPEndpointDestinationConfiguration.ProcessingConfiguration.Processors)
 				}
 			}
@@ -175,7 +174,7 @@ func newResourceDelta(
 			if len(a.ko.Spec.HTTPEndpointDestinationConfiguration.RequestConfiguration.CommonAttributes) != len(b.ko.Spec.HTTPEndpointDestinationConfiguration.RequestConfiguration.CommonAttributes) {
 				delta.Add("Spec.HTTPEndpointDestinationConfiguration.RequestConfiguration.CommonAttributes", a.ko.Spec.HTTPEndpointDestinationConfiguration.RequestConfiguration.CommonAttributes, b.ko.Spec.HTTPEndpointDestinationConfiguration.RequestConfiguration.CommonAttributes)
 			} else if len(a.ko.Spec.HTTPEndpointDestinationConfiguration.RequestConfiguration.CommonAttributes) > 0 {
-				if !reflect.DeepEqual(a.ko.Spec.HTTPEndpointDestinationConfiguration.RequestConfiguration.CommonAttributes, b.ko.Spec.HTTPEndpointDestinationConfiguration.RequestConfiguration.CommonAttributes) {
+				if !equality.Semantic.Equalities.DeepEqual(a.ko.Spec.HTTPEndpointDestinationConfiguration.RequestConfiguration.CommonAttributes, b.ko.Spec.HTTPEndpointDestinationConfiguration.RequestConfiguration.CommonAttributes) {
 					delta.Add("Spec.HTTPEndpointDestinationConfiguration.RequestConfiguration.CommonAttributes", a.ko.Spec.HTTPEndpointDestinationConfiguration.RequestConfiguration.CommonAttributes, b.ko.Spec.HTTPEndpointDestinationConfiguration.RequestConfiguration.CommonAttributes)
 				}
 			}
