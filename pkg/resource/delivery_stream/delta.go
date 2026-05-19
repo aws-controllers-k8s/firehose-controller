@@ -48,7 +48,9 @@ func newResourceDelta(
 	}
 
 	if ackcompare.HasNilDifference(a.ko.Spec.DeliveryStreamEncryptionConfiguration, b.ko.Spec.DeliveryStreamEncryptionConfiguration) {
-		delta.Add("Spec.DeliveryStreamEncryptionConfiguration", a.ko.Spec.DeliveryStreamEncryptionConfiguration, b.ko.Spec.DeliveryStreamEncryptionConfiguration)
+		if !ackcompare.IsNilEqualsZero(a.ko.Spec.DeliveryStreamEncryptionConfiguration, b.ko.Spec.DeliveryStreamEncryptionConfiguration) {
+			delta.Add("Spec.DeliveryStreamEncryptionConfiguration", a.ko.Spec.DeliveryStreamEncryptionConfiguration, b.ko.Spec.DeliveryStreamEncryptionConfiguration)
+		}
 	} else if a.ko.Spec.DeliveryStreamEncryptionConfiguration != nil && b.ko.Spec.DeliveryStreamEncryptionConfiguration != nil {
 		if ackcompare.HasNilDifference(a.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyARN, b.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyARN) {
 			delta.Add("Spec.DeliveryStreamEncryptionConfiguration.KeyARN", a.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyARN, b.ko.Spec.DeliveryStreamEncryptionConfiguration.KeyARN)
