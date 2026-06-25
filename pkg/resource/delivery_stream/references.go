@@ -27,6 +27,7 @@ import (
 	kmsapitypes "github.com/aws-controllers-k8s/kms-controller/apis/v1alpha1"
 	ackv1alpha1 "github.com/aws-controllers-k8s/runtime/apis/core/v1alpha1"
 	ackerr "github.com/aws-controllers-k8s/runtime/pkg/errors"
+	ackrt "github.com/aws-controllers-k8s/runtime/pkg/runtime"
 	acktypes "github.com/aws-controllers-k8s/runtime/pkg/types"
 	s3apitypes "github.com/aws-controllers-k8s/s3-controller/apis/v1alpha1"
 	secretsmanagerapitypes "github.com/aws-controllers-k8s/secretsmanager-controller/apis/v1alpha1"
@@ -260,9 +261,17 @@ func (rm *resourceManager) resolveReferenceForDeliveryStreamEncryptionConfigurat
 			if arr.Name == nil || *arr.Name == "" {
 				return hasReferences, fmt.Errorf("provided resource reference is nil or empty: DeliveryStreamEncryptionConfiguration.KeyRef")
 			}
-			namespace := ko.ObjectMeta.GetNamespace()
-			if arr.Namespace != nil && *arr.Namespace != "" {
-				namespace = *arr.Namespace
+			namespace, err := ackrt.ResolveCrossNamespaceReference(
+				ctx,
+				rm.cfg.EnableCrossNamespace,
+				&ko.Status.Conditions,
+				ackrt.CrossNamespaceRefKindResource,
+				ko.ObjectMeta.GetNamespace(),
+				arr.Namespace,
+				*arr.Name,
+			)
+			if err != nil {
+				return hasReferences, err
 			}
 			obj := &kmsapitypes.Key{}
 			if err := getReferencedResourceState_Key(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
@@ -345,9 +354,17 @@ func (rm *resourceManager) resolveReferenceForHTTPEndpointDestinationConfigurati
 			if arr.Name == nil || *arr.Name == "" {
 				return hasReferences, fmt.Errorf("provided resource reference is nil or empty: HTTPEndpointDestinationConfiguration.RoleRef")
 			}
-			namespace := ko.ObjectMeta.GetNamespace()
-			if arr.Namespace != nil && *arr.Namespace != "" {
-				namespace = *arr.Namespace
+			namespace, err := ackrt.ResolveCrossNamespaceReference(
+				ctx,
+				rm.cfg.EnableCrossNamespace,
+				&ko.Status.Conditions,
+				ackrt.CrossNamespaceRefKindResource,
+				ko.ObjectMeta.GetNamespace(),
+				arr.Namespace,
+				*arr.Name,
+			)
+			if err != nil {
+				return hasReferences, err
 			}
 			obj := &iamapitypes.Role{}
 			if err := getReferencedResourceState_Role(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
@@ -431,9 +448,17 @@ func (rm *resourceManager) resolveReferenceForHTTPEndpointDestinationConfigurati
 				if arr.Name == nil || *arr.Name == "" {
 					return hasReferences, fmt.Errorf("provided resource reference is nil or empty: HTTPEndpointDestinationConfiguration.S3Configuration.BucketRef")
 				}
-				namespace := ko.ObjectMeta.GetNamespace()
-				if arr.Namespace != nil && *arr.Namespace != "" {
-					namespace = *arr.Namespace
+				namespace, err := ackrt.ResolveCrossNamespaceReference(
+					ctx,
+					rm.cfg.EnableCrossNamespace,
+					&ko.Status.Conditions,
+					ackrt.CrossNamespaceRefKindResource,
+					ko.ObjectMeta.GetNamespace(),
+					arr.Namespace,
+					*arr.Name,
+				)
+				if err != nil {
+					return hasReferences, err
 				}
 				obj := &s3apitypes.Bucket{}
 				if err := getReferencedResourceState_Bucket(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
@@ -520,9 +545,17 @@ func (rm *resourceManager) resolveReferenceForHTTPEndpointDestinationConfigurati
 						if arr.Name == nil || *arr.Name == "" {
 							return hasReferences, fmt.Errorf("provided resource reference is nil or empty: HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef")
 						}
-						namespace := ko.ObjectMeta.GetNamespace()
-						if arr.Namespace != nil && *arr.Namespace != "" {
-							namespace = *arr.Namespace
+						namespace, err := ackrt.ResolveCrossNamespaceReference(
+							ctx,
+							rm.cfg.EnableCrossNamespace,
+							&ko.Status.Conditions,
+							ackrt.CrossNamespaceRefKindResource,
+							ko.ObjectMeta.GetNamespace(),
+							arr.Namespace,
+							*arr.Name,
+						)
+						if err != nil {
+							return hasReferences, err
 						}
 						obj := &kmsapitypes.Key{}
 						if err := getReferencedResourceState_Key(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
@@ -555,9 +588,17 @@ func (rm *resourceManager) resolveReferenceForHTTPEndpointDestinationConfigurati
 				if arr.Name == nil || *arr.Name == "" {
 					return hasReferences, fmt.Errorf("provided resource reference is nil or empty: HTTPEndpointDestinationConfiguration.S3Configuration.RoleRef")
 				}
-				namespace := ko.ObjectMeta.GetNamespace()
-				if arr.Namespace != nil && *arr.Namespace != "" {
-					namespace = *arr.Namespace
+				namespace, err := ackrt.ResolveCrossNamespaceReference(
+					ctx,
+					rm.cfg.EnableCrossNamespace,
+					&ko.Status.Conditions,
+					ackrt.CrossNamespaceRefKindResource,
+					ko.ObjectMeta.GetNamespace(),
+					arr.Namespace,
+					*arr.Name,
+				)
+				if err != nil {
+					return hasReferences, err
 				}
 				obj := &iamapitypes.Role{}
 				if err := getReferencedResourceState_Role(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
@@ -588,9 +629,17 @@ func (rm *resourceManager) resolveReferenceForHTTPEndpointDestinationConfigurati
 				if arr.Name == nil || *arr.Name == "" {
 					return hasReferences, fmt.Errorf("provided resource reference is nil or empty: HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.RoleRef")
 				}
-				namespace := ko.ObjectMeta.GetNamespace()
-				if arr.Namespace != nil && *arr.Namespace != "" {
-					namespace = *arr.Namespace
+				namespace, err := ackrt.ResolveCrossNamespaceReference(
+					ctx,
+					rm.cfg.EnableCrossNamespace,
+					&ko.Status.Conditions,
+					ackrt.CrossNamespaceRefKindResource,
+					ko.ObjectMeta.GetNamespace(),
+					arr.Namespace,
+					*arr.Name,
+				)
+				if err != nil {
+					return hasReferences, err
 				}
 				obj := &iamapitypes.Role{}
 				if err := getReferencedResourceState_Role(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
@@ -621,9 +670,17 @@ func (rm *resourceManager) resolveReferenceForHTTPEndpointDestinationConfigurati
 				if arr.Name == nil || *arr.Name == "" {
 					return hasReferences, fmt.Errorf("provided resource reference is nil or empty: HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.SecretRef")
 				}
-				namespace := ko.ObjectMeta.GetNamespace()
-				if arr.Namespace != nil && *arr.Namespace != "" {
-					namespace = *arr.Namespace
+				namespace, err := ackrt.ResolveCrossNamespaceReference(
+					ctx,
+					rm.cfg.EnableCrossNamespace,
+					&ko.Status.Conditions,
+					ackrt.CrossNamespaceRefKindResource,
+					ko.ObjectMeta.GetNamespace(),
+					arr.Namespace,
+					*arr.Name,
+				)
+				if err != nil {
+					return hasReferences, err
 				}
 				obj := &secretsmanagerapitypes.Secret{}
 				if err := getReferencedResourceState_Secret(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
