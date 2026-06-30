@@ -34,6 +34,42 @@ from e2e.replacement_values import REPLACEMENT_VALUES
 
 UPDATE_WAIT_SECONDS = 10
 
+# Toggling Firehose server-side encryption is asynchronous: after the spec is
+# patched the controller needs a reconcile to observe the change, and AWS reports
+# transitional ENABLING/DISABLING states before settling on ENABLED/DISABLED.
+ENCRYPTION_STATUS_WAIT_PERIODS = 30
+ENCRYPTION_STATUS_WAIT_PERIOD_LENGTH = 10
+
+
+def wait_for_encryption_status(
+    ref,
+    expected_status: str,
+    wait_periods: int = ENCRYPTION_STATUS_WAIT_PERIODS,
+    period_length: int = ENCRYPTION_STATUS_WAIT_PERIOD_LENGTH,
+):
+    """Polls the delivery stream until its encryption status reaches expected_status.
+
+    Enabling/disabling server-side encryption is eventually consistent on both the
+    controller and the AWS side, so a fixed sleep plus a check on the
+    ACK.ResourceSynced condition is racy: that condition can still read True from the
+    previous reconcile, letting the test observe the stale, pre-update encryption
+    status. Poll the status field directly until it converges instead.
+
+    Returns the resource once converged; fails the test if it does not converge in time.
+    """
+    status = None
+    for _ in range(wait_periods):
+        cr = k8s.get_resource(ref)
+        status = cr.get("status", {}).get("deliveryStreamEncryptionConfigurationStatus")
+        if status == expected_status:
+            return cr
+        time.sleep(period_length)
+
+    pytest.fail(
+        f"delivery stream encryption status did not reach {expected_status} within "
+        f"{wait_periods * period_length}s (last observed: {status})"
+    )
+
 
 @pytest.fixture(scope="module")
 def http_dest_delivery_stream():
@@ -110,11 +146,13 @@ class TestDeliveryStream:
         k8s.patch_custom_resource(ref, updates)
         time.sleep(UPDATE_WAIT_SECONDS)
 
+        # Wait for the controller to reconcile the change and AWS to finish the
+        # ENABLING -> ENABLED transition before asserting.
+        cr = wait_for_encryption_status(ref, "ENABLED")
         k8s.wait_on_condition(ref, condition.CONDITION_TYPE_RESOURCE_SYNCED, "True")
         condition.assert_synced(ref)
 
         # Confirm that server-side encryption has been successfully enabled.
-        cr = k8s.get_resource(ref)
         assert cr is not None
         assert cr["status"]["deliveryStreamStatus"] == "ACTIVE"
         assert cr["status"]["deliveryStreamEncryptionConfigurationStatus"] == "ENABLED"
@@ -138,11 +176,15 @@ class TestDeliveryStream:
         k8s.patch_custom_resource(ref, updates)
         time.sleep(UPDATE_WAIT_SECONDS)
 
+        # Wait for the controller to reconcile the change and AWS to finish the
+        # DISABLING -> DISABLED transition before asserting. This also ensures the
+        # stream is no longer DISABLING when the fixture tears it down, avoiding
+        # ResourceInUseException on delete.
+        cr = wait_for_encryption_status(ref, "DISABLED")
         k8s.wait_on_condition(ref, condition.CONDITION_TYPE_RESOURCE_SYNCED, "True")
         condition.assert_synced(ref)
 
         # Confirm that server-side encryption has been successfully disabled.
-        cr = k8s.get_resource(ref)
         assert cr is not None
         assert cr["status"]["deliveryStreamStatus"] == "ACTIVE"
         assert cr["status"]["deliveryStreamEncryptionConfigurationStatus"] == "DISABLED"
