@@ -18,7 +18,8 @@ import boto3
 import pytest
 import time
 import logging
-from typing import Dict, Tuple
+from datetime import datetime
+from typing import Dict, Optional, Tuple
 
 from acktest.resources import random_suffix_name
 from acktest.tags import assert_equal_without_ack_tags
@@ -34,47 +35,73 @@ from e2e.replacement_values import REPLACEMENT_VALUES
 
 UPDATE_WAIT_SECONDS = 10
 
-# Toggling Firehose server-side encryption is asynchronous: after the spec is
-# patched the controller needs a reconcile to observe the change, and AWS reports
-# transitional ENABLING/DISABLING states before settling on ENABLED/DISABLED.
-ENCRYPTION_STATUS_WAIT_PERIODS = 30
-ENCRYPTION_STATUS_WAIT_PERIOD_LENGTH = 10
+# Bounds the wait for the controller to reconcile a patched spec change.
+RESYNC_WAIT_PERIODS = 30
+RESYNC_WAIT_PERIOD_LENGTH = 10
 
 
-def wait_for_encryption_status(
-    ref,
-    expected_status: str,
-    wait_periods: int = ENCRYPTION_STATUS_WAIT_PERIODS,
-    period_length: int = ENCRYPTION_STATUS_WAIT_PERIOD_LENGTH,
-):
-    """Polls the delivery stream until its encryption status reaches expected_status.
+def get_synced_last_transition_time(ref) -> Optional[datetime]:
+    """Returns the lastTransitionTime of the ACK.ResourceSynced condition.
 
-    Replaces the previous "fixed sleep + ACK.ResourceSynced check" pattern, which was
-    racy: ACK re-affirms ResourceSynced=True after each reconcile and never records an
-    observed generation (the Condition type has no observedGeneration field and the
-    runtime sets none), so the condition can still read True from the *previous*
-    reconcile. A "wait for a generation bump" approach does not help either, because
-    metadata.generation is incremented by the API server the moment the spec is patched,
-    before the controller has observed it.
-
-    Instead, poll the status field until it converges. Convergence to the expected value
-    is a stronger guarantee than an observed-generation check: it proves both that the
-    controller reconciled the patch and that AWS finished the ENABLING/DISABLING
-    transition.
-
-    Returns the resource once converged; fails the test if it does not converge in time.
+    Returned as a timezone-aware datetime, or None if the condition (or its
+    timestamp) is not present yet.
     """
-    status = None
+    cond = k8s.get_resource_condition(ref, condition.CONDITION_TYPE_RESOURCE_SYNCED)
+    if cond is None:
+        return None
+    ts = cond.get("lastTransitionTime")
+    if ts is None:
+        return None
+    # Kubernetes serializes the timestamp as RFC3339 with a trailing 'Z'.
+    return datetime.fromisoformat(ts.replace("Z", "+00:00"))
+
+
+def wait_for_resync_after(
+    ref,
+    since: Optional[datetime],
+    wait_periods: int = RESYNC_WAIT_PERIODS,
+    period_length: int = RESYNC_WAIT_PERIOD_LENGTH,
+):
+    """Waits for the controller to reconcile a spec change applied after `since`.
+
+    The naive "fixed sleep + ACK.ResourceSynced==True" pattern is racy: ACK
+    re-affirms ResourceSynced after every reconcile, so immediately after a patch
+    the condition can still read True from the *previous* reconcile, letting the
+    test observe stale status. Generation-based approaches do not help either --
+    ACK records no observed generation, and metadata.generation is bumped by the
+    API server the instant the spec is patched, before the controller sees it.
+
+    Two properties of the ACK runtime make a timestamp check both correct and
+    sufficient here:
+      1. SetSynced rewrites ResourceSynced.lastTransitionTime to "now" on every
+         reconcile (it does not follow the usual "only on status change" rule), so
+         a newer timestamp than the one captured before the patch proves the
+         controller reconciled the patch.
+      2. While AWS is ENABLING/DISABLING encryption the controller requeues, which
+         drives ResourceSynced to a non-True status; it only returns to True once
+         the resource has fully converged. So a *fresh* ResourceSynced=True implies
+         the encryption transition has settled.
+
+    Capture the timestamp before patching, then wait for ResourceSynced=True with a
+    strictly newer lastTransitionTime. Returns the resource once resynced; fails the
+    test if it does not resync in time.
+    """
     for _ in range(wait_periods):
-        cr = k8s.get_resource(ref)
-        status = cr.get("status", {}).get("deliveryStreamEncryptionConfigurationStatus")
-        if status == expected_status:
-            return cr
+        cond = k8s.get_resource_condition(
+            ref, condition.CONDITION_TYPE_RESOURCE_SYNCED
+        )
+        if cond is not None and str(cond.get("status")) == "True":
+            ts = cond.get("lastTransitionTime")
+            if ts is not None:
+                last = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+                if since is None or last > since:
+                    return k8s.get_resource(ref)
         time.sleep(period_length)
 
     pytest.fail(
-        f"delivery stream encryption status did not reach {expected_status} within "
-        f"{wait_periods * period_length}s (last observed: {status})"
+        f"resource {ref} was not resynced (ACK.ResourceSynced=True with a "
+        f"lastTransitionTime newer than {since}) within "
+        f"{wait_periods * period_length}s"
     )
 
 
@@ -150,12 +177,14 @@ class TestDeliveryStream:
             }
         }
 
+        synced_at = get_synced_last_transition_time(ref)
         k8s.patch_custom_resource(ref, updates)
 
-        # Poll until the controller has reconciled the change and AWS has finished
-        # the ENABLING -> ENABLED transition, instead of sleeping a fixed interval.
-        cr = wait_for_encryption_status(ref, "ENABLED")
-        k8s.wait_on_condition(ref, condition.CONDITION_TYPE_RESOURCE_SYNCED, "True")
+        # Wait for a fresh reconcile after the patch (ResourceSynced=True with a
+        # newer lastTransitionTime), instead of sleeping a fixed interval. This
+        # also implies AWS finished the ENABLING -> ENABLED transition, since the
+        # controller requeues while encryption is ENABLING.
+        cr = wait_for_resync_after(ref, synced_at)
         condition.assert_synced(ref)
 
         # Confirm that server-side encryption has been successfully enabled.
@@ -179,14 +208,16 @@ class TestDeliveryStream:
             }
         }
 
+        synced_at = get_synced_last_transition_time(ref)
         k8s.patch_custom_resource(ref, updates)
 
-        # Poll until the controller has reconciled the change and AWS has finished
-        # the DISABLING -> DISABLED transition, instead of sleeping a fixed interval.
-        # This also ensures the stream is no longer DISABLING when the fixture tears
-        # it down, avoiding ResourceInUseException on delete.
-        cr = wait_for_encryption_status(ref, "DISABLED")
-        k8s.wait_on_condition(ref, condition.CONDITION_TYPE_RESOURCE_SYNCED, "True")
+        # Wait for a fresh reconcile after the patch (ResourceSynced=True with a
+        # newer lastTransitionTime), instead of sleeping a fixed interval. The
+        # controller requeues while encryption is DISABLING, so a fresh
+        # ResourceSynced=True implies the DISABLING -> DISABLED transition has
+        # settled. This also ensures the stream is no longer DISABLING when the
+        # fixture tears it down, avoiding ResourceInUseException on delete.
+        cr = wait_for_resync_after(ref, synced_at)
         condition.assert_synced(ref)
 
         # Confirm that server-side encryption has been successfully disabled.
