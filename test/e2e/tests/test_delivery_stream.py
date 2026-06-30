@@ -49,11 +49,18 @@ def wait_for_encryption_status(
 ):
     """Polls the delivery stream until its encryption status reaches expected_status.
 
-    Enabling/disabling server-side encryption is eventually consistent on both the
-    controller and the AWS side, so a fixed sleep plus a check on the
-    ACK.ResourceSynced condition is racy: that condition can still read True from the
-    previous reconcile, letting the test observe the stale, pre-update encryption
-    status. Poll the status field directly until it converges instead.
+    Replaces the previous "fixed sleep + ACK.ResourceSynced check" pattern, which was
+    racy: ACK re-affirms ResourceSynced=True after each reconcile and never records an
+    observed generation (the Condition type has no observedGeneration field and the
+    runtime sets none), so the condition can still read True from the *previous*
+    reconcile. A "wait for a generation bump" approach does not help either, because
+    metadata.generation is incremented by the API server the moment the spec is patched,
+    before the controller has observed it.
+
+    Instead, poll the status field until it converges. Convergence to the expected value
+    is a stronger guarantee than an observed-generation check: it proves both that the
+    controller reconciled the patch and that AWS finished the ENABLING/DISABLING
+    transition.
 
     Returns the resource once converged; fails the test if it does not converge in time.
     """
@@ -144,10 +151,9 @@ class TestDeliveryStream:
         }
 
         k8s.patch_custom_resource(ref, updates)
-        time.sleep(UPDATE_WAIT_SECONDS)
 
-        # Wait for the controller to reconcile the change and AWS to finish the
-        # ENABLING -> ENABLED transition before asserting.
+        # Poll until the controller has reconciled the change and AWS has finished
+        # the ENABLING -> ENABLED transition, instead of sleeping a fixed interval.
         cr = wait_for_encryption_status(ref, "ENABLED")
         k8s.wait_on_condition(ref, condition.CONDITION_TYPE_RESOURCE_SYNCED, "True")
         condition.assert_synced(ref)
@@ -174,12 +180,11 @@ class TestDeliveryStream:
         }
 
         k8s.patch_custom_resource(ref, updates)
-        time.sleep(UPDATE_WAIT_SECONDS)
 
-        # Wait for the controller to reconcile the change and AWS to finish the
-        # DISABLING -> DISABLED transition before asserting. This also ensures the
-        # stream is no longer DISABLING when the fixture tears it down, avoiding
-        # ResourceInUseException on delete.
+        # Poll until the controller has reconciled the change and AWS has finished
+        # the DISABLING -> DISABLED transition, instead of sleeping a fixed interval.
+        # This also ensures the stream is no longer DISABLING when the fixture tears
+        # it down, avoiding ResourceInUseException on delete.
         cr = wait_for_encryption_status(ref, "DISABLED")
         k8s.wait_on_condition(ref, condition.CONDITION_TYPE_RESOURCE_SYNCED, "True")
         condition.assert_synced(ref)
