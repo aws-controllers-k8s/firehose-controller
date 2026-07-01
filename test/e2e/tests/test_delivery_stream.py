@@ -16,7 +16,6 @@
 
 import boto3
 import pytest
-import time
 import logging
 from typing import Dict, Tuple
 
@@ -31,8 +30,6 @@ from e2e import (
 )
 from e2e.bootstrap_resources import get_bootstrap_resources
 from e2e.replacement_values import REPLACEMENT_VALUES
-
-UPDATE_WAIT_SECONDS = 10
 
 # Bounds the wait for the controller to reconcile a patched spec change.
 RESYNC_WAIT_PERIODS = 30
@@ -223,10 +220,17 @@ class TestDeliveryStream:
             }
         }
 
+        synced_at = condition.get_synced_last_transition_time(ref)
         k8s.patch_custom_resource(ref, updates)
-        time.sleep(UPDATE_WAIT_SECONDS)
 
-        k8s.wait_on_condition(ref, condition.CONDITION_TYPE_RESOURCE_SYNCED, "True")
+        # Wait for a fresh reconcile after the patch (ResourceSynced=True with a
+        # lastTransitionTime newer than synced_at), instead of sleeping a fixed
+        # interval.
+        assert k8s.wait_on_condition_after(
+            ref, condition.CONDITION_TYPE_RESOURCE_SYNCED, "True",
+            last_transition_after=synced_at,
+            wait_periods=RESYNC_WAIT_PERIODS, period_length=RESYNC_WAIT_PERIOD_LENGTH,
+        )
         condition.assert_synced(ref)
 
         cr = k8s.get_resource(ref)
