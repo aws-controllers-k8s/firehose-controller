@@ -111,10 +111,7 @@ class TestDeliveryStream:
         synced_at = condition.get_synced_last_transition_time(ref)
         k8s.patch_custom_resource(ref, updates)
 
-        # Wait for a fresh reconcile after the patch (ResourceSynced=True with a
-        # lastTransitionTime newer than synced_at), instead of sleeping a fixed
-        # interval. This also implies AWS finished the ENABLING -> ENABLED
-        # transition, since the controller requeues while encryption is ENABLING.
+        # Wait for a fresh reconcile (implies AWS finished ENABLING).
         assert k8s.wait_on_condition_after(
             ref, condition.CONDITION_TYPE_RESOURCE_SYNCED, "True",
             last_transition_after=synced_at,
@@ -147,12 +144,8 @@ class TestDeliveryStream:
         synced_at = condition.get_synced_last_transition_time(ref)
         k8s.patch_custom_resource(ref, updates)
 
-        # Wait for a fresh reconcile after the patch (ResourceSynced=True with a
-        # lastTransitionTime newer than synced_at), instead of sleeping a fixed
-        # interval. The controller requeues while encryption is DISABLING, so a
-        # fresh ResourceSynced=True implies the DISABLING -> DISABLED transition
-        # has settled. This also ensures the stream is no longer DISABLING when
-        # the fixture tears it down, avoiding ResourceInUseException on delete.
+        # Wait for a fresh reconcile (implies AWS finished DISABLING, so the
+        # fixture can delete the stream without ResourceInUseException).
         assert k8s.wait_on_condition_after(
             ref, condition.CONDITION_TYPE_RESOURCE_SYNCED, "True",
             last_transition_after=synced_at,
@@ -223,9 +216,7 @@ class TestDeliveryStream:
         synced_at = condition.get_synced_last_transition_time(ref)
         k8s.patch_custom_resource(ref, updates)
 
-        # Wait for a fresh reconcile after the patch (ResourceSynced=True with a
-        # lastTransitionTime newer than synced_at), instead of sleeping a fixed
-        # interval.
+        # Wait for a fresh reconcile after the patch.
         assert k8s.wait_on_condition_after(
             ref, condition.CONDITION_TYPE_RESOURCE_SYNCED, "True",
             last_transition_after=synced_at,
