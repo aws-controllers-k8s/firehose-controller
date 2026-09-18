@@ -36,10 +36,10 @@ type DeliveryStreamSpec struct {
 	DeliveryStreamName *string `json:"deliveryStreamName"`
 	// The Firehose stream type. This parameter can be one of the following values:
 	//
-	//   - DirectPut: Provider applications access the Firehose stream directly.
+	//    * DirectPut: Provider applications access the Firehose stream directly.
 	//
-	//   - KinesisStreamAsSource: The Firehose stream uses a Kinesis data stream
-	//     as a source.
+	//    * KinesisStreamAsSource: The Firehose stream uses a Kinesis data stream
+	//    as a source.
 	DeliveryStreamType *string `json:"deliveryStreamType,omitempty"`
 	// Enables configuring Kinesis Firehose to deliver data to any HTTP endpoint
 	// destination. You can specify only one destination.
@@ -59,7 +59,7 @@ type DeliveryStreamSpec struct {
 	// this permission, requests to create new Firehose streams with IAM resource
 	// tags will fail with an AccessDeniedException such as following.
 	//
-	// # AccessDeniedException
+	// AccessDeniedException
 	//
 	// User: arn:aws:sts::x:assumed-role/x/x is not authorized to perform: firehose:TagDeliveryStream
 	// on resource: arn:aws:firehose:us-east-1:x:deliverystream/x with an explicit

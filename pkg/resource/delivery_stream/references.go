@@ -122,6 +122,127 @@ func (rm *resourceManager) ClearResolvedReferences(res acktypes.AWSResource) ack
 	return &resource{ko}
 }
 
+// EnsureReferences restores, onto a copy of `latest`, the cross-resource reference
+// (*Ref) fields it is missing, taking them from `desired`. Only reference fields are
+// written, so every concrete value on `latest` stands.
+//
+// A *Ref is a sibling of the concrete field it resolves into, so rebuilding the
+// containing struct from an AWS API response drops it. That disables
+// ClearResolvedReferences, which suppresses a resolved value only while the sibling
+// *Ref is visible, so the spec patch would otherwise delete the declared *Ref and
+// store the resolved value in its place.
+//
+// Only references reached through structs are restored, and each containing struct
+// is created on `latest` when `desired` has it and `latest` does not -- generated
+// set-output code nils a struct when the response omits it. A top-level *Ref needs
+// no help, since generated set-output code overwrites only the concrete field. One
+// reached through a list is not restored: it has no fixed address, and replacing the
+// whole list would discard whatever the service populated inside it.
+//
+// Nothing is written unless `desired` actually holds the reference, so a source that
+// declares none leaves `latest` untouched.
+func (rm *resourceManager) EnsureReferences(
+	desired acktypes.AWSResource,
+	latest acktypes.AWSResource,
+) acktypes.AWSResource {
+	// Deep copy the source as well, so a reference handed over below does not
+	// alias the caller's declared object.
+	desiredKO := rm.concreteResource(desired).ko.DeepCopy()
+	latestKO := rm.concreteResource(latest).ko.DeepCopy()
+
+	if desiredKO.Spec.DeliveryStreamEncryptionConfiguration != nil {
+		if desiredKO.Spec.DeliveryStreamEncryptionConfiguration.KeyRef != nil {
+			if latestKO.Spec.DeliveryStreamEncryptionConfiguration == nil {
+				latestKO.Spec.DeliveryStreamEncryptionConfiguration = &svcapitypes.DeliveryStreamEncryptionConfigurationInput{}
+			}
+			if latestKO.Spec.DeliveryStreamEncryptionConfiguration.KeyRef == nil {
+				latestKO.Spec.DeliveryStreamEncryptionConfiguration.KeyRef = desiredKO.Spec.DeliveryStreamEncryptionConfiguration.KeyRef
+			}
+		}
+	}
+	if desiredKO.Spec.HTTPEndpointDestinationConfiguration != nil {
+		if desiredKO.Spec.HTTPEndpointDestinationConfiguration.RoleRef != nil {
+			if latestKO.Spec.HTTPEndpointDestinationConfiguration == nil {
+				latestKO.Spec.HTTPEndpointDestinationConfiguration = &svcapitypes.HTTPEndpointDestinationConfiguration{}
+			}
+			if latestKO.Spec.HTTPEndpointDestinationConfiguration.RoleRef == nil {
+				latestKO.Spec.HTTPEndpointDestinationConfiguration.RoleRef = desiredKO.Spec.HTTPEndpointDestinationConfiguration.RoleRef
+			}
+		}
+		if desiredKO.Spec.HTTPEndpointDestinationConfiguration.S3Configuration != nil {
+			if desiredKO.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.BucketRef != nil {
+				if latestKO.Spec.HTTPEndpointDestinationConfiguration == nil {
+					latestKO.Spec.HTTPEndpointDestinationConfiguration = &svcapitypes.HTTPEndpointDestinationConfiguration{}
+				}
+				if latestKO.Spec.HTTPEndpointDestinationConfiguration.S3Configuration == nil {
+					latestKO.Spec.HTTPEndpointDestinationConfiguration.S3Configuration = &svcapitypes.S3DestinationConfiguration{}
+				}
+				if latestKO.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.BucketRef == nil {
+					latestKO.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.BucketRef = desiredKO.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.BucketRef
+				}
+			}
+			if desiredKO.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.RoleRef != nil {
+				if latestKO.Spec.HTTPEndpointDestinationConfiguration == nil {
+					latestKO.Spec.HTTPEndpointDestinationConfiguration = &svcapitypes.HTTPEndpointDestinationConfiguration{}
+				}
+				if latestKO.Spec.HTTPEndpointDestinationConfiguration.S3Configuration == nil {
+					latestKO.Spec.HTTPEndpointDestinationConfiguration.S3Configuration = &svcapitypes.S3DestinationConfiguration{}
+				}
+				if latestKO.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.RoleRef == nil {
+					latestKO.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.RoleRef = desiredKO.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.RoleRef
+				}
+			}
+			if desiredKO.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration != nil {
+				if desiredKO.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig != nil {
+					if desiredKO.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef != nil {
+						if latestKO.Spec.HTTPEndpointDestinationConfiguration == nil {
+							latestKO.Spec.HTTPEndpointDestinationConfiguration = &svcapitypes.HTTPEndpointDestinationConfiguration{}
+						}
+						if latestKO.Spec.HTTPEndpointDestinationConfiguration.S3Configuration == nil {
+							latestKO.Spec.HTTPEndpointDestinationConfiguration.S3Configuration = &svcapitypes.S3DestinationConfiguration{}
+						}
+						if latestKO.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration == nil {
+							latestKO.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration = &svcapitypes.EncryptionConfiguration{}
+						}
+						if latestKO.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig == nil {
+							latestKO.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig = &svcapitypes.KMSEncryptionConfig{}
+						}
+						if latestKO.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef == nil {
+							latestKO.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef = desiredKO.Spec.HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef
+						}
+					}
+				}
+			}
+		}
+		if desiredKO.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration != nil {
+			if desiredKO.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.RoleRef != nil {
+				if latestKO.Spec.HTTPEndpointDestinationConfiguration == nil {
+					latestKO.Spec.HTTPEndpointDestinationConfiguration = &svcapitypes.HTTPEndpointDestinationConfiguration{}
+				}
+				if latestKO.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration == nil {
+					latestKO.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration = &svcapitypes.SecretsManagerConfiguration{}
+				}
+				if latestKO.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.RoleRef == nil {
+					latestKO.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.RoleRef = desiredKO.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.RoleRef
+				}
+			}
+			if desiredKO.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.SecretRef != nil {
+				if latestKO.Spec.HTTPEndpointDestinationConfiguration == nil {
+					latestKO.Spec.HTTPEndpointDestinationConfiguration = &svcapitypes.HTTPEndpointDestinationConfiguration{}
+				}
+				if latestKO.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration == nil {
+					latestKO.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration = &svcapitypes.SecretsManagerConfiguration{}
+				}
+				if latestKO.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.SecretRef == nil {
+					latestKO.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.SecretRef = desiredKO.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.SecretRef
+				}
+			}
+		}
+	}
+
+	return &resource{latestKO}
+}
+
 // ResolveReferences finds if there are any Reference field(s) present
 // inside AWSResource passed in the parameter and attempts to resolve those
 // reference field(s) into their respective target field(s). It returns a
