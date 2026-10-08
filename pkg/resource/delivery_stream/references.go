@@ -382,11 +382,8 @@ func (rm *resourceManager) resolveReferenceForDeliveryStreamEncryptionConfigurat
 			if arr.Name == nil || *arr.Name == "" {
 				return hasReferences, fmt.Errorf("provided resource reference is nil or empty: DeliveryStreamEncryptionConfiguration.KeyRef")
 			}
-			namespace, err := ackrt.ResolveCrossNamespaceReference(
-				ctx,
+			namespace, _, err := ackrt.ValidateCrossNamespaceReference(
 				rm.cfg.EnableCrossNamespace,
-				&ko.Status.Conditions,
-				ackrt.CrossNamespaceRefKindResource,
 				ko.ObjectMeta.GetNamespace(),
 				arr.Namespace,
 				*arr.Name,
@@ -475,11 +472,8 @@ func (rm *resourceManager) resolveReferenceForHTTPEndpointDestinationConfigurati
 			if arr.Name == nil || *arr.Name == "" {
 				return hasReferences, fmt.Errorf("provided resource reference is nil or empty: HTTPEndpointDestinationConfiguration.RoleRef")
 			}
-			namespace, err := ackrt.ResolveCrossNamespaceReference(
-				ctx,
+			namespace, _, err := ackrt.ValidateCrossNamespaceReference(
 				rm.cfg.EnableCrossNamespace,
-				&ko.Status.Conditions,
-				ackrt.CrossNamespaceRefKindResource,
 				ko.ObjectMeta.GetNamespace(),
 				arr.Namespace,
 				*arr.Name,
@@ -569,11 +563,8 @@ func (rm *resourceManager) resolveReferenceForHTTPEndpointDestinationConfigurati
 				if arr.Name == nil || *arr.Name == "" {
 					return hasReferences, fmt.Errorf("provided resource reference is nil or empty: HTTPEndpointDestinationConfiguration.S3Configuration.BucketRef")
 				}
-				namespace, err := ackrt.ResolveCrossNamespaceReference(
-					ctx,
+				namespace, _, err := ackrt.ValidateCrossNamespaceReference(
 					rm.cfg.EnableCrossNamespace,
-					&ko.Status.Conditions,
-					ackrt.CrossNamespaceRefKindResource,
 					ko.ObjectMeta.GetNamespace(),
 					arr.Namespace,
 					*arr.Name,
@@ -666,11 +657,8 @@ func (rm *resourceManager) resolveReferenceForHTTPEndpointDestinationConfigurati
 						if arr.Name == nil || *arr.Name == "" {
 							return hasReferences, fmt.Errorf("provided resource reference is nil or empty: HTTPEndpointDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef")
 						}
-						namespace, err := ackrt.ResolveCrossNamespaceReference(
-							ctx,
+						namespace, _, err := ackrt.ValidateCrossNamespaceReference(
 							rm.cfg.EnableCrossNamespace,
-							&ko.Status.Conditions,
-							ackrt.CrossNamespaceRefKindResource,
 							ko.ObjectMeta.GetNamespace(),
 							arr.Namespace,
 							*arr.Name,
@@ -709,11 +697,8 @@ func (rm *resourceManager) resolveReferenceForHTTPEndpointDestinationConfigurati
 				if arr.Name == nil || *arr.Name == "" {
 					return hasReferences, fmt.Errorf("provided resource reference is nil or empty: HTTPEndpointDestinationConfiguration.S3Configuration.RoleRef")
 				}
-				namespace, err := ackrt.ResolveCrossNamespaceReference(
-					ctx,
+				namespace, _, err := ackrt.ValidateCrossNamespaceReference(
 					rm.cfg.EnableCrossNamespace,
-					&ko.Status.Conditions,
-					ackrt.CrossNamespaceRefKindResource,
 					ko.ObjectMeta.GetNamespace(),
 					arr.Namespace,
 					*arr.Name,
@@ -750,11 +735,8 @@ func (rm *resourceManager) resolveReferenceForHTTPEndpointDestinationConfigurati
 				if arr.Name == nil || *arr.Name == "" {
 					return hasReferences, fmt.Errorf("provided resource reference is nil or empty: HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.RoleRef")
 				}
-				namespace, err := ackrt.ResolveCrossNamespaceReference(
-					ctx,
+				namespace, _, err := ackrt.ValidateCrossNamespaceReference(
 					rm.cfg.EnableCrossNamespace,
-					&ko.Status.Conditions,
-					ackrt.CrossNamespaceRefKindResource,
 					ko.ObjectMeta.GetNamespace(),
 					arr.Namespace,
 					*arr.Name,
@@ -791,11 +773,8 @@ func (rm *resourceManager) resolveReferenceForHTTPEndpointDestinationConfigurati
 				if arr.Name == nil || *arr.Name == "" {
 					return hasReferences, fmt.Errorf("provided resource reference is nil or empty: HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.SecretRef")
 				}
-				namespace, err := ackrt.ResolveCrossNamespaceReference(
-					ctx,
+				namespace, _, err := ackrt.ValidateCrossNamespaceReference(
 					rm.cfg.EnableCrossNamespace,
-					&ko.Status.Conditions,
-					ackrt.CrossNamespaceRefKindResource,
 					ko.ObjectMeta.GetNamespace(),
 					arr.Namespace,
 					*arr.Name,
