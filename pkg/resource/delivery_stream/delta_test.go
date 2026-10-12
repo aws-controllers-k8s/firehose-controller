@@ -17,7 +17,7 @@ import (
 	"testing"
 
 	svcapitypes "github.com/aws-controllers-k8s/firehose-controller/apis/v1alpha1"
-	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go-v2/aws"
 )
 
 func TestDeliveryStreamEncryptionConfigurationComparison(t *testing.T) {
