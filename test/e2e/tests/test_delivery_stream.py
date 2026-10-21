@@ -112,6 +112,50 @@ def extended_s3_delivery_stream():
         pass
 
 
+@pytest.fixture(scope="module")
+def splunk_delivery_stream():
+    bootstrapped_resources = get_bootstrap_resources()
+
+    resource_name = random_suffix_name("splunk-delivery-stream", 48)
+    secret_name = random_suffix_name("hec-token", 24)
+    secret_key = "token"
+    k8s.create_opaque_secret("default", secret_name, secret_key, "00000000-0000-0000-0000-000000000000")
+
+    replacements = REPLACEMENT_VALUES.copy()
+    replacements["DELIVERY_STREAM_NAME"] = resource_name
+    replacements["DELIVERY_STREAM_TYPE"] = "DirectPut"
+    replacements["HEC_ENDPOINT"] = "https://splunk.example.com:8088"
+    replacements["HEC_TOKEN_SECRET_NAME"] = secret_name
+    replacements["HEC_TOKEN_SECRET_KEY"] = secret_key
+    replacements["S3_BUCKET_ARN"] = f"arn:aws:s3:::{bootstrapped_resources.HttpDestBucket.name}"
+    replacements["S3_ROLE_ARN"] = bootstrapped_resources.HttpDestBucketRole.arn
+
+    resource_data = load_firehose_resource(
+        "delivery_stream_splunk",
+        additional_replacements=replacements,
+    )
+
+    ref = k8s.CustomResourceReference(
+        CRD_GROUP, CRD_VERSION, "deliverystreams",
+        resource_name, namespace="default",
+    )
+
+    k8s.create_custom_resource(ref, resource_data)
+    cr = k8s.wait_resource_consumed_by_controller(ref)
+
+    assert cr is not None
+    assert k8s.get_resource_exists(ref)
+
+    yield (ref, cr)
+
+    try:
+        _, deleted = k8s.delete_custom_resource(ref, wait_periods=3, period_length=10)
+        assert deleted
+    except:
+        pass
+    k8s.delete_secret("default", secret_name)
+
+
 @service_marker
 @pytest.mark.canary
 class TestDeliveryStream:
@@ -354,3 +398,59 @@ class TestDeliveryStream:
         assert destination["Prefix"] == "updated/"
         assert destination["BufferingHints"]["IntervalInSeconds"] == 120
         assert destination["BufferingHints"]["SizeInMBs"] == 2
+
+    def test_create_update_delete_splunk_delivery_stream(self, splunk_delivery_stream, firehose_client):
+        (ref, cr) = splunk_delivery_stream
+        bootstrapped_resources = get_bootstrap_resources()
+        bucket_arn = f"arn:aws:s3:::{bootstrapped_resources.HttpDestBucket.name}"
+
+        k8s.wait_on_condition(ref, condition.CONDITION_TYPE_RESOURCE_SYNCED, "True")
+        cr = k8s.get_resource(ref)
+        condition.assert_synced(ref)
+
+        assert cr["status"]["deliveryStreamStatus"] == "ACTIVE"
+        splunk = cr["spec"]["splunkDestinationConfiguration"]
+        assert splunk["hECEndpoint"] == "https://splunk.example.com:8088"
+        assert splunk["hECEndpointType"] == "Raw"
+        assert splunk["s3Configuration"]["bucketARN"] == bucket_arn
+        assert "extendedS3DestinationConfiguration" not in cr["spec"]
+
+        ds_name = cr["spec"]["deliveryStreamName"]
+        delivery_stream = firehose_client.describe_delivery_stream(DeliveryStreamName=ds_name)
+        description = delivery_stream["DeliveryStreamDescription"]
+        assert description["DeliveryStreamStatus"] == "ACTIVE"
+        assert len(description["Destinations"]) == 1
+        destination = description["Destinations"][0]["SplunkDestinationDescription"]
+        assert destination["HECEndpoint"] == "https://splunk.example.com:8088"
+        assert destination["HECEndpointType"] == "Raw"
+        assert destination["HECAcknowledgmentTimeoutInSeconds"] == 180
+        assert destination["S3BackupMode"] == "FailedEventsOnly"
+        assert destination["S3DestinationDescription"]["BucketARN"] == bucket_arn
+
+        updates = {
+            "spec": {
+                "splunkDestinationConfiguration": {
+                    "hECEndpointType": "Event",
+                    "hECAcknowledgmentTimeoutInSeconds": 240,
+                },
+            }
+        }
+
+        synced_at = condition.get_synced_last_transition_time(ref)
+        k8s.patch_custom_resource(ref, updates)
+
+        assert k8s.wait_on_condition_after(
+            ref, condition.CONDITION_TYPE_RESOURCE_SYNCED, "True",
+            last_transition_after=synced_at,
+            wait_periods=RESYNC_WAIT_PERIODS, period_length=RESYNC_WAIT_PERIOD_LENGTH,
+        )
+        condition.assert_synced(ref)
+
+        cr = k8s.get_resource(ref)
+        assert cr["status"]["deliveryStreamStatus"] == "ACTIVE"
+        assert cr["spec"]["splunkDestinationConfiguration"]["hECEndpointType"] == "Event"
+
+        delivery_stream = firehose_client.describe_delivery_stream(DeliveryStreamName=ds_name)
+        destination = delivery_stream["DeliveryStreamDescription"]["Destinations"][0]["SplunkDestinationDescription"]
+        assert destination["HECEndpointType"] == "Event"
+        assert destination["HECAcknowledgmentTimeoutInSeconds"] == 240

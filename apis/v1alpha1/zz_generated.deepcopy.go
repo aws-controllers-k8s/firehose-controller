@@ -1282,6 +1282,11 @@ func (in *DeliveryStreamSpec) DeepCopyInto(out *DeliveryStreamSpec) {
 		*out = new(HTTPEndpointDestinationConfiguration)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.SplunkDestinationConfiguration != nil {
+		in, out := &in.SplunkDestinationConfiguration, &out.SplunkDestinationConfiguration
+		*out = new(SplunkDestinationConfiguration)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.Tags != nil {
 		in, out := &in.Tags, &out.Tags
 		*out = make([]*Tag, len(*in))
@@ -4391,7 +4396,7 @@ func (in *SplunkDestinationConfiguration) DeepCopyInto(out *SplunkDestinationCon
 	}
 	if in.HECToken != nil {
 		in, out := &in.HECToken, &out.HECToken
-		*out = new(string)
+		*out = new(corev1alpha1.SecretKeyReference)
 		**out = **in
 	}
 	if in.ProcessingConfiguration != nil {

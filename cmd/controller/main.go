@@ -16,24 +16,20 @@
 package main
 
 import (
-	"context"
 	"os"
+	"context"
 	goruntime "runtime"
 	"runtime/debug"
 
-	iamapitypes "github.com/aws-controllers-k8s/iam-controller/apis/v1alpha1"
-	kmsapitypes "github.com/aws-controllers-k8s/kms-controller/apis/v1alpha1"
 	ackv1alpha1 "github.com/aws-controllers-k8s/runtime/apis/core/v1alpha1"
 	ackcfg "github.com/aws-controllers-k8s/runtime/pkg/config"
 	ackrt "github.com/aws-controllers-k8s/runtime/pkg/runtime"
 	acktypes "github.com/aws-controllers-k8s/runtime/pkg/types"
 	ackrtutil "github.com/aws-controllers-k8s/runtime/pkg/util"
 	ackrtwebhook "github.com/aws-controllers-k8s/runtime/pkg/webhook"
-	s3apitypes "github.com/aws-controllers-k8s/s3-controller/apis/v1alpha1"
-	secretsmanagerapitypes "github.com/aws-controllers-k8s/secretsmanager-controller/apis/v1alpha1"
 	flag "github.com/spf13/pflag"
-	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
+	"k8s.io/apimachinery/pkg/runtime"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
 	ctrlrt "sigs.k8s.io/controller-runtime"
 	ctrlrtcache "sigs.k8s.io/controller-runtime/pkg/cache"
@@ -41,20 +37,25 @@ import (
 	ctrlrtmetrics "sigs.k8s.io/controller-runtime/pkg/metrics"
 	metricsserver "sigs.k8s.io/controller-runtime/pkg/metrics/server"
 	ctrlrtwebhook "sigs.k8s.io/controller-runtime/pkg/webhook"
+	iamapitypes "github.com/aws-controllers-k8s/iam-controller/apis/v1alpha1"
+	kmsapitypes "github.com/aws-controllers-k8s/kms-controller/apis/v1alpha1"
+	s3apitypes "github.com/aws-controllers-k8s/s3-controller/apis/v1alpha1"
+	secretsmanagerapitypes "github.com/aws-controllers-k8s/secretsmanager-controller/apis/v1alpha1"
 
-	svctypes "github.com/aws-controllers-k8s/firehose-controller/apis/v1alpha1"
 	svcresource "github.com/aws-controllers-k8s/firehose-controller/pkg/resource"
+	svctypes "github.com/aws-controllers-k8s/firehose-controller/apis/v1alpha1"
 
+	
 	_ "github.com/aws-controllers-k8s/firehose-controller/pkg/resource/delivery_stream"
-
+	
 	"github.com/aws-controllers-k8s/firehose-controller/pkg/version"
 )
 
 var (
-	awsServiceAPIGroup = "firehose.services.k8s.aws"
-	awsServiceAlias    = "firehose"
-	scheme             = runtime.NewScheme()
-	setupLog           = ctrlrt.Log.WithName("setup")
+	awsServiceAPIGroup      = "firehose.services.k8s.aws"
+	awsServiceAlias	        = "firehose"
+	scheme			        = runtime.NewScheme()
+	setupLog		        = ctrlrt.Log.WithName("setup")
 )
 
 // depVersion returns the module version of the given dependency import path,
@@ -74,7 +75,7 @@ func depVersion(path string) string {
 
 func init() {
 	_ = clientgoscheme.AddToScheme(scheme)
-
+	
 	_ = svctypes.AddToScheme(scheme)
 	_ = ackv1alpha1.AddToScheme(scheme)
 	_ = iamapitypes.AddToScheme(scheme)
@@ -122,7 +123,8 @@ func main() {
 		)
 		os.Exit(1)
 	}
-
+	
+	
 	for _, namespace := range namespaces {
 		watchNamespaces[namespace] = ctrlrtcache.Config{}
 	}
