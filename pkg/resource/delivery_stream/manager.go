@@ -50,7 +50,7 @@ var (
 // +kubebuilder:rbac:groups=firehose.services.k8s.aws,resources=deliverystreams,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=firehose.services.k8s.aws,resources=deliverystreams/status,verbs=get;update;patch
 
-var lateInitializeFieldNames = []string{"DeliveryStreamEncryptionConfiguration", "HTTPEndpointDestinationConfiguration", "BufferingHints", "CloudWatchLoggingOptions", "EndpointConfiguration", "ProcessingConfiguration", "RequestConfiguration", "RetryOptions", "RoleARN", "S3BackupMode", "S3Configuration", "BufferingHints", "CloudWatchLoggingOptions", "CompressionFormat", "EncryptionConfiguration", "ErrorOutputPrefix", "Prefix", "SecretsManagerConfiguration"}
+var lateInitializeFieldNames = []string{"DeliveryStreamEncryptionConfiguration", "ExtendedS3DestinationConfiguration", "BufferingHints", "CloudWatchLoggingOptions", "CompressionFormat", "CustomTimeZone", "DataFormatConversionConfiguration", "DynamicPartitioningConfiguration", "EncryptionConfiguration", "ErrorOutputPrefix", "FileExtension", "Prefix", "ProcessingConfiguration", "S3BackupMode", "HTTPEndpointDestinationConfiguration", "BufferingHints", "CloudWatchLoggingOptions", "EndpointConfiguration", "ProcessingConfiguration", "RequestConfiguration", "RetryOptions", "RoleARN", "S3BackupMode", "S3Configuration", "BufferingHints", "CloudWatchLoggingOptions", "CompressionFormat", "EncryptionConfiguration", "ErrorOutputPrefix", "Prefix", "SecretsManagerConfiguration"}
 
 // resourceManager is responsible for providing a consistent way to perform
 // CRUD operations in a backend AWS service API for Book custom resources.
@@ -268,6 +268,69 @@ func (rm *resourceManager) lateInitializeFromReadOneOutput(
 	latestKo := rm.concreteResource(latest).ko.DeepCopy()
 	if observedKo.Spec.DeliveryStreamEncryptionConfiguration != nil && latestKo.Spec.DeliveryStreamEncryptionConfiguration == nil {
 		latestKo.Spec.DeliveryStreamEncryptionConfiguration = observedKo.Spec.DeliveryStreamEncryptionConfiguration
+	}
+	if observedKo.Spec.ExtendedS3DestinationConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration == nil {
+		latestKo.Spec.ExtendedS3DestinationConfiguration = observedKo.Spec.ExtendedS3DestinationConfiguration
+	}
+	if observedKo.Spec.ExtendedS3DestinationConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration != nil {
+		if observedKo.Spec.ExtendedS3DestinationConfiguration.BufferingHints != nil && latestKo.Spec.ExtendedS3DestinationConfiguration.BufferingHints == nil {
+			latestKo.Spec.ExtendedS3DestinationConfiguration.BufferingHints = observedKo.Spec.ExtendedS3DestinationConfiguration.BufferingHints
+		}
+	}
+	if observedKo.Spec.ExtendedS3DestinationConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration != nil {
+		if observedKo.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions != nil && latestKo.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions == nil {
+			latestKo.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions = observedKo.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions
+		}
+	}
+	if observedKo.Spec.ExtendedS3DestinationConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration != nil {
+		if observedKo.Spec.ExtendedS3DestinationConfiguration.CompressionFormat != nil && latestKo.Spec.ExtendedS3DestinationConfiguration.CompressionFormat == nil {
+			latestKo.Spec.ExtendedS3DestinationConfiguration.CompressionFormat = observedKo.Spec.ExtendedS3DestinationConfiguration.CompressionFormat
+		}
+	}
+	if observedKo.Spec.ExtendedS3DestinationConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration != nil {
+		if observedKo.Spec.ExtendedS3DestinationConfiguration.CustomTimeZone != nil && latestKo.Spec.ExtendedS3DestinationConfiguration.CustomTimeZone == nil {
+			latestKo.Spec.ExtendedS3DestinationConfiguration.CustomTimeZone = observedKo.Spec.ExtendedS3DestinationConfiguration.CustomTimeZone
+		}
+	}
+	if observedKo.Spec.ExtendedS3DestinationConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration != nil {
+		if observedKo.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration == nil {
+			latestKo.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration = observedKo.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration
+		}
+	}
+	if observedKo.Spec.ExtendedS3DestinationConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration != nil {
+		if observedKo.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration == nil {
+			latestKo.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration = observedKo.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration
+		}
+	}
+	if observedKo.Spec.ExtendedS3DestinationConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration != nil {
+		if observedKo.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration == nil {
+			latestKo.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration = observedKo.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration
+		}
+	}
+	if observedKo.Spec.ExtendedS3DestinationConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration != nil {
+		if observedKo.Spec.ExtendedS3DestinationConfiguration.ErrorOutputPrefix != nil && latestKo.Spec.ExtendedS3DestinationConfiguration.ErrorOutputPrefix == nil {
+			latestKo.Spec.ExtendedS3DestinationConfiguration.ErrorOutputPrefix = observedKo.Spec.ExtendedS3DestinationConfiguration.ErrorOutputPrefix
+		}
+	}
+	if observedKo.Spec.ExtendedS3DestinationConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration != nil {
+		if observedKo.Spec.ExtendedS3DestinationConfiguration.FileExtension != nil && latestKo.Spec.ExtendedS3DestinationConfiguration.FileExtension == nil {
+			latestKo.Spec.ExtendedS3DestinationConfiguration.FileExtension = observedKo.Spec.ExtendedS3DestinationConfiguration.FileExtension
+		}
+	}
+	if observedKo.Spec.ExtendedS3DestinationConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration != nil {
+		if observedKo.Spec.ExtendedS3DestinationConfiguration.Prefix != nil && latestKo.Spec.ExtendedS3DestinationConfiguration.Prefix == nil {
+			latestKo.Spec.ExtendedS3DestinationConfiguration.Prefix = observedKo.Spec.ExtendedS3DestinationConfiguration.Prefix
+		}
+	}
+	if observedKo.Spec.ExtendedS3DestinationConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration != nil {
+		if observedKo.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration == nil {
+			latestKo.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration = observedKo.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration
+		}
+	}
+	if observedKo.Spec.ExtendedS3DestinationConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration != nil {
+		if observedKo.Spec.ExtendedS3DestinationConfiguration.S3BackupMode != nil && latestKo.Spec.ExtendedS3DestinationConfiguration.S3BackupMode == nil {
+			latestKo.Spec.ExtendedS3DestinationConfiguration.S3BackupMode = observedKo.Spec.ExtendedS3DestinationConfiguration.S3BackupMode
+		}
 	}
 	if observedKo.Spec.HTTPEndpointDestinationConfiguration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration == nil {
 		latestKo.Spec.HTTPEndpointDestinationConfiguration = observedKo.Spec.HTTPEndpointDestinationConfiguration

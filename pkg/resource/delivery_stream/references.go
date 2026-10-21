@@ -38,6 +38,21 @@ import (
 // +kubebuilder:rbac:groups=kms.services.k8s.aws,resources=keys,verbs=get;list
 // +kubebuilder:rbac:groups=kms.services.k8s.aws,resources=keys/status,verbs=get;list
 
+// +kubebuilder:rbac:groups=s3.services.k8s.aws,resources=buckets,verbs=get;list
+// +kubebuilder:rbac:groups=s3.services.k8s.aws,resources=buckets/status,verbs=get;list
+
+// +kubebuilder:rbac:groups=kms.services.k8s.aws,resources=keys,verbs=get;list
+// +kubebuilder:rbac:groups=kms.services.k8s.aws,resources=keys/status,verbs=get;list
+
+// +kubebuilder:rbac:groups=iam.services.k8s.aws,resources=roles,verbs=get;list
+// +kubebuilder:rbac:groups=iam.services.k8s.aws,resources=roles/status,verbs=get;list
+
+// +kubebuilder:rbac:groups=s3.services.k8s.aws,resources=buckets,verbs=get;list
+// +kubebuilder:rbac:groups=s3.services.k8s.aws,resources=buckets/status,verbs=get;list
+
+// +kubebuilder:rbac:groups=iam.services.k8s.aws,resources=roles,verbs=get;list
+// +kubebuilder:rbac:groups=iam.services.k8s.aws,resources=roles/status,verbs=get;list
+
 // +kubebuilder:rbac:groups=iam.services.k8s.aws,resources=roles,verbs=get;list
 // +kubebuilder:rbac:groups=iam.services.k8s.aws,resources=roles/status,verbs=get;list
 
@@ -66,6 +81,44 @@ func (rm *resourceManager) ClearResolvedReferences(res acktypes.AWSResource) ack
 	if ko.Spec.DeliveryStreamEncryptionConfiguration != nil {
 		if ko.Spec.DeliveryStreamEncryptionConfiguration.KeyRef != nil {
 			ko.Spec.DeliveryStreamEncryptionConfiguration.KeyARN = nil
+		}
+	}
+
+	if ko.Spec.ExtendedS3DestinationConfiguration != nil {
+		if ko.Spec.ExtendedS3DestinationConfiguration.BucketRef != nil {
+			ko.Spec.ExtendedS3DestinationConfiguration.BucketARN = nil
+		}
+	}
+
+	if ko.Spec.ExtendedS3DestinationConfiguration != nil {
+		if ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration != nil {
+			if ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig != nil {
+				if ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef != nil {
+					ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN = nil
+				}
+			}
+		}
+	}
+
+	if ko.Spec.ExtendedS3DestinationConfiguration != nil {
+		if ko.Spec.ExtendedS3DestinationConfiguration.RoleRef != nil {
+			ko.Spec.ExtendedS3DestinationConfiguration.RoleARN = nil
+		}
+	}
+
+	if ko.Spec.ExtendedS3DestinationConfiguration != nil {
+		if ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration != nil {
+			if ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketRef != nil {
+				ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketARN = nil
+			}
+		}
+	}
+
+	if ko.Spec.ExtendedS3DestinationConfiguration != nil {
+		if ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration != nil {
+			if ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleRef != nil {
+				ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleARN = nil
+			}
 		}
 	}
 
@@ -157,6 +210,66 @@ func (rm *resourceManager) EnsureReferences(
 			}
 			if latestKO.Spec.DeliveryStreamEncryptionConfiguration.KeyRef == nil {
 				latestKO.Spec.DeliveryStreamEncryptionConfiguration.KeyRef = desiredKO.Spec.DeliveryStreamEncryptionConfiguration.KeyRef
+			}
+		}
+	}
+	if desiredKO.Spec.ExtendedS3DestinationConfiguration != nil {
+		if desiredKO.Spec.ExtendedS3DestinationConfiguration.BucketRef != nil {
+			if latestKO.Spec.ExtendedS3DestinationConfiguration == nil {
+				latestKO.Spec.ExtendedS3DestinationConfiguration = &svcapitypes.ExtendedS3DestinationConfiguration{}
+			}
+			if latestKO.Spec.ExtendedS3DestinationConfiguration.BucketRef == nil {
+				latestKO.Spec.ExtendedS3DestinationConfiguration.BucketRef = desiredKO.Spec.ExtendedS3DestinationConfiguration.BucketRef
+			}
+		}
+		if desiredKO.Spec.ExtendedS3DestinationConfiguration.RoleRef != nil {
+			if latestKO.Spec.ExtendedS3DestinationConfiguration == nil {
+				latestKO.Spec.ExtendedS3DestinationConfiguration = &svcapitypes.ExtendedS3DestinationConfiguration{}
+			}
+			if latestKO.Spec.ExtendedS3DestinationConfiguration.RoleRef == nil {
+				latestKO.Spec.ExtendedS3DestinationConfiguration.RoleRef = desiredKO.Spec.ExtendedS3DestinationConfiguration.RoleRef
+			}
+		}
+		if desiredKO.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration != nil {
+			if desiredKO.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig != nil {
+				if desiredKO.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef != nil {
+					if latestKO.Spec.ExtendedS3DestinationConfiguration == nil {
+						latestKO.Spec.ExtendedS3DestinationConfiguration = &svcapitypes.ExtendedS3DestinationConfiguration{}
+					}
+					if latestKO.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration == nil {
+						latestKO.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration = &svcapitypes.EncryptionConfiguration{}
+					}
+					if latestKO.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig == nil {
+						latestKO.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig = &svcapitypes.KMSEncryptionConfig{}
+					}
+					if latestKO.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef == nil {
+						latestKO.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef = desiredKO.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef
+					}
+				}
+			}
+		}
+		if desiredKO.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration != nil {
+			if desiredKO.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketRef != nil {
+				if latestKO.Spec.ExtendedS3DestinationConfiguration == nil {
+					latestKO.Spec.ExtendedS3DestinationConfiguration = &svcapitypes.ExtendedS3DestinationConfiguration{}
+				}
+				if latestKO.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration == nil {
+					latestKO.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration = &svcapitypes.S3DestinationConfiguration{}
+				}
+				if latestKO.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketRef == nil {
+					latestKO.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketRef = desiredKO.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketRef
+				}
+			}
+			if desiredKO.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleRef != nil {
+				if latestKO.Spec.ExtendedS3DestinationConfiguration == nil {
+					latestKO.Spec.ExtendedS3DestinationConfiguration = &svcapitypes.ExtendedS3DestinationConfiguration{}
+				}
+				if latestKO.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration == nil {
+					latestKO.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration = &svcapitypes.S3DestinationConfiguration{}
+				}
+				if latestKO.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleRef == nil {
+					latestKO.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleRef = desiredKO.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleRef
+				}
 			}
 		}
 	}
@@ -265,6 +378,36 @@ func (rm *resourceManager) ResolveReferences(
 		resourceHasReferences = resourceHasReferences || fieldHasReferences
 	}
 
+	if fieldHasReferences, err := rm.resolveReferenceForExtendedS3DestinationConfiguration_BucketARN(ctx, apiReader, ko); err != nil {
+		return &resource{ko}, (resourceHasReferences || fieldHasReferences), err
+	} else {
+		resourceHasReferences = resourceHasReferences || fieldHasReferences
+	}
+
+	if fieldHasReferences, err := rm.resolveReferenceForExtendedS3DestinationConfiguration_EncryptionConfiguration_KMSEncryptionConfig_AWSKMSKeyARN(ctx, apiReader, ko); err != nil {
+		return &resource{ko}, (resourceHasReferences || fieldHasReferences), err
+	} else {
+		resourceHasReferences = resourceHasReferences || fieldHasReferences
+	}
+
+	if fieldHasReferences, err := rm.resolveReferenceForExtendedS3DestinationConfiguration_RoleARN(ctx, apiReader, ko); err != nil {
+		return &resource{ko}, (resourceHasReferences || fieldHasReferences), err
+	} else {
+		resourceHasReferences = resourceHasReferences || fieldHasReferences
+	}
+
+	if fieldHasReferences, err := rm.resolveReferenceForExtendedS3DestinationConfiguration_S3BackupConfiguration_BucketARN(ctx, apiReader, ko); err != nil {
+		return &resource{ko}, (resourceHasReferences || fieldHasReferences), err
+	} else {
+		resourceHasReferences = resourceHasReferences || fieldHasReferences
+	}
+
+	if fieldHasReferences, err := rm.resolveReferenceForExtendedS3DestinationConfiguration_S3BackupConfiguration_RoleARN(ctx, apiReader, ko); err != nil {
+		return &resource{ko}, (resourceHasReferences || fieldHasReferences), err
+	} else {
+		resourceHasReferences = resourceHasReferences || fieldHasReferences
+	}
+
 	if fieldHasReferences, err := rm.resolveReferenceForHTTPEndpointDestinationConfiguration_RoleARN(ctx, apiReader, ko); err != nil {
 		return &resource{ko}, (resourceHasReferences || fieldHasReferences), err
 	} else {
@@ -311,6 +454,44 @@ func validateReferenceFields(ko *svcapitypes.DeliveryStream) error {
 	if ko.Spec.DeliveryStreamEncryptionConfiguration != nil {
 		if ko.Spec.DeliveryStreamEncryptionConfiguration.KeyRef != nil && ko.Spec.DeliveryStreamEncryptionConfiguration.KeyARN != nil {
 			return ackerr.ResourceReferenceAndIDNotSupportedFor("DeliveryStreamEncryptionConfiguration.KeyARN", "DeliveryStreamEncryptionConfiguration.KeyRef")
+		}
+	}
+
+	if ko.Spec.ExtendedS3DestinationConfiguration != nil {
+		if ko.Spec.ExtendedS3DestinationConfiguration.BucketRef != nil && ko.Spec.ExtendedS3DestinationConfiguration.BucketARN != nil {
+			return ackerr.ResourceReferenceAndIDNotSupportedFor("ExtendedS3DestinationConfiguration.BucketARN", "ExtendedS3DestinationConfiguration.BucketRef")
+		}
+	}
+
+	if ko.Spec.ExtendedS3DestinationConfiguration != nil {
+		if ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration != nil {
+			if ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig != nil {
+				if ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef != nil && ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN != nil {
+					return ackerr.ResourceReferenceAndIDNotSupportedFor("ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN", "ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef")
+				}
+			}
+		}
+	}
+
+	if ko.Spec.ExtendedS3DestinationConfiguration != nil {
+		if ko.Spec.ExtendedS3DestinationConfiguration.RoleRef != nil && ko.Spec.ExtendedS3DestinationConfiguration.RoleARN != nil {
+			return ackerr.ResourceReferenceAndIDNotSupportedFor("ExtendedS3DestinationConfiguration.RoleARN", "ExtendedS3DestinationConfiguration.RoleRef")
+		}
+	}
+
+	if ko.Spec.ExtendedS3DestinationConfiguration != nil {
+		if ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration != nil {
+			if ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketRef != nil && ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketARN != nil {
+				return ackerr.ResourceReferenceAndIDNotSupportedFor("ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketARN", "ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketRef")
+			}
+		}
+	}
+
+	if ko.Spec.ExtendedS3DestinationConfiguration != nil {
+		if ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration != nil {
+			if ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleRef != nil && ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleARN != nil {
+				return ackerr.ResourceReferenceAndIDNotSupportedFor("ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleARN", "ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleRef")
+			}
 		}
 	}
 
@@ -456,21 +637,151 @@ func getReferencedResourceState_Key(
 	return nil
 }
 
-// resolveReferenceForHTTPEndpointDestinationConfiguration_RoleARN reads the resource referenced
-// from HTTPEndpointDestinationConfiguration.RoleRef field and sets the HTTPEndpointDestinationConfiguration.RoleARN
+// resolveReferenceForExtendedS3DestinationConfiguration_BucketARN reads the resource referenced
+// from ExtendedS3DestinationConfiguration.BucketRef field and sets the ExtendedS3DestinationConfiguration.BucketARN
 // from referenced resource. Returns a boolean indicating whether a reference
 // contains references, or an error
-func (rm *resourceManager) resolveReferenceForHTTPEndpointDestinationConfiguration_RoleARN(
+func (rm *resourceManager) resolveReferenceForExtendedS3DestinationConfiguration_BucketARN(
 	ctx context.Context,
 	apiReader client.Reader,
 	ko *svcapitypes.DeliveryStream,
 ) (hasReferences bool, err error) {
-	if ko.Spec.HTTPEndpointDestinationConfiguration != nil {
-		if ko.Spec.HTTPEndpointDestinationConfiguration.RoleRef != nil && ko.Spec.HTTPEndpointDestinationConfiguration.RoleRef.From != nil {
+	if ko.Spec.ExtendedS3DestinationConfiguration != nil {
+		if ko.Spec.ExtendedS3DestinationConfiguration.BucketRef != nil && ko.Spec.ExtendedS3DestinationConfiguration.BucketRef.From != nil {
 			hasReferences = true
-			arr := ko.Spec.HTTPEndpointDestinationConfiguration.RoleRef.From
+			arr := ko.Spec.ExtendedS3DestinationConfiguration.BucketRef.From
 			if arr.Name == nil || *arr.Name == "" {
-				return hasReferences, fmt.Errorf("provided resource reference is nil or empty: HTTPEndpointDestinationConfiguration.RoleRef")
+				return hasReferences, fmt.Errorf("provided resource reference is nil or empty: ExtendedS3DestinationConfiguration.BucketRef")
+			}
+			namespace, _, err := ackrt.ValidateCrossNamespaceReference(
+				rm.cfg.EnableCrossNamespace,
+				ko.ObjectMeta.GetNamespace(),
+				arr.Namespace,
+				*arr.Name,
+			)
+			if err != nil {
+				return hasReferences, err
+			}
+			obj := &s3apitypes.Bucket{}
+			if err := getReferencedResourceState_Bucket(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
+				return hasReferences, err
+			}
+			ko.Spec.ExtendedS3DestinationConfiguration.BucketARN = (*string)(obj.Status.ACKResourceMetadata.ARN)
+		}
+	}
+
+	return hasReferences, nil
+}
+
+// getReferencedResourceState_Bucket looks up whether a referenced resource
+// exists and is in a ACK.ResourceSynced=True state. If the referenced resource does exist and is
+// in a Synced state, returns nil, otherwise returns `ackerr.ResourceReferenceTerminalFor` or
+// `ResourceReferenceNotSyncedFor` depending on if the resource is in a Terminal state.
+func getReferencedResourceState_Bucket(
+	ctx context.Context,
+	apiReader client.Reader,
+	obj *s3apitypes.Bucket,
+	name string, // the Kubernetes name of the referenced resource
+	namespace string, // the Kubernetes namespace of the referenced resource
+) error {
+	namespacedName := types.NamespacedName{
+		Namespace: namespace,
+		Name:      name,
+	}
+	err := apiReader.Get(ctx, namespacedName, obj)
+	if err != nil {
+		return err
+	}
+	var refResourceTerminal bool
+	for _, cond := range obj.Status.Conditions {
+		if cond.Type == ackv1alpha1.ConditionTypeTerminal &&
+			cond.Status == corev1.ConditionTrue {
+			return ackerr.ResourceReferenceTerminalFor(
+				"Bucket",
+				namespace, name)
+		}
+	}
+	if refResourceTerminal {
+		return ackerr.ResourceReferenceTerminalFor(
+			"Bucket",
+			namespace, name)
+	}
+	var refResourceSynced bool
+	for _, cond := range obj.Status.Conditions {
+		if cond.Type == ackv1alpha1.ConditionTypeResourceSynced &&
+			cond.Status == corev1.ConditionTrue {
+			refResourceSynced = true
+		}
+	}
+	if !refResourceSynced {
+		return ackerr.ResourceReferenceNotSyncedFor(
+			"Bucket",
+			namespace, name)
+	}
+	if obj.Status.ACKResourceMetadata == nil || obj.Status.ACKResourceMetadata.ARN == nil {
+		return ackerr.ResourceReferenceMissingTargetFieldFor(
+			"Bucket",
+			namespace, name,
+			"Status.ACKResourceMetadata.ARN")
+	}
+	return nil
+}
+
+// resolveReferenceForExtendedS3DestinationConfiguration_EncryptionConfiguration_KMSEncryptionConfig_AWSKMSKeyARN reads the resource referenced
+// from ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef field and sets the ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN
+// from referenced resource. Returns a boolean indicating whether a reference
+// contains references, or an error
+func (rm *resourceManager) resolveReferenceForExtendedS3DestinationConfiguration_EncryptionConfiguration_KMSEncryptionConfig_AWSKMSKeyARN(
+	ctx context.Context,
+	apiReader client.Reader,
+	ko *svcapitypes.DeliveryStream,
+) (hasReferences bool, err error) {
+	if ko.Spec.ExtendedS3DestinationConfiguration != nil {
+		if ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration != nil {
+			if ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig != nil {
+				if ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef != nil && ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef.From != nil {
+					hasReferences = true
+					arr := ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef.From
+					if arr.Name == nil || *arr.Name == "" {
+						return hasReferences, fmt.Errorf("provided resource reference is nil or empty: ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef")
+					}
+					namespace, _, err := ackrt.ValidateCrossNamespaceReference(
+						rm.cfg.EnableCrossNamespace,
+						ko.ObjectMeta.GetNamespace(),
+						arr.Namespace,
+						*arr.Name,
+					)
+					if err != nil {
+						return hasReferences, err
+					}
+					obj := &kmsapitypes.Key{}
+					if err := getReferencedResourceState_Key(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
+						return hasReferences, err
+					}
+					ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN = (*string)(obj.Status.ACKResourceMetadata.ARN)
+				}
+			}
+		}
+	}
+
+	return hasReferences, nil
+}
+
+// resolveReferenceForExtendedS3DestinationConfiguration_RoleARN reads the resource referenced
+// from ExtendedS3DestinationConfiguration.RoleRef field and sets the ExtendedS3DestinationConfiguration.RoleARN
+// from referenced resource. Returns a boolean indicating whether a reference
+// contains references, or an error
+func (rm *resourceManager) resolveReferenceForExtendedS3DestinationConfiguration_RoleARN(
+	ctx context.Context,
+	apiReader client.Reader,
+	ko *svcapitypes.DeliveryStream,
+) (hasReferences bool, err error) {
+	if ko.Spec.ExtendedS3DestinationConfiguration != nil {
+		if ko.Spec.ExtendedS3DestinationConfiguration.RoleRef != nil && ko.Spec.ExtendedS3DestinationConfiguration.RoleRef.From != nil {
+			hasReferences = true
+			arr := ko.Spec.ExtendedS3DestinationConfiguration.RoleRef.From
+			if arr.Name == nil || *arr.Name == "" {
+				return hasReferences, fmt.Errorf("provided resource reference is nil or empty: ExtendedS3DestinationConfiguration.RoleRef")
 			}
 			namespace, _, err := ackrt.ValidateCrossNamespaceReference(
 				rm.cfg.EnableCrossNamespace,
@@ -485,7 +796,7 @@ func (rm *resourceManager) resolveReferenceForHTTPEndpointDestinationConfigurati
 			if err := getReferencedResourceState_Role(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
 				return hasReferences, err
 			}
-			ko.Spec.HTTPEndpointDestinationConfiguration.RoleARN = (*string)(obj.Status.ACKResourceMetadata.ARN)
+			ko.Spec.ExtendedS3DestinationConfiguration.RoleARN = (*string)(obj.Status.ACKResourceMetadata.ARN)
 		}
 	}
 
@@ -546,6 +857,118 @@ func getReferencedResourceState_Role(
 	return nil
 }
 
+// resolveReferenceForExtendedS3DestinationConfiguration_S3BackupConfiguration_BucketARN reads the resource referenced
+// from ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketRef field and sets the ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketARN
+// from referenced resource. Returns a boolean indicating whether a reference
+// contains references, or an error
+func (rm *resourceManager) resolveReferenceForExtendedS3DestinationConfiguration_S3BackupConfiguration_BucketARN(
+	ctx context.Context,
+	apiReader client.Reader,
+	ko *svcapitypes.DeliveryStream,
+) (hasReferences bool, err error) {
+	if ko.Spec.ExtendedS3DestinationConfiguration != nil {
+		if ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration != nil {
+			if ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketRef != nil && ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketRef.From != nil {
+				hasReferences = true
+				arr := ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketRef.From
+				if arr.Name == nil || *arr.Name == "" {
+					return hasReferences, fmt.Errorf("provided resource reference is nil or empty: ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketRef")
+				}
+				namespace, _, err := ackrt.ValidateCrossNamespaceReference(
+					rm.cfg.EnableCrossNamespace,
+					ko.ObjectMeta.GetNamespace(),
+					arr.Namespace,
+					*arr.Name,
+				)
+				if err != nil {
+					return hasReferences, err
+				}
+				obj := &s3apitypes.Bucket{}
+				if err := getReferencedResourceState_Bucket(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
+					return hasReferences, err
+				}
+				ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketARN = (*string)(obj.Status.ACKResourceMetadata.ARN)
+			}
+		}
+	}
+
+	return hasReferences, nil
+}
+
+// resolveReferenceForExtendedS3DestinationConfiguration_S3BackupConfiguration_RoleARN reads the resource referenced
+// from ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleRef field and sets the ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleARN
+// from referenced resource. Returns a boolean indicating whether a reference
+// contains references, or an error
+func (rm *resourceManager) resolveReferenceForExtendedS3DestinationConfiguration_S3BackupConfiguration_RoleARN(
+	ctx context.Context,
+	apiReader client.Reader,
+	ko *svcapitypes.DeliveryStream,
+) (hasReferences bool, err error) {
+	if ko.Spec.ExtendedS3DestinationConfiguration != nil {
+		if ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration != nil {
+			if ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleRef != nil && ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleRef.From != nil {
+				hasReferences = true
+				arr := ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleRef.From
+				if arr.Name == nil || *arr.Name == "" {
+					return hasReferences, fmt.Errorf("provided resource reference is nil or empty: ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleRef")
+				}
+				namespace, _, err := ackrt.ValidateCrossNamespaceReference(
+					rm.cfg.EnableCrossNamespace,
+					ko.ObjectMeta.GetNamespace(),
+					arr.Namespace,
+					*arr.Name,
+				)
+				if err != nil {
+					return hasReferences, err
+				}
+				obj := &iamapitypes.Role{}
+				if err := getReferencedResourceState_Role(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
+					return hasReferences, err
+				}
+				ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleARN = (*string)(obj.Status.ACKResourceMetadata.ARN)
+			}
+		}
+	}
+
+	return hasReferences, nil
+}
+
+// resolveReferenceForHTTPEndpointDestinationConfiguration_RoleARN reads the resource referenced
+// from HTTPEndpointDestinationConfiguration.RoleRef field and sets the HTTPEndpointDestinationConfiguration.RoleARN
+// from referenced resource. Returns a boolean indicating whether a reference
+// contains references, or an error
+func (rm *resourceManager) resolveReferenceForHTTPEndpointDestinationConfiguration_RoleARN(
+	ctx context.Context,
+	apiReader client.Reader,
+	ko *svcapitypes.DeliveryStream,
+) (hasReferences bool, err error) {
+	if ko.Spec.HTTPEndpointDestinationConfiguration != nil {
+		if ko.Spec.HTTPEndpointDestinationConfiguration.RoleRef != nil && ko.Spec.HTTPEndpointDestinationConfiguration.RoleRef.From != nil {
+			hasReferences = true
+			arr := ko.Spec.HTTPEndpointDestinationConfiguration.RoleRef.From
+			if arr.Name == nil || *arr.Name == "" {
+				return hasReferences, fmt.Errorf("provided resource reference is nil or empty: HTTPEndpointDestinationConfiguration.RoleRef")
+			}
+			namespace, _, err := ackrt.ValidateCrossNamespaceReference(
+				rm.cfg.EnableCrossNamespace,
+				ko.ObjectMeta.GetNamespace(),
+				arr.Namespace,
+				*arr.Name,
+			)
+			if err != nil {
+				return hasReferences, err
+			}
+			obj := &iamapitypes.Role{}
+			if err := getReferencedResourceState_Role(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
+				return hasReferences, err
+			}
+			ko.Spec.HTTPEndpointDestinationConfiguration.RoleARN = (*string)(obj.Status.ACKResourceMetadata.ARN)
+		}
+	}
+
+	return hasReferences, nil
+}
+
 // resolveReferenceForHTTPEndpointDestinationConfiguration_S3Configuration_BucketARN reads the resource referenced
 // from HTTPEndpointDestinationConfiguration.S3Configuration.BucketRef field and sets the HTTPEndpointDestinationConfiguration.S3Configuration.BucketARN
 // from referenced resource. Returns a boolean indicating whether a reference
@@ -582,60 +1005,6 @@ func (rm *resourceManager) resolveReferenceForHTTPEndpointDestinationConfigurati
 	}
 
 	return hasReferences, nil
-}
-
-// getReferencedResourceState_Bucket looks up whether a referenced resource
-// exists and is in a ACK.ResourceSynced=True state. If the referenced resource does exist and is
-// in a Synced state, returns nil, otherwise returns `ackerr.ResourceReferenceTerminalFor` or
-// `ResourceReferenceNotSyncedFor` depending on if the resource is in a Terminal state.
-func getReferencedResourceState_Bucket(
-	ctx context.Context,
-	apiReader client.Reader,
-	obj *s3apitypes.Bucket,
-	name string, // the Kubernetes name of the referenced resource
-	namespace string, // the Kubernetes namespace of the referenced resource
-) error {
-	namespacedName := types.NamespacedName{
-		Namespace: namespace,
-		Name:      name,
-	}
-	err := apiReader.Get(ctx, namespacedName, obj)
-	if err != nil {
-		return err
-	}
-	var refResourceTerminal bool
-	for _, cond := range obj.Status.Conditions {
-		if cond.Type == ackv1alpha1.ConditionTypeTerminal &&
-			cond.Status == corev1.ConditionTrue {
-			return ackerr.ResourceReferenceTerminalFor(
-				"Bucket",
-				namespace, name)
-		}
-	}
-	if refResourceTerminal {
-		return ackerr.ResourceReferenceTerminalFor(
-			"Bucket",
-			namespace, name)
-	}
-	var refResourceSynced bool
-	for _, cond := range obj.Status.Conditions {
-		if cond.Type == ackv1alpha1.ConditionTypeResourceSynced &&
-			cond.Status == corev1.ConditionTrue {
-			refResourceSynced = true
-		}
-	}
-	if !refResourceSynced {
-		return ackerr.ResourceReferenceNotSyncedFor(
-			"Bucket",
-			namespace, name)
-	}
-	if obj.Status.ACKResourceMetadata == nil || obj.Status.ACKResourceMetadata.ARN == nil {
-		return ackerr.ResourceReferenceMissingTargetFieldFor(
-			"Bucket",
-			namespace, name,
-			"Status.ACKResourceMetadata.ARN")
-	}
-	return nil
 }
 
 // resolveReferenceForHTTPEndpointDestinationConfiguration_S3Configuration_EncryptionConfiguration_KMSEncryptionConfig_AWSKMSKeyARN reads the resource referenced

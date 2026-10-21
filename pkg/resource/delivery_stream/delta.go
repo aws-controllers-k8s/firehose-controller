@@ -81,6 +81,504 @@ func newResourceDelta(
 			delta.Add("Spec.DeliveryStreamType", a.ko.Spec.DeliveryStreamType, b.ko.Spec.DeliveryStreamType)
 		}
 	}
+	if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration, b.ko.Spec.ExtendedS3DestinationConfiguration) {
+		delta.Add("Spec.ExtendedS3DestinationConfiguration", a.ko.Spec.ExtendedS3DestinationConfiguration, b.ko.Spec.ExtendedS3DestinationConfiguration)
+	} else if a.ko.Spec.ExtendedS3DestinationConfiguration != nil && b.ko.Spec.ExtendedS3DestinationConfiguration != nil {
+		if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.BucketARN, b.ko.Spec.ExtendedS3DestinationConfiguration.BucketARN) {
+			delta.Add("Spec.ExtendedS3DestinationConfiguration.BucketARN", a.ko.Spec.ExtendedS3DestinationConfiguration.BucketARN, b.ko.Spec.ExtendedS3DestinationConfiguration.BucketARN)
+		} else if a.ko.Spec.ExtendedS3DestinationConfiguration.BucketARN != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.BucketARN != nil {
+			if *a.ko.Spec.ExtendedS3DestinationConfiguration.BucketARN != *b.ko.Spec.ExtendedS3DestinationConfiguration.BucketARN {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.BucketARN", a.ko.Spec.ExtendedS3DestinationConfiguration.BucketARN, b.ko.Spec.ExtendedS3DestinationConfiguration.BucketARN)
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints, b.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints) {
+			delta.Add("Spec.ExtendedS3DestinationConfiguration.BufferingHints", a.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints, b.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints)
+		} else if a.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints != nil {
+			if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints.IntervalInSeconds, b.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints.IntervalInSeconds) {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.BufferingHints.IntervalInSeconds", a.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints.IntervalInSeconds, b.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints.IntervalInSeconds)
+			} else if a.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints.IntervalInSeconds != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints.IntervalInSeconds != nil {
+				if *a.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints.IntervalInSeconds != *b.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints.IntervalInSeconds {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.BufferingHints.IntervalInSeconds", a.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints.IntervalInSeconds, b.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints.IntervalInSeconds)
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints.SizeInMBs, b.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints.SizeInMBs) {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.BufferingHints.SizeInMBs", a.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints.SizeInMBs, b.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints.SizeInMBs)
+			} else if a.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints.SizeInMBs != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints.SizeInMBs != nil {
+				if *a.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints.SizeInMBs != *b.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints.SizeInMBs {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.BufferingHints.SizeInMBs", a.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints.SizeInMBs, b.ko.Spec.ExtendedS3DestinationConfiguration.BufferingHints.SizeInMBs)
+				}
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions, b.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions) {
+			delta.Add("Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions", a.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions, b.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions)
+		} else if a.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions != nil {
+			if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.Enabled, b.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.Enabled) {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.Enabled", a.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.Enabled, b.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.Enabled)
+			} else if a.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.Enabled != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.Enabled != nil {
+				if *a.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.Enabled != *b.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.Enabled {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.Enabled", a.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.Enabled, b.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.Enabled)
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogGroupName, b.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogGroupName) {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogGroupName", a.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogGroupName, b.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogGroupName)
+			} else if a.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogGroupName != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogGroupName != nil {
+				if *a.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogGroupName != *b.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogGroupName {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogGroupName", a.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogGroupName, b.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogGroupName)
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogStreamName, b.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogStreamName) {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogStreamName", a.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogStreamName, b.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogStreamName)
+			} else if a.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogStreamName != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogStreamName != nil {
+				if *a.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogStreamName != *b.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogStreamName {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogStreamName", a.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogStreamName, b.ko.Spec.ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions.LogStreamName)
+				}
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.CompressionFormat, b.ko.Spec.ExtendedS3DestinationConfiguration.CompressionFormat) {
+			delta.Add("Spec.ExtendedS3DestinationConfiguration.CompressionFormat", a.ko.Spec.ExtendedS3DestinationConfiguration.CompressionFormat, b.ko.Spec.ExtendedS3DestinationConfiguration.CompressionFormat)
+		} else if a.ko.Spec.ExtendedS3DestinationConfiguration.CompressionFormat != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.CompressionFormat != nil {
+			if *a.ko.Spec.ExtendedS3DestinationConfiguration.CompressionFormat != *b.ko.Spec.ExtendedS3DestinationConfiguration.CompressionFormat {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.CompressionFormat", a.ko.Spec.ExtendedS3DestinationConfiguration.CompressionFormat, b.ko.Spec.ExtendedS3DestinationConfiguration.CompressionFormat)
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.CustomTimeZone, b.ko.Spec.ExtendedS3DestinationConfiguration.CustomTimeZone) {
+			delta.Add("Spec.ExtendedS3DestinationConfiguration.CustomTimeZone", a.ko.Spec.ExtendedS3DestinationConfiguration.CustomTimeZone, b.ko.Spec.ExtendedS3DestinationConfiguration.CustomTimeZone)
+		} else if a.ko.Spec.ExtendedS3DestinationConfiguration.CustomTimeZone != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.CustomTimeZone != nil {
+			if *a.ko.Spec.ExtendedS3DestinationConfiguration.CustomTimeZone != *b.ko.Spec.ExtendedS3DestinationConfiguration.CustomTimeZone {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.CustomTimeZone", a.ko.Spec.ExtendedS3DestinationConfiguration.CustomTimeZone, b.ko.Spec.ExtendedS3DestinationConfiguration.CustomTimeZone)
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration) {
+			delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration)
+		} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration != nil {
+			if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.Enabled, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.Enabled) {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.Enabled", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.Enabled, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.Enabled)
+			} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.Enabled != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.Enabled != nil {
+				if *a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.Enabled != *b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.Enabled {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.Enabled", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.Enabled, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.Enabled)
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration) {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration)
+			} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration != nil {
+				if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer) {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer)
+				} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer != nil {
+					if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.HiveJSONSerDe, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.HiveJSONSerDe) {
+						delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.HiveJSONSerDe", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.HiveJSONSerDe, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.HiveJSONSerDe)
+					} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.HiveJSONSerDe != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.HiveJSONSerDe != nil {
+						if len(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.HiveJSONSerDe.TimestampFormats) != len(b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.HiveJSONSerDe.TimestampFormats) {
+							delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.HiveJSONSerDe.TimestampFormats", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.HiveJSONSerDe.TimestampFormats, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.HiveJSONSerDe.TimestampFormats)
+						} else if len(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.HiveJSONSerDe.TimestampFormats) > 0 {
+							if !ackcompare.SliceStringPEqual(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.HiveJSONSerDe.TimestampFormats, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.HiveJSONSerDe.TimestampFormats) {
+								delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.HiveJSONSerDe.TimestampFormats", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.HiveJSONSerDe.TimestampFormats, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.HiveJSONSerDe.TimestampFormats)
+							}
+						}
+					}
+					if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe) {
+						delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe)
+					} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe != nil {
+						if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.CaseInsensitive, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.CaseInsensitive) {
+							delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.CaseInsensitive", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.CaseInsensitive, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.CaseInsensitive)
+						} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.CaseInsensitive != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.CaseInsensitive != nil {
+							if *a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.CaseInsensitive != *b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.CaseInsensitive {
+								delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.CaseInsensitive", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.CaseInsensitive, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.CaseInsensitive)
+							}
+						}
+						if len(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.ColumnToJSONKeyMappings) != len(b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.ColumnToJSONKeyMappings) {
+							delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.ColumnToJSONKeyMappings", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.ColumnToJSONKeyMappings, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.ColumnToJSONKeyMappings)
+						} else if len(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.ColumnToJSONKeyMappings) > 0 {
+							if !ackcompare.MapStringStringPEqual(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.ColumnToJSONKeyMappings, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.ColumnToJSONKeyMappings) {
+								delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.ColumnToJSONKeyMappings", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.ColumnToJSONKeyMappings, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.ColumnToJSONKeyMappings)
+							}
+						}
+						if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.ConvertDotsInJSONKeysToUnderscores, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.ConvertDotsInJSONKeysToUnderscores) {
+							delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.ConvertDotsInJSONKeysToUnderscores", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.ConvertDotsInJSONKeysToUnderscores, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.ConvertDotsInJSONKeysToUnderscores)
+						} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.ConvertDotsInJSONKeysToUnderscores != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.ConvertDotsInJSONKeysToUnderscores != nil {
+							if *a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.ConvertDotsInJSONKeysToUnderscores != *b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.ConvertDotsInJSONKeysToUnderscores {
+								delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.ConvertDotsInJSONKeysToUnderscores", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.ConvertDotsInJSONKeysToUnderscores, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.InputFormatConfiguration.Deserializer.OpenXJSONSerDe.ConvertDotsInJSONKeysToUnderscores)
+							}
+						}
+					}
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration) {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration)
+			} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration != nil {
+				if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer) {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer)
+				} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer != nil {
+					if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe) {
+						delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe)
+					} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe != nil {
+						if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BlockSizeBytes, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BlockSizeBytes) {
+							delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BlockSizeBytes", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BlockSizeBytes, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BlockSizeBytes)
+						} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BlockSizeBytes != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BlockSizeBytes != nil {
+							if *a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BlockSizeBytes != *b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BlockSizeBytes {
+								delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BlockSizeBytes", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BlockSizeBytes, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BlockSizeBytes)
+							}
+						}
+						if len(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BloomFilterColumns) != len(b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BloomFilterColumns) {
+							delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BloomFilterColumns", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BloomFilterColumns, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BloomFilterColumns)
+						} else if len(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BloomFilterColumns) > 0 {
+							if !ackcompare.SliceStringPEqual(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BloomFilterColumns, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BloomFilterColumns) {
+								delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BloomFilterColumns", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BloomFilterColumns, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BloomFilterColumns)
+							}
+						}
+						if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BloomFilterFalsePositiveProbability, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BloomFilterFalsePositiveProbability) {
+							delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BloomFilterFalsePositiveProbability", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BloomFilterFalsePositiveProbability, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BloomFilterFalsePositiveProbability)
+						} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BloomFilterFalsePositiveProbability != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BloomFilterFalsePositiveProbability != nil {
+							if *a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BloomFilterFalsePositiveProbability != *b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BloomFilterFalsePositiveProbability {
+								delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BloomFilterFalsePositiveProbability", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BloomFilterFalsePositiveProbability, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.BloomFilterFalsePositiveProbability)
+							}
+						}
+						if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.Compression, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.Compression) {
+							delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.Compression", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.Compression, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.Compression)
+						} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.Compression != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.Compression != nil {
+							if *a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.Compression != *b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.Compression {
+								delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.Compression", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.Compression, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.Compression)
+							}
+						}
+						if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.DictionaryKeyThreshold, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.DictionaryKeyThreshold) {
+							delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.DictionaryKeyThreshold", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.DictionaryKeyThreshold, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.DictionaryKeyThreshold)
+						} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.DictionaryKeyThreshold != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.DictionaryKeyThreshold != nil {
+							if *a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.DictionaryKeyThreshold != *b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.DictionaryKeyThreshold {
+								delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.DictionaryKeyThreshold", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.DictionaryKeyThreshold, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.DictionaryKeyThreshold)
+							}
+						}
+						if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.EnablePadding, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.EnablePadding) {
+							delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.EnablePadding", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.EnablePadding, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.EnablePadding)
+						} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.EnablePadding != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.EnablePadding != nil {
+							if *a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.EnablePadding != *b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.EnablePadding {
+								delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.EnablePadding", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.EnablePadding, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.EnablePadding)
+							}
+						}
+						if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.FormatVersion, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.FormatVersion) {
+							delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.FormatVersion", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.FormatVersion, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.FormatVersion)
+						} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.FormatVersion != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.FormatVersion != nil {
+							if *a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.FormatVersion != *b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.FormatVersion {
+								delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.FormatVersion", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.FormatVersion, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.FormatVersion)
+							}
+						}
+						if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.PaddingTolerance, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.PaddingTolerance) {
+							delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.PaddingTolerance", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.PaddingTolerance, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.PaddingTolerance)
+						} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.PaddingTolerance != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.PaddingTolerance != nil {
+							if *a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.PaddingTolerance != *b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.PaddingTolerance {
+								delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.PaddingTolerance", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.PaddingTolerance, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.PaddingTolerance)
+							}
+						}
+						if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.RowIndexStride, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.RowIndexStride) {
+							delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.RowIndexStride", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.RowIndexStride, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.RowIndexStride)
+						} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.RowIndexStride != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.RowIndexStride != nil {
+							if *a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.RowIndexStride != *b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.RowIndexStride {
+								delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.RowIndexStride", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.RowIndexStride, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.RowIndexStride)
+							}
+						}
+						if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.StripeSizeBytes, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.StripeSizeBytes) {
+							delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.StripeSizeBytes", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.StripeSizeBytes, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.StripeSizeBytes)
+						} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.StripeSizeBytes != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.StripeSizeBytes != nil {
+							if *a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.StripeSizeBytes != *b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.StripeSizeBytes {
+								delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.StripeSizeBytes", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.StripeSizeBytes, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.OrcSerDe.StripeSizeBytes)
+							}
+						}
+					}
+					if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe) {
+						delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe)
+					} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe != nil {
+						if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.BlockSizeBytes, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.BlockSizeBytes) {
+							delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.BlockSizeBytes", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.BlockSizeBytes, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.BlockSizeBytes)
+						} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.BlockSizeBytes != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.BlockSizeBytes != nil {
+							if *a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.BlockSizeBytes != *b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.BlockSizeBytes {
+								delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.BlockSizeBytes", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.BlockSizeBytes, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.BlockSizeBytes)
+							}
+						}
+						if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.Compression, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.Compression) {
+							delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.Compression", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.Compression, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.Compression)
+						} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.Compression != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.Compression != nil {
+							if *a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.Compression != *b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.Compression {
+								delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.Compression", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.Compression, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.Compression)
+							}
+						}
+						if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.EnableDictionaryCompression, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.EnableDictionaryCompression) {
+							delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.EnableDictionaryCompression", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.EnableDictionaryCompression, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.EnableDictionaryCompression)
+						} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.EnableDictionaryCompression != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.EnableDictionaryCompression != nil {
+							if *a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.EnableDictionaryCompression != *b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.EnableDictionaryCompression {
+								delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.EnableDictionaryCompression", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.EnableDictionaryCompression, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.EnableDictionaryCompression)
+							}
+						}
+						if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.MaxPaddingBytes, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.MaxPaddingBytes) {
+							delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.MaxPaddingBytes", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.MaxPaddingBytes, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.MaxPaddingBytes)
+						} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.MaxPaddingBytes != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.MaxPaddingBytes != nil {
+							if *a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.MaxPaddingBytes != *b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.MaxPaddingBytes {
+								delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.MaxPaddingBytes", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.MaxPaddingBytes, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.MaxPaddingBytes)
+							}
+						}
+						if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.PageSizeBytes, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.PageSizeBytes) {
+							delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.PageSizeBytes", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.PageSizeBytes, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.PageSizeBytes)
+						} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.PageSizeBytes != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.PageSizeBytes != nil {
+							if *a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.PageSizeBytes != *b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.PageSizeBytes {
+								delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.PageSizeBytes", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.PageSizeBytes, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.PageSizeBytes)
+							}
+						}
+						if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.WriterVersion, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.WriterVersion) {
+							delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.WriterVersion", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.WriterVersion, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.WriterVersion)
+						} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.WriterVersion != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.WriterVersion != nil {
+							if *a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.WriterVersion != *b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.WriterVersion {
+								delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.WriterVersion", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.WriterVersion, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.OutputFormatConfiguration.Serializer.ParquetSerDe.WriterVersion)
+							}
+						}
+					}
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration) {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration)
+			} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration != nil {
+				if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.CatalogID, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.CatalogID) {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.CatalogID", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.CatalogID, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.CatalogID)
+				} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.CatalogID != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.CatalogID != nil {
+					if *a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.CatalogID != *b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.CatalogID {
+						delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.CatalogID", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.CatalogID, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.CatalogID)
+					}
+				}
+				if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.DatabaseName, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.DatabaseName) {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.DatabaseName", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.DatabaseName, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.DatabaseName)
+				} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.DatabaseName != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.DatabaseName != nil {
+					if *a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.DatabaseName != *b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.DatabaseName {
+						delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.DatabaseName", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.DatabaseName, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.DatabaseName)
+					}
+				}
+				if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.Region, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.Region) {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.Region", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.Region, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.Region)
+				} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.Region != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.Region != nil {
+					if *a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.Region != *b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.Region {
+						delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.Region", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.Region, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.Region)
+					}
+				}
+				if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.RoleARN, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.RoleARN) {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.RoleARN", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.RoleARN, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.RoleARN)
+				} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.RoleARN != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.RoleARN != nil {
+					if *a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.RoleARN != *b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.RoleARN {
+						delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.RoleARN", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.RoleARN, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.RoleARN)
+					}
+				}
+				if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.TableName, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.TableName) {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.TableName", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.TableName, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.TableName)
+				} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.TableName != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.TableName != nil {
+					if *a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.TableName != *b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.TableName {
+						delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.TableName", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.TableName, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.TableName)
+					}
+				}
+				if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.VersionID, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.VersionID) {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.VersionID", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.VersionID, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.VersionID)
+				} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.VersionID != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.VersionID != nil {
+					if *a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.VersionID != *b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.VersionID {
+						delta.Add("Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.VersionID", a.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.VersionID, b.ko.Spec.ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration.SchemaConfiguration.VersionID)
+					}
+				}
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration, b.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration) {
+			delta.Add("Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration", a.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration, b.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration)
+		} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration != nil {
+			if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.Enabled, b.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.Enabled) {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.Enabled", a.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.Enabled, b.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.Enabled)
+			} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.Enabled != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.Enabled != nil {
+				if *a.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.Enabled != *b.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.Enabled {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.Enabled", a.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.Enabled, b.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.Enabled)
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.RetryOptions, b.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.RetryOptions) {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.RetryOptions", a.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.RetryOptions, b.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.RetryOptions)
+			} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.RetryOptions != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.RetryOptions != nil {
+				if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.RetryOptions.DurationInSeconds, b.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.RetryOptions.DurationInSeconds) {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.RetryOptions.DurationInSeconds", a.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.RetryOptions.DurationInSeconds, b.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.RetryOptions.DurationInSeconds)
+				} else if a.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.RetryOptions.DurationInSeconds != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.RetryOptions.DurationInSeconds != nil {
+					if *a.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.RetryOptions.DurationInSeconds != *b.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.RetryOptions.DurationInSeconds {
+						delta.Add("Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.RetryOptions.DurationInSeconds", a.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.RetryOptions.DurationInSeconds, b.ko.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.RetryOptions.DurationInSeconds)
+					}
+				}
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration, b.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration) {
+			delta.Add("Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration", a.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration, b.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration)
+		} else if a.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration != nil {
+			if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig, b.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig) {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig", a.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig, b.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig)
+			} else if a.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig != nil {
+				if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN, b.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN) {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN", a.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN, b.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN)
+				} else if a.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN != nil {
+					if *a.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN != *b.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN {
+						delta.Add("Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN", a.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN, b.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN)
+					}
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.NoEncryptionConfig, b.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.NoEncryptionConfig) {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.NoEncryptionConfig", a.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.NoEncryptionConfig, b.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.NoEncryptionConfig)
+			} else if a.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.NoEncryptionConfig != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.NoEncryptionConfig != nil {
+				if *a.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.NoEncryptionConfig != *b.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.NoEncryptionConfig {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.NoEncryptionConfig", a.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.NoEncryptionConfig, b.ko.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration.NoEncryptionConfig)
+				}
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.ErrorOutputPrefix, b.ko.Spec.ExtendedS3DestinationConfiguration.ErrorOutputPrefix) {
+			delta.Add("Spec.ExtendedS3DestinationConfiguration.ErrorOutputPrefix", a.ko.Spec.ExtendedS3DestinationConfiguration.ErrorOutputPrefix, b.ko.Spec.ExtendedS3DestinationConfiguration.ErrorOutputPrefix)
+		} else if a.ko.Spec.ExtendedS3DestinationConfiguration.ErrorOutputPrefix != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.ErrorOutputPrefix != nil {
+			if *a.ko.Spec.ExtendedS3DestinationConfiguration.ErrorOutputPrefix != *b.ko.Spec.ExtendedS3DestinationConfiguration.ErrorOutputPrefix {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.ErrorOutputPrefix", a.ko.Spec.ExtendedS3DestinationConfiguration.ErrorOutputPrefix, b.ko.Spec.ExtendedS3DestinationConfiguration.ErrorOutputPrefix)
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.FileExtension, b.ko.Spec.ExtendedS3DestinationConfiguration.FileExtension) {
+			delta.Add("Spec.ExtendedS3DestinationConfiguration.FileExtension", a.ko.Spec.ExtendedS3DestinationConfiguration.FileExtension, b.ko.Spec.ExtendedS3DestinationConfiguration.FileExtension)
+		} else if a.ko.Spec.ExtendedS3DestinationConfiguration.FileExtension != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.FileExtension != nil {
+			if *a.ko.Spec.ExtendedS3DestinationConfiguration.FileExtension != *b.ko.Spec.ExtendedS3DestinationConfiguration.FileExtension {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.FileExtension", a.ko.Spec.ExtendedS3DestinationConfiguration.FileExtension, b.ko.Spec.ExtendedS3DestinationConfiguration.FileExtension)
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.Prefix, b.ko.Spec.ExtendedS3DestinationConfiguration.Prefix) {
+			delta.Add("Spec.ExtendedS3DestinationConfiguration.Prefix", a.ko.Spec.ExtendedS3DestinationConfiguration.Prefix, b.ko.Spec.ExtendedS3DestinationConfiguration.Prefix)
+		} else if a.ko.Spec.ExtendedS3DestinationConfiguration.Prefix != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.Prefix != nil {
+			if *a.ko.Spec.ExtendedS3DestinationConfiguration.Prefix != *b.ko.Spec.ExtendedS3DestinationConfiguration.Prefix {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.Prefix", a.ko.Spec.ExtendedS3DestinationConfiguration.Prefix, b.ko.Spec.ExtendedS3DestinationConfiguration.Prefix)
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration, b.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration) {
+			delta.Add("Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration", a.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration, b.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration)
+		} else if a.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration != nil {
+			if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration.Enabled, b.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration.Enabled) {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration.Enabled", a.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration.Enabled, b.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration.Enabled)
+			} else if a.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration.Enabled != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration.Enabled != nil {
+				if *a.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration.Enabled != *b.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration.Enabled {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration.Enabled", a.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration.Enabled, b.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration.Enabled)
+				}
+			}
+			if len(a.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration.Processors) != len(b.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration.Processors) {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration.Processors", a.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration.Processors, b.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration.Processors)
+			} else if len(a.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration.Processors) > 0 {
+				if !equality.Semantic.Equalities.DeepEqual(a.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration.Processors, b.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration.Processors) {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration.Processors", a.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration.Processors, b.ko.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration.Processors)
+				}
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.RoleARN, b.ko.Spec.ExtendedS3DestinationConfiguration.RoleARN) {
+			delta.Add("Spec.ExtendedS3DestinationConfiguration.RoleARN", a.ko.Spec.ExtendedS3DestinationConfiguration.RoleARN, b.ko.Spec.ExtendedS3DestinationConfiguration.RoleARN)
+		} else if a.ko.Spec.ExtendedS3DestinationConfiguration.RoleARN != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.RoleARN != nil {
+			if *a.ko.Spec.ExtendedS3DestinationConfiguration.RoleARN != *b.ko.Spec.ExtendedS3DestinationConfiguration.RoleARN {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.RoleARN", a.ko.Spec.ExtendedS3DestinationConfiguration.RoleARN, b.ko.Spec.ExtendedS3DestinationConfiguration.RoleARN)
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration) {
+			delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration)
+		} else if a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration != nil {
+			if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketARN, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketARN) {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketARN", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketARN, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketARN)
+			} else if a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketARN != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketARN != nil {
+				if *a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketARN != *b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketARN {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketARN", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketARN, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketARN)
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints) {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints)
+			} else if a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints != nil {
+				if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints.IntervalInSeconds, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints.IntervalInSeconds) {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints.IntervalInSeconds", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints.IntervalInSeconds, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints.IntervalInSeconds)
+				} else if a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints.IntervalInSeconds != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints.IntervalInSeconds != nil {
+					if *a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints.IntervalInSeconds != *b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints.IntervalInSeconds {
+						delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints.IntervalInSeconds", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints.IntervalInSeconds, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints.IntervalInSeconds)
+					}
+				}
+				if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints.SizeInMBs, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints.SizeInMBs) {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints.SizeInMBs", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints.SizeInMBs, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints.SizeInMBs)
+				} else if a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints.SizeInMBs != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints.SizeInMBs != nil {
+					if *a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints.SizeInMBs != *b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints.SizeInMBs {
+						delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints.SizeInMBs", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints.SizeInMBs, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints.SizeInMBs)
+					}
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions) {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions)
+			} else if a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions != nil {
+				if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.Enabled, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.Enabled) {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.Enabled", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.Enabled, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.Enabled)
+				} else if a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.Enabled != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.Enabled != nil {
+					if *a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.Enabled != *b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.Enabled {
+						delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.Enabled", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.Enabled, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.Enabled)
+					}
+				}
+				if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogGroupName, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogGroupName) {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogGroupName", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogGroupName, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogGroupName)
+				} else if a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogGroupName != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogGroupName != nil {
+					if *a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogGroupName != *b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogGroupName {
+						delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogGroupName", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogGroupName, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogGroupName)
+					}
+				}
+				if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogStreamName, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogStreamName) {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogStreamName", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogStreamName, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogStreamName)
+				} else if a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogStreamName != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogStreamName != nil {
+					if *a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogStreamName != *b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogStreamName {
+						delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogStreamName", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogStreamName, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions.LogStreamName)
+					}
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CompressionFormat, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CompressionFormat) {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CompressionFormat", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CompressionFormat, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CompressionFormat)
+			} else if a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CompressionFormat != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CompressionFormat != nil {
+				if *a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CompressionFormat != *b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CompressionFormat {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CompressionFormat", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CompressionFormat, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CompressionFormat)
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration) {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration)
+			} else if a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration != nil {
+				if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.KMSEncryptionConfig, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.KMSEncryptionConfig) {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.KMSEncryptionConfig", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.KMSEncryptionConfig, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.KMSEncryptionConfig)
+				} else if a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.KMSEncryptionConfig != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.KMSEncryptionConfig != nil {
+					if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN) {
+						delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN)
+					} else if a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN != nil {
+						if *a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN != *b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN {
+							delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN)
+						}
+					}
+				}
+				if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.NoEncryptionConfig, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.NoEncryptionConfig) {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.NoEncryptionConfig", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.NoEncryptionConfig, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.NoEncryptionConfig)
+				} else if a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.NoEncryptionConfig != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.NoEncryptionConfig != nil {
+					if *a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.NoEncryptionConfig != *b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.NoEncryptionConfig {
+						delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.NoEncryptionConfig", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.NoEncryptionConfig, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration.NoEncryptionConfig)
+					}
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.ErrorOutputPrefix, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.ErrorOutputPrefix) {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.ErrorOutputPrefix", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.ErrorOutputPrefix, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.ErrorOutputPrefix)
+			} else if a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.ErrorOutputPrefix != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.ErrorOutputPrefix != nil {
+				if *a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.ErrorOutputPrefix != *b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.ErrorOutputPrefix {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.ErrorOutputPrefix", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.ErrorOutputPrefix, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.ErrorOutputPrefix)
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.Prefix, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.Prefix) {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.Prefix", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.Prefix, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.Prefix)
+			} else if a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.Prefix != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.Prefix != nil {
+				if *a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.Prefix != *b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.Prefix {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.Prefix", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.Prefix, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.Prefix)
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleARN, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleARN) {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleARN", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleARN, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleARN)
+			} else if a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleARN != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleARN != nil {
+				if *a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleARN != *b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleARN {
+					delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleARN", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleARN, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleARN)
+				}
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupMode, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupMode) {
+			delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupMode", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupMode, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupMode)
+		} else if a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupMode != nil && b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupMode != nil {
+			if *a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupMode != *b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupMode {
+				delta.Add("Spec.ExtendedS3DestinationConfiguration.S3BackupMode", a.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupMode, b.ko.Spec.ExtendedS3DestinationConfiguration.S3BackupMode)
+			}
+		}
+	}
 	if ackcompare.HasNilDifference(a.ko.Spec.HTTPEndpointDestinationConfiguration, b.ko.Spec.HTTPEndpointDestinationConfiguration) {
 		delta.Add("Spec.HTTPEndpointDestinationConfiguration", a.ko.Spec.HTTPEndpointDestinationConfiguration, b.ko.Spec.HTTPEndpointDestinationConfiguration)
 	} else if a.ko.Spec.HTTPEndpointDestinationConfiguration != nil && b.ko.Spec.HTTPEndpointDestinationConfiguration != nil {

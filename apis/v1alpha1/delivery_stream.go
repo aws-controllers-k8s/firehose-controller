@@ -41,6 +41,8 @@ type DeliveryStreamSpec struct {
 	//    * KinesisStreamAsSource: The Firehose stream uses a Kinesis data stream
 	//    as a source.
 	DeliveryStreamType *string `json:"deliveryStreamType,omitempty"`
+	// The destination in Amazon S3. You can specify only one destination.
+	ExtendedS3DestinationConfiguration *ExtendedS3DestinationConfiguration `json:"extendedS3DestinationConfiguration,omitempty"`
 	// Enables configuring Kinesis Firehose to deliver data to any HTTP endpoint
 	// destination. You can specify only one destination.
 	HTTPEndpointDestinationConfiguration *HTTPEndpointDestinationConfiguration `json:"httpEndpointDestinationConfiguration,omitempty"`
