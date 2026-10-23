@@ -1272,6 +1272,11 @@ func (in *DeliveryStreamSpec) DeepCopyInto(out *DeliveryStreamSpec) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.ExtendedS3DestinationConfiguration != nil {
+		in, out := &in.ExtendedS3DestinationConfiguration, &out.ExtendedS3DestinationConfiguration
+		*out = new(ExtendedS3DestinationConfiguration)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.HTTPEndpointDestinationConfiguration != nil {
 		in, out := &in.HTTPEndpointDestinationConfiguration, &out.HTTPEndpointDestinationConfiguration
 		*out = new(HTTPEndpointDestinationConfiguration)
@@ -1908,6 +1913,11 @@ func (in *ExtendedS3DestinationConfiguration) DeepCopyInto(out *ExtendedS3Destin
 		*out = new(string)
 		**out = **in
 	}
+	if in.BucketRef != nil {
+		in, out := &in.BucketRef, &out.BucketRef
+		*out = new(corev1alpha1.AWSResourceReferenceWrapper)
+		(*in).DeepCopyInto(*out)
+	}
 	if in.BufferingHints != nil {
 		in, out := &in.BufferingHints, &out.BufferingHints
 		*out = new(BufferingHints)
@@ -1967,6 +1977,11 @@ func (in *ExtendedS3DestinationConfiguration) DeepCopyInto(out *ExtendedS3Destin
 		in, out := &in.RoleARN, &out.RoleARN
 		*out = new(string)
 		**out = **in
+	}
+	if in.RoleRef != nil {
+		in, out := &in.RoleRef, &out.RoleRef
+		*out = new(corev1alpha1.AWSResourceReferenceWrapper)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.S3BackupConfiguration != nil {
 		in, out := &in.S3BackupConfiguration, &out.S3BackupConfiguration

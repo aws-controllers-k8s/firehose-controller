@@ -635,6 +635,8 @@ type EncryptionConfiguration struct {
 // Describes the configuration of a destination in Amazon S3.
 type ExtendedS3DestinationConfiguration struct {
 	BucketARN *string `json:"bucketARN,omitempty"`
+	// Reference field for BucketARN
+	BucketRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"bucketRef,omitempty"`
 	// Describes hints for the buffering to perform before delivering data to the
 	// destination. These options are treated as hints, and therefore Firehose might
 	// choose to use different values when it is optimal. The SizeInMBs and IntervalInSeconds
@@ -664,6 +666,8 @@ type ExtendedS3DestinationConfiguration struct {
 	// Describes a data processing configuration.
 	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
 	RoleARN                 *string                  `json:"roleARN,omitempty"`
+	// Reference field for RoleARN
+	RoleRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"roleRef,omitempty"`
 	// Describes the configuration of a destination in Amazon S3.
 	S3BackupConfiguration *S3DestinationConfiguration `json:"s3BackupConfiguration,omitempty"`
 	S3BackupMode          *string                     `json:"s3BackupMode,omitempty"`

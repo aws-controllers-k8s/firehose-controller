@@ -7,7 +7,6 @@ ignore:
     - CreateDeliveryStreamInput.DatabaseSourceConfiguration
     - CreateDeliveryStreamInput.DirectPutSourceConfiguration
     - CreateDeliveryStreamInput.ElasticsearchDestinationConfiguration
-    - CreateDeliveryStreamInput.ExtendedS3DestinationConfiguration
     #- CreateDeliveryStreamInput.HttpEndpointDestinationConfiguration
     - CreateDeliveryStreamInput.IcebergDestinationConfiguration
     - CreateDeliveryStreamInput.KinesisStreamSourceConfiguration
@@ -36,6 +35,8 @@ resources:
             HttpEndpointDestinationUpdate: HttpEndpointDestinationConfiguration
             HttpEndpointDestinationConfiguration.S3Update: S3Configuration
             S3Update: S3Configuration
+            ExtendedS3DestinationUpdate: ExtendedS3DestinationConfiguration
+            ExtendedS3DestinationConfiguration.S3BackupUpdate: S3BackupConfiguration
 
     fields:
       DeliveryStreamEncryptionConfiguration:
@@ -232,7 +233,132 @@ resources:
             service_name: secretsmanager
             path: Status.ACKResourceMetadata.ARN
 
-      
+
+      ExtendedS3DestinationConfiguration:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      ExtendedS3DestinationConfiguration.BucketARN:
+        references:
+          resource: Bucket
+          service_name: s3
+          path: Status.ACKResourceMetadata.ARN
+
+      ExtendedS3DestinationConfiguration.RoleARN:
+        references:
+          resource: Role
+          service_name: iam
+          path: Status.ACKResourceMetadata.ARN
+
+      ExtendedS3DestinationConfiguration.BufferingHints:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      ExtendedS3DestinationConfiguration.CloudWatchLoggingOptions:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      ExtendedS3DestinationConfiguration.CompressionFormat:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      ExtendedS3DestinationConfiguration.EncryptionConfiguration:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      ExtendedS3DestinationConfiguration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN:
+        references:
+          resource: Key
+          service_name: kms
+          path: Status.ACKResourceMetadata.ARN
+
+      ExtendedS3DestinationConfiguration.ErrorOutputPrefix:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      ExtendedS3DestinationConfiguration.Prefix:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      ExtendedS3DestinationConfiguration.ProcessingConfiguration:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      ExtendedS3DestinationConfiguration.S3BackupMode:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      ExtendedS3DestinationConfiguration.S3BackupConfiguration:
+        set:
+          - method: Update
+            to: S3BackupUpdate
+
+      ExtendedS3DestinationConfiguration.S3BackupConfiguration.BucketARN:
+        references:
+          resource: Bucket
+          service_name: s3
+          path: Status.ACKResourceMetadata.ARN
+
+      ExtendedS3DestinationConfiguration.S3BackupConfiguration.RoleARN:
+        references:
+          resource: Role
+          service_name: iam
+          path: Status.ACKResourceMetadata.ARN
+
+      ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      ExtendedS3DestinationConfiguration.S3BackupConfiguration.CompressionFormat:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.RetryOptions:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      ExtendedS3DestinationConfiguration.CustomTimeZone:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      ExtendedS3DestinationConfiguration.FileExtension:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
     hooks:
       delta_pre_compare:
         template_path: hooks/delivery_stream/delta_pre_compare.go.tpl

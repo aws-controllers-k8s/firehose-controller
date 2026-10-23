@@ -170,6 +170,8 @@ func setDestinations(ko *svcapitypes.DeliveryStream, resp *svcsdk.DescribeDelive
 	switch {
 	case respDestination.HttpEndpointDestinationDescription != nil:
 		readHttpDestinationDescription(ko, respDestination.HttpEndpointDestinationDescription)
+	case respDestination.ExtendedS3DestinationDescription != nil:
+		readExtendedS3DestinationDescription(ko, respDestination.ExtendedS3DestinationDescription)
 	}
 
 	return nil

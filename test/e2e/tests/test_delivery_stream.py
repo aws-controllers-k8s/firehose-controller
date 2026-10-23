@@ -76,6 +76,42 @@ def http_dest_delivery_stream():
     except:
         pass
 
+@pytest.fixture(scope="module")
+def extended_s3_delivery_stream():
+    bootstrapped_resources = get_bootstrap_resources()
+
+    resource_name = random_suffix_name("extended-s3-delivery-stream", 48)
+    replacements = REPLACEMENT_VALUES.copy()
+    replacements["DELIVERY_STREAM_NAME"] = resource_name
+    replacements["DELIVERY_STREAM_TYPE"] = "DirectPut"
+    replacements["S3_BUCKET_ARN"] = f"arn:aws:s3:::{bootstrapped_resources.HttpDestBucket.name}"
+    replacements["S3_ROLE_ARN"] = bootstrapped_resources.HttpDestBucketRole.arn
+
+    resource_data = load_firehose_resource(
+        "delivery_stream_extendeds3",
+        additional_replacements=replacements,
+    )
+
+    ref = k8s.CustomResourceReference(
+        CRD_GROUP, CRD_VERSION, "deliverystreams",
+        resource_name, namespace="default",
+    )
+
+    k8s.create_custom_resource(ref, resource_data)
+    cr = k8s.wait_resource_consumed_by_controller(ref)
+
+    assert cr is not None
+    assert k8s.get_resource_exists(ref)
+
+    yield (ref, cr)
+
+    try:
+        _, deleted = k8s.delete_custom_resource(ref, wait_periods=3, period_length=10)
+        assert deleted
+    except:
+        pass
+
+
 @service_marker
 @pytest.mark.canary
 class TestDeliveryStream:
@@ -258,3 +294,63 @@ class TestDeliveryStream:
         
 
         
+
+    def test_create_update_delete_extended_s3_delivery_stream(self, extended_s3_delivery_stream, firehose_client):
+        (ref, cr) = extended_s3_delivery_stream
+        bootstrapped_resources = get_bootstrap_resources()
+        bucket_arn = f"arn:aws:s3:::{bootstrapped_resources.HttpDestBucket.name}"
+
+        k8s.wait_on_condition(ref, condition.CONDITION_TYPE_RESOURCE_SYNCED, "True")
+        cr = k8s.get_resource(ref)
+        condition.assert_synced(ref)
+
+        assert cr["status"]["deliveryStreamStatus"] == "ACTIVE"
+        assert cr["spec"]["extendedS3DestinationConfiguration"]["bucketARN"] == bucket_arn
+        assert cr["spec"]["extendedS3DestinationConfiguration"]["bufferingHints"]["intervalInSeconds"] == 60
+        assert "httpEndpointDestinationConfiguration" not in cr["spec"]
+
+        ds_name = cr["spec"]["deliveryStreamName"]
+        delivery_stream = firehose_client.describe_delivery_stream(DeliveryStreamName=ds_name)
+        description = delivery_stream["DeliveryStreamDescription"]
+        assert description["DeliveryStreamStatus"] == "ACTIVE"
+        assert len(description["Destinations"]) == 1
+        destination = description["Destinations"][0]["ExtendedS3DestinationDescription"]
+        assert destination["BucketARN"] == bucket_arn
+        assert destination["BufferingHints"]["IntervalInSeconds"] == 60
+        assert destination["BufferingHints"]["SizeInMBs"] == 1
+
+        expected_tags = [{"Key": "environment", "Value": "dev"}]
+        stream_tags = firehose_client.list_tags_for_delivery_stream(DeliveryStreamName=ds_name)
+        assert_equal_without_ack_tags(expected_tags, stream_tags["Tags"])
+
+        updates = {
+            "spec": {
+                "extendedS3DestinationConfiguration": {
+                    "prefix": "updated/",
+                    "bufferingHints": {
+                        "intervalInSeconds": 120,
+                        "sizeInMBs": 2,
+                    },
+                },
+            }
+        }
+
+        synced_at = condition.get_synced_last_transition_time(ref)
+        k8s.patch_custom_resource(ref, updates)
+
+        assert k8s.wait_on_condition_after(
+            ref, condition.CONDITION_TYPE_RESOURCE_SYNCED, "True",
+            last_transition_after=synced_at,
+            wait_periods=RESYNC_WAIT_PERIODS, period_length=RESYNC_WAIT_PERIOD_LENGTH,
+        )
+        condition.assert_synced(ref)
+
+        cr = k8s.get_resource(ref)
+        assert cr["status"]["deliveryStreamStatus"] == "ACTIVE"
+        assert cr["spec"]["extendedS3DestinationConfiguration"]["prefix"] == "updated/"
+
+        delivery_stream = firehose_client.describe_delivery_stream(DeliveryStreamName=ds_name)
+        destination = delivery_stream["DeliveryStreamDescription"]["Destinations"][0]["ExtendedS3DestinationDescription"]
+        assert destination["Prefix"] == "updated/"
+        assert destination["BufferingHints"]["IntervalInSeconds"] == 120
+        assert destination["BufferingHints"]["SizeInMBs"] == 2
