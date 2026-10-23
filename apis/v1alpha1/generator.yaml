@@ -314,12 +314,37 @@ resources:
           service_name: iam
           path: Status.ACKResourceMetadata.ARN
 
+      ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      ExtendedS3DestinationConfiguration.S3BackupConfiguration.CompressionFormat:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
       ExtendedS3DestinationConfiguration.DataFormatConversionConfiguration:
         late_initialize: {
           skip_incomplete_check: {}
         }
 
       ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.RetryOptions:
         late_initialize: {
           skip_incomplete_check: {}
         }

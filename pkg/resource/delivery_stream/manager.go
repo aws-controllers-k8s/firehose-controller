@@ -50,7 +50,7 @@ var (
 // +kubebuilder:rbac:groups=firehose.services.k8s.aws,resources=deliverystreams,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=firehose.services.k8s.aws,resources=deliverystreams/status,verbs=get;update;patch
 
-var lateInitializeFieldNames = []string{"DeliveryStreamEncryptionConfiguration", "ExtendedS3DestinationConfiguration", "BufferingHints", "CloudWatchLoggingOptions", "CompressionFormat", "CustomTimeZone", "DataFormatConversionConfiguration", "DynamicPartitioningConfiguration", "EncryptionConfiguration", "ErrorOutputPrefix", "FileExtension", "Prefix", "ProcessingConfiguration", "S3BackupMode", "HTTPEndpointDestinationConfiguration", "BufferingHints", "CloudWatchLoggingOptions", "EndpointConfiguration", "ProcessingConfiguration", "RequestConfiguration", "RetryOptions", "RoleARN", "S3BackupMode", "S3Configuration", "BufferingHints", "CloudWatchLoggingOptions", "CompressionFormat", "EncryptionConfiguration", "ErrorOutputPrefix", "Prefix", "SecretsManagerConfiguration"}
+var lateInitializeFieldNames = []string{"DeliveryStreamEncryptionConfiguration", "ExtendedS3DestinationConfiguration", "BufferingHints", "CloudWatchLoggingOptions", "CompressionFormat", "CustomTimeZone", "DataFormatConversionConfiguration", "DynamicPartitioningConfiguration", "RetryOptions", "EncryptionConfiguration", "ErrorOutputPrefix", "FileExtension", "Prefix", "ProcessingConfiguration", "BufferingHints", "CloudWatchLoggingOptions", "CompressionFormat", "EncryptionConfiguration", "S3BackupMode", "HTTPEndpointDestinationConfiguration", "BufferingHints", "CloudWatchLoggingOptions", "EndpointConfiguration", "ProcessingConfiguration", "RequestConfiguration", "RetryOptions", "RoleARN", "S3BackupMode", "S3Configuration", "BufferingHints", "CloudWatchLoggingOptions", "CompressionFormat", "EncryptionConfiguration", "ErrorOutputPrefix", "Prefix", "SecretsManagerConfiguration"}
 
 // resourceManager is responsible for providing a consistent way to perform
 // CRUD operations in a backend AWS service API for Book custom resources.
@@ -303,6 +303,13 @@ func (rm *resourceManager) lateInitializeFromReadOneOutput(
 		}
 	}
 	if observedKo.Spec.ExtendedS3DestinationConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration != nil {
+		if observedKo.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration != nil {
+			if observedKo.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.RetryOptions != nil && latestKo.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.RetryOptions == nil {
+				latestKo.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.RetryOptions = observedKo.Spec.ExtendedS3DestinationConfiguration.DynamicPartitioningConfiguration.RetryOptions
+			}
+		}
+	}
+	if observedKo.Spec.ExtendedS3DestinationConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration != nil {
 		if observedKo.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration == nil {
 			latestKo.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration = observedKo.Spec.ExtendedS3DestinationConfiguration.EncryptionConfiguration
 		}
@@ -325,6 +332,34 @@ func (rm *resourceManager) lateInitializeFromReadOneOutput(
 	if observedKo.Spec.ExtendedS3DestinationConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration != nil {
 		if observedKo.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration == nil {
 			latestKo.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration = observedKo.Spec.ExtendedS3DestinationConfiguration.ProcessingConfiguration
+		}
+	}
+	if observedKo.Spec.ExtendedS3DestinationConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration != nil {
+		if observedKo.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration != nil {
+			if observedKo.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints != nil && latestKo.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints == nil {
+				latestKo.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints = observedKo.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.BufferingHints
+			}
+		}
+	}
+	if observedKo.Spec.ExtendedS3DestinationConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration != nil {
+		if observedKo.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration != nil {
+			if observedKo.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions != nil && latestKo.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions == nil {
+				latestKo.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions = observedKo.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CloudWatchLoggingOptions
+			}
+		}
+	}
+	if observedKo.Spec.ExtendedS3DestinationConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration != nil {
+		if observedKo.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration != nil {
+			if observedKo.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CompressionFormat != nil && latestKo.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CompressionFormat == nil {
+				latestKo.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CompressionFormat = observedKo.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.CompressionFormat
+			}
+		}
+	}
+	if observedKo.Spec.ExtendedS3DestinationConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration != nil {
+		if observedKo.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration != nil {
+			if observedKo.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration == nil {
+				latestKo.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration = observedKo.Spec.ExtendedS3DestinationConfiguration.S3BackupConfiguration.EncryptionConfiguration
+			}
 		}
 	}
 	if observedKo.Spec.ExtendedS3DestinationConfiguration != nil && latestKo.Spec.ExtendedS3DestinationConfiguration != nil {

@@ -208,3 +208,74 @@ func TestSetDestinationsExtendedS3(t *testing.T) {
 		t.Errorf("HTTP endpoint destination must stay nil")
 	}
 }
+
+// Firehose fills in defaults on the backup block and on the dynamic
+// partitioning retry options. After the read and the late initialization the
+// desired resource must carry them, or every reconcile sees drift and calls
+// UpdateDestination.
+func TestExtendedS3LateInitializationLeavesNoDelta(t *testing.T) {
+	desired := &resource{ko: &svcapitypes.DeliveryStream{}}
+	desired.ko.Spec.ExtendedS3DestinationConfiguration = &svcapitypes.ExtendedS3DestinationConfiguration{
+		BucketARN:    aws.String("arn:aws:s3:::data"),
+		RoleARN:      aws.String("arn:aws:iam::123456789012:role/firehose"),
+		S3BackupMode: aws.String("Enabled"),
+		S3BackupConfiguration: &svcapitypes.S3DestinationConfiguration{
+			BucketARN: aws.String("arn:aws:s3:::backup"),
+			RoleARN:   aws.String("arn:aws:iam::123456789012:role/firehose"),
+		},
+		DynamicPartitioningConfiguration: &svcapitypes.DynamicPartitioningConfiguration{Enabled: aws.Bool(true)},
+		ProcessingConfiguration: &svcapitypes.ProcessingConfiguration{
+			Enabled: aws.Bool(true),
+			Processors: []*svcapitypes.Processor{{
+				Type: aws.String("MetadataExtraction"),
+				Parameters: []*svcapitypes.ProcessorParameter{
+					{ParameterName: aws.String("MetadataExtractionQuery"), ParameterValue: aws.String("{customer_id:.customer_id}")},
+					{ParameterName: aws.String("JsonParsingEngine"), ParameterValue: aws.String("JQ-1.6")},
+				},
+			}},
+		},
+	}
+
+	observed := &resource{ko: desired.ko.DeepCopy()}
+	readExtendedS3DestinationDescription(observed.ko, &svcsdktypes.ExtendedS3DestinationDescription{
+		BucketARN:                aws.String("arn:aws:s3:::data"),
+		RoleARN:                  aws.String("arn:aws:iam::123456789012:role/firehose"),
+		BufferingHints:           &svcsdktypes.BufferingHints{IntervalInSeconds: aws.Int32(300), SizeInMBs: aws.Int32(5)},
+		CompressionFormat:        svcsdktypes.CompressionFormatUncompressed,
+		EncryptionConfiguration:  &svcsdktypes.EncryptionConfiguration{NoEncryptionConfig: svcsdktypes.NoEncryptionConfigNoEncryption},
+		CloudWatchLoggingOptions: &svcsdktypes.CloudWatchLoggingOptions{Enabled: aws.Bool(false)},
+		S3BackupMode:             svcsdktypes.S3BackupModeEnabled,
+		S3BackupDescription: &svcsdktypes.S3DestinationDescription{
+			BucketARN:                aws.String("arn:aws:s3:::backup"),
+			RoleARN:                  aws.String("arn:aws:iam::123456789012:role/firehose"),
+			BufferingHints:           &svcsdktypes.BufferingHints{IntervalInSeconds: aws.Int32(300), SizeInMBs: aws.Int32(5)},
+			CompressionFormat:        svcsdktypes.CompressionFormatUncompressed,
+			EncryptionConfiguration:  &svcsdktypes.EncryptionConfiguration{NoEncryptionConfig: svcsdktypes.NoEncryptionConfigNoEncryption},
+			CloudWatchLoggingOptions: &svcsdktypes.CloudWatchLoggingOptions{Enabled: aws.Bool(false)},
+		},
+		DynamicPartitioningConfiguration: &svcsdktypes.DynamicPartitioningConfiguration{
+			Enabled:      aws.Bool(true),
+			RetryOptions: &svcsdktypes.RetryOptions{DurationInSeconds: aws.Int32(300)},
+		},
+		ProcessingConfiguration: &svcsdktypes.ProcessingConfiguration{
+			Enabled: aws.Bool(true),
+			Processors: []svcsdktypes.Processor{{
+				Type: svcsdktypes.ProcessorTypeMetadataExtraction,
+				Parameters: []svcsdktypes.ProcessorParameter{
+					{ParameterName: svcsdktypes.ProcessorParameterNameMetadataExtractionQuery, ParameterValue: aws.String("{customer_id:.customer_id}")},
+					{ParameterName: svcsdktypes.ProcessorParameterNameJsonParsingEngine, ParameterValue: aws.String("JQ-1.6")},
+				},
+			}},
+		},
+	})
+
+	if before := newResourceDelta(desired, observed); len(before.Differences) == 0 {
+		t.Fatalf("expected the defaults to differ from the bare spec before late initialization")
+	}
+
+	rm := &resourceManager{}
+	lateInitialized := rm.concreteResource(rm.lateInitializeFromReadOneOutput(observed, desired))
+	if delta := newResourceDelta(lateInitialized, observed); len(delta.Differences) != 0 {
+		t.Errorf("late initialization left %d differences: %+v", len(delta.Differences), delta.Differences)
+	}
+}
