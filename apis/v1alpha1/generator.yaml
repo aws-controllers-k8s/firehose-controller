@@ -13,7 +13,6 @@ ignore:
     - CreateDeliveryStreamInput.MSKSourceConfiguration
     - CreateDeliveryStreamInput.RedshiftDestinationConfiguration
     - CreateDeliveryStreamInput.SnowflakeDestinationConfiguration
-    - CreateDeliveryStreamInput.SplunkDestinationConfiguration
     - CreateDeliveryStreamInput.S3DestinationConfiguration
 
 
@@ -37,6 +36,8 @@ resources:
             S3Update: S3Configuration
             ExtendedS3DestinationUpdate: ExtendedS3DestinationConfiguration
             ExtendedS3DestinationConfiguration.S3BackupUpdate: S3BackupConfiguration
+            SplunkDestinationUpdate: SplunkDestinationConfiguration
+            SplunkDestinationConfiguration.S3Update: S3Configuration
 
     fields:
       DeliveryStreamEncryptionConfiguration:
@@ -358,6 +359,118 @@ resources:
         late_initialize: {
           skip_incomplete_check: {}
         }
+
+
+      SplunkDestinationConfiguration:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      SplunkDestinationConfiguration.HECToken:
+        is_secret: true
+
+      SplunkDestinationConfiguration.HECAcknowledgmentTimeoutInSeconds:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      SplunkDestinationConfiguration.RetryOptions:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      SplunkDestinationConfiguration.S3BackupMode:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      SplunkDestinationConfiguration.S3Configuration:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+        set:
+          - method: Update
+            to: S3Update
+
+      SplunkDestinationConfiguration.S3Configuration.BucketARN:
+        references:
+          resource: Bucket
+          service_name: s3
+          path: Status.ACKResourceMetadata.ARN
+
+      SplunkDestinationConfiguration.S3Configuration.RoleARN:
+        references:
+          resource: Role
+          service_name: iam
+          path: Status.ACKResourceMetadata.ARN
+
+      SplunkDestinationConfiguration.S3Configuration.BufferingHints:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      SplunkDestinationConfiguration.S3Configuration.CompressionFormat:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN:
+        references:
+          resource: Key
+          service_name: kms
+          path: Status.ACKResourceMetadata.ARN
+
+      SplunkDestinationConfiguration.S3Configuration.ErrorOutputPrefix:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      SplunkDestinationConfiguration.S3Configuration.Prefix:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      SplunkDestinationConfiguration.ProcessingConfiguration:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      SplunkDestinationConfiguration.CloudWatchLoggingOptions:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      SplunkDestinationConfiguration.BufferingHints:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      SplunkDestinationConfiguration.SecretsManagerConfiguration:
+        late_initialize: {
+          skip_incomplete_check: {}
+        }
+
+      SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleARN:
+        references:
+          resource: Role
+          service_name: iam
+          path: Status.ACKResourceMetadata.ARN
+
+      SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretARN:
+        references:
+          resource: Secret
+          service_name: secretsmanager
+          path: Status.ACKResourceMetadata.ARN
 
     hooks:
       delta_pre_compare:

@@ -823,19 +823,205 @@ func (rm *resourceManager) newCreateRequestPayload(
 		}
 		res.HttpEndpointDestinationConfiguration = f4
 	}
-	if r.ko.Spec.Tags != nil {
-		f5 := []svcsdktypes.Tag{}
-		for _, f5iter := range r.ko.Spec.Tags {
-			f5elem := &svcsdktypes.Tag{}
-			if f5iter.Key != nil {
-				f5elem.Key = f5iter.Key
+	if r.ko.Spec.SplunkDestinationConfiguration != nil {
+		f5 := &svcsdktypes.SplunkDestinationConfiguration{}
+		if r.ko.Spec.SplunkDestinationConfiguration.BufferingHints != nil {
+			f5f0 := &svcsdktypes.SplunkBufferingHints{}
+			if r.ko.Spec.SplunkDestinationConfiguration.BufferingHints.IntervalInSeconds != nil {
+				intervalInSecondsCopy0 := *r.ko.Spec.SplunkDestinationConfiguration.BufferingHints.IntervalInSeconds
+				if intervalInSecondsCopy0 > math.MaxInt32 || intervalInSecondsCopy0 < math.MinInt32 {
+					return nil, fmt.Errorf("error: field IntervalInSeconds is of type int32")
+				}
+				intervalInSecondsCopy := int32(intervalInSecondsCopy0)
+				f5f0.IntervalInSeconds = &intervalInSecondsCopy
 			}
-			if f5iter.Value != nil {
-				f5elem.Value = f5iter.Value
+			if r.ko.Spec.SplunkDestinationConfiguration.BufferingHints.SizeInMBs != nil {
+				sizeInMBsCopy0 := *r.ko.Spec.SplunkDestinationConfiguration.BufferingHints.SizeInMBs
+				if sizeInMBsCopy0 > math.MaxInt32 || sizeInMBsCopy0 < math.MinInt32 {
+					return nil, fmt.Errorf("error: field SizeInMBs is of type int32")
+				}
+				sizeInMBsCopy := int32(sizeInMBsCopy0)
+				f5f0.SizeInMBs = &sizeInMBsCopy
 			}
-			f5 = append(f5, *f5elem)
+			f5.BufferingHints = f5f0
 		}
-		res.Tags = f5
+		if r.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions != nil {
+			f5f1 := &svcsdktypes.CloudWatchLoggingOptions{}
+			if r.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.Enabled != nil {
+				f5f1.Enabled = r.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.Enabled
+			}
+			if r.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName != nil {
+				f5f1.LogGroupName = r.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName
+			}
+			if r.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName != nil {
+				f5f1.LogStreamName = r.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName
+			}
+			f5.CloudWatchLoggingOptions = f5f1
+		}
+		if r.ko.Spec.SplunkDestinationConfiguration.HECAcknowledgmentTimeoutInSeconds != nil {
+			hECAcknowledgmentTimeoutInSecondsCopy0 := *r.ko.Spec.SplunkDestinationConfiguration.HECAcknowledgmentTimeoutInSeconds
+			if hECAcknowledgmentTimeoutInSecondsCopy0 > math.MaxInt32 || hECAcknowledgmentTimeoutInSecondsCopy0 < math.MinInt32 {
+				return nil, fmt.Errorf("error: field HECAcknowledgmentTimeoutInSeconds is of type int32")
+			}
+			hECAcknowledgmentTimeoutInSecondsCopy := int32(hECAcknowledgmentTimeoutInSecondsCopy0)
+			f5.HECAcknowledgmentTimeoutInSeconds = &hECAcknowledgmentTimeoutInSecondsCopy
+		}
+		if r.ko.Spec.SplunkDestinationConfiguration.HECEndpoint != nil {
+			f5.HECEndpoint = r.ko.Spec.SplunkDestinationConfiguration.HECEndpoint
+		}
+		if r.ko.Spec.SplunkDestinationConfiguration.HECEndpointType != nil {
+			f5.HECEndpointType = svcsdktypes.HECEndpointType(*r.ko.Spec.SplunkDestinationConfiguration.HECEndpointType)
+		}
+		if r.ko.Spec.SplunkDestinationConfiguration.HECToken != nil {
+			tmpSecret, err := rm.rr.SecretValueFromReference(ctx, r.ko.Spec.SplunkDestinationConfiguration.HECToken)
+			if err != nil {
+				return nil, ackrequeue.Needed(err)
+			}
+			if tmpSecret != "" {
+				f5.HECToken = aws.String(tmpSecret)
+			}
+		}
+		if r.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration != nil {
+			f5f6 := &svcsdktypes.ProcessingConfiguration{}
+			if r.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Enabled != nil {
+				f5f6.Enabled = r.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Enabled
+			}
+			if r.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Processors != nil {
+				f5f6f1 := []svcsdktypes.Processor{}
+				for _, f5f6f1iter := range r.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Processors {
+					f5f6f1elem := &svcsdktypes.Processor{}
+					if f5f6f1iter.Parameters != nil {
+						f5f6f1elemf0 := []svcsdktypes.ProcessorParameter{}
+						for _, f5f6f1elemf0iter := range f5f6f1iter.Parameters {
+							f5f6f1elemf0elem := &svcsdktypes.ProcessorParameter{}
+							if f5f6f1elemf0iter.ParameterName != nil {
+								f5f6f1elemf0elem.ParameterName = svcsdktypes.ProcessorParameterName(*f5f6f1elemf0iter.ParameterName)
+							}
+							if f5f6f1elemf0iter.ParameterValue != nil {
+								f5f6f1elemf0elem.ParameterValue = f5f6f1elemf0iter.ParameterValue
+							}
+							f5f6f1elemf0 = append(f5f6f1elemf0, *f5f6f1elemf0elem)
+						}
+						f5f6f1elem.Parameters = f5f6f1elemf0
+					}
+					if f5f6f1iter.Type != nil {
+						f5f6f1elem.Type = svcsdktypes.ProcessorType(*f5f6f1iter.Type)
+					}
+					f5f6f1 = append(f5f6f1, *f5f6f1elem)
+				}
+				f5f6.Processors = f5f6f1
+			}
+			f5.ProcessingConfiguration = f5f6
+		}
+		if r.ko.Spec.SplunkDestinationConfiguration.RetryOptions != nil {
+			f5f7 := &svcsdktypes.SplunkRetryOptions{}
+			if r.ko.Spec.SplunkDestinationConfiguration.RetryOptions.DurationInSeconds != nil {
+				durationInSecondsCopy0 := *r.ko.Spec.SplunkDestinationConfiguration.RetryOptions.DurationInSeconds
+				if durationInSecondsCopy0 > math.MaxInt32 || durationInSecondsCopy0 < math.MinInt32 {
+					return nil, fmt.Errorf("error: field DurationInSeconds is of type int32")
+				}
+				durationInSecondsCopy := int32(durationInSecondsCopy0)
+				f5f7.DurationInSeconds = &durationInSecondsCopy
+			}
+			f5.RetryOptions = f5f7
+		}
+		if r.ko.Spec.SplunkDestinationConfiguration.S3BackupMode != nil {
+			f5.S3BackupMode = svcsdktypes.SplunkS3BackupMode(*r.ko.Spec.SplunkDestinationConfiguration.S3BackupMode)
+		}
+		if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration != nil {
+			f5f9 := &svcsdktypes.S3DestinationConfiguration{}
+			if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BucketARN != nil {
+				f5f9.BucketARN = r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BucketARN
+			}
+			if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints != nil {
+				f5f9f1 := &svcsdktypes.BufferingHints{}
+				if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds != nil {
+					intervalInSecondsCopy0 := *r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds
+					if intervalInSecondsCopy0 > math.MaxInt32 || intervalInSecondsCopy0 < math.MinInt32 {
+						return nil, fmt.Errorf("error: field IntervalInSeconds is of type int32")
+					}
+					intervalInSecondsCopy := int32(intervalInSecondsCopy0)
+					f5f9f1.IntervalInSeconds = &intervalInSecondsCopy
+				}
+				if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs != nil {
+					sizeInMBsCopy0 := *r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs
+					if sizeInMBsCopy0 > math.MaxInt32 || sizeInMBsCopy0 < math.MinInt32 {
+						return nil, fmt.Errorf("error: field SizeInMBs is of type int32")
+					}
+					sizeInMBsCopy := int32(sizeInMBsCopy0)
+					f5f9f1.SizeInMBs = &sizeInMBsCopy
+				}
+				f5f9.BufferingHints = f5f9f1
+			}
+			if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions != nil {
+				f5f9f2 := &svcsdktypes.CloudWatchLoggingOptions{}
+				if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled != nil {
+					f5f9f2.Enabled = r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled
+				}
+				if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName != nil {
+					f5f9f2.LogGroupName = r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName
+				}
+				if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName != nil {
+					f5f9f2.LogStreamName = r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName
+				}
+				f5f9.CloudWatchLoggingOptions = f5f9f2
+			}
+			if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CompressionFormat != nil {
+				f5f9.CompressionFormat = svcsdktypes.CompressionFormat(*r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CompressionFormat)
+			}
+			if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration != nil {
+				f5f9f4 := &svcsdktypes.EncryptionConfiguration{}
+				if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig != nil {
+					f5f9f4f0 := &svcsdktypes.KMSEncryptionConfig{}
+					if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN != nil {
+						f5f9f4f0.AWSKMSKeyARN = r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN
+					}
+					f5f9f4.KMSEncryptionConfig = f5f9f4f0
+				}
+				if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig != nil {
+					f5f9f4.NoEncryptionConfig = svcsdktypes.NoEncryptionConfig(*r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig)
+				}
+				f5f9.EncryptionConfiguration = f5f9f4
+			}
+			if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.ErrorOutputPrefix != nil {
+				f5f9.ErrorOutputPrefix = r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.ErrorOutputPrefix
+			}
+			if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.Prefix != nil {
+				f5f9.Prefix = r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.Prefix
+			}
+			if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.RoleARN != nil {
+				f5f9.RoleARN = r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.RoleARN
+			}
+			f5.S3Configuration = f5f9
+		}
+		if r.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration != nil {
+			f5f10 := &svcsdktypes.SecretsManagerConfiguration{}
+			if r.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.Enabled != nil {
+				f5f10.Enabled = r.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.Enabled
+			}
+			if r.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleARN != nil {
+				f5f10.RoleARN = r.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleARN
+			}
+			if r.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretARN != nil {
+				f5f10.SecretARN = r.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretARN
+			}
+			f5.SecretsManagerConfiguration = f5f10
+		}
+		res.SplunkDestinationConfiguration = f5
+	}
+	if r.ko.Spec.Tags != nil {
+		f6 := []svcsdktypes.Tag{}
+		for _, f6iter := range r.ko.Spec.Tags {
+			f6elem := &svcsdktypes.Tag{}
+			if f6iter.Key != nil {
+				f6elem.Key = f6iter.Key
+			}
+			if f6iter.Value != nil {
+				f6elem.Value = f6iter.Value
+			}
+			f6 = append(f6, *f6elem)
+		}
+		res.Tags = f6
 	}
 
 	return res, nil
@@ -1476,6 +1662,192 @@ func (rm *resourceManager) newUpdateRequestPayload(
 			f7.SecretsManagerConfiguration = f7f9
 		}
 		res.HttpEndpointDestinationUpdate = f7
+	}
+	if r.ko.Spec.SplunkDestinationConfiguration != nil {
+		f12 := &svcsdktypes.SplunkDestinationUpdate{}
+		if r.ko.Spec.SplunkDestinationConfiguration.BufferingHints != nil {
+			f12f0 := &svcsdktypes.SplunkBufferingHints{}
+			if r.ko.Spec.SplunkDestinationConfiguration.BufferingHints.IntervalInSeconds != nil {
+				intervalInSecondsCopy0 := *r.ko.Spec.SplunkDestinationConfiguration.BufferingHints.IntervalInSeconds
+				if intervalInSecondsCopy0 > math.MaxInt32 || intervalInSecondsCopy0 < math.MinInt32 {
+					return nil, fmt.Errorf("error: field IntervalInSeconds is of type int32")
+				}
+				intervalInSecondsCopy := int32(intervalInSecondsCopy0)
+				f12f0.IntervalInSeconds = &intervalInSecondsCopy
+			}
+			if r.ko.Spec.SplunkDestinationConfiguration.BufferingHints.SizeInMBs != nil {
+				sizeInMBsCopy0 := *r.ko.Spec.SplunkDestinationConfiguration.BufferingHints.SizeInMBs
+				if sizeInMBsCopy0 > math.MaxInt32 || sizeInMBsCopy0 < math.MinInt32 {
+					return nil, fmt.Errorf("error: field SizeInMBs is of type int32")
+				}
+				sizeInMBsCopy := int32(sizeInMBsCopy0)
+				f12f0.SizeInMBs = &sizeInMBsCopy
+			}
+			f12.BufferingHints = f12f0
+		}
+		if r.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions != nil {
+			f12f1 := &svcsdktypes.CloudWatchLoggingOptions{}
+			if r.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.Enabled != nil {
+				f12f1.Enabled = r.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.Enabled
+			}
+			if r.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName != nil {
+				f12f1.LogGroupName = r.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName
+			}
+			if r.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName != nil {
+				f12f1.LogStreamName = r.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName
+			}
+			f12.CloudWatchLoggingOptions = f12f1
+		}
+		if r.ko.Spec.SplunkDestinationConfiguration.HECAcknowledgmentTimeoutInSeconds != nil {
+			hECAcknowledgmentTimeoutInSecondsCopy0 := *r.ko.Spec.SplunkDestinationConfiguration.HECAcknowledgmentTimeoutInSeconds
+			if hECAcknowledgmentTimeoutInSecondsCopy0 > math.MaxInt32 || hECAcknowledgmentTimeoutInSecondsCopy0 < math.MinInt32 {
+				return nil, fmt.Errorf("error: field HECAcknowledgmentTimeoutInSeconds is of type int32")
+			}
+			hECAcknowledgmentTimeoutInSecondsCopy := int32(hECAcknowledgmentTimeoutInSecondsCopy0)
+			f12.HECAcknowledgmentTimeoutInSeconds = &hECAcknowledgmentTimeoutInSecondsCopy
+		}
+		if r.ko.Spec.SplunkDestinationConfiguration.HECEndpoint != nil {
+			f12.HECEndpoint = r.ko.Spec.SplunkDestinationConfiguration.HECEndpoint
+		}
+		if r.ko.Spec.SplunkDestinationConfiguration.HECEndpointType != nil {
+			f12.HECEndpointType = svcsdktypes.HECEndpointType(*r.ko.Spec.SplunkDestinationConfiguration.HECEndpointType)
+		}
+		if r.ko.Spec.SplunkDestinationConfiguration.HECToken != nil {
+			tmpSecret, err := rm.rr.SecretValueFromReference(ctx, r.ko.Spec.SplunkDestinationConfiguration.HECToken)
+			if err != nil {
+				return nil, ackrequeue.Needed(err)
+			}
+			if tmpSecret != "" {
+				f12.HECToken = aws.String(tmpSecret)
+			}
+		}
+		if r.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration != nil {
+			f12f6 := &svcsdktypes.ProcessingConfiguration{}
+			if r.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Enabled != nil {
+				f12f6.Enabled = r.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Enabled
+			}
+			if r.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Processors != nil {
+				f12f6f1 := []svcsdktypes.Processor{}
+				for _, f12f6f1iter := range r.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Processors {
+					f12f6f1elem := &svcsdktypes.Processor{}
+					if f12f6f1iter.Parameters != nil {
+						f12f6f1elemf0 := []svcsdktypes.ProcessorParameter{}
+						for _, f12f6f1elemf0iter := range f12f6f1iter.Parameters {
+							f12f6f1elemf0elem := &svcsdktypes.ProcessorParameter{}
+							if f12f6f1elemf0iter.ParameterName != nil {
+								f12f6f1elemf0elem.ParameterName = svcsdktypes.ProcessorParameterName(*f12f6f1elemf0iter.ParameterName)
+							}
+							if f12f6f1elemf0iter.ParameterValue != nil {
+								f12f6f1elemf0elem.ParameterValue = f12f6f1elemf0iter.ParameterValue
+							}
+							f12f6f1elemf0 = append(f12f6f1elemf0, *f12f6f1elemf0elem)
+						}
+						f12f6f1elem.Parameters = f12f6f1elemf0
+					}
+					if f12f6f1iter.Type != nil {
+						f12f6f1elem.Type = svcsdktypes.ProcessorType(*f12f6f1iter.Type)
+					}
+					f12f6f1 = append(f12f6f1, *f12f6f1elem)
+				}
+				f12f6.Processors = f12f6f1
+			}
+			f12.ProcessingConfiguration = f12f6
+		}
+		if r.ko.Spec.SplunkDestinationConfiguration.RetryOptions != nil {
+			f12f7 := &svcsdktypes.SplunkRetryOptions{}
+			if r.ko.Spec.SplunkDestinationConfiguration.RetryOptions.DurationInSeconds != nil {
+				durationInSecondsCopy0 := *r.ko.Spec.SplunkDestinationConfiguration.RetryOptions.DurationInSeconds
+				if durationInSecondsCopy0 > math.MaxInt32 || durationInSecondsCopy0 < math.MinInt32 {
+					return nil, fmt.Errorf("error: field DurationInSeconds is of type int32")
+				}
+				durationInSecondsCopy := int32(durationInSecondsCopy0)
+				f12f7.DurationInSeconds = &durationInSecondsCopy
+			}
+			f12.RetryOptions = f12f7
+		}
+		if r.ko.Spec.SplunkDestinationConfiguration.S3BackupMode != nil {
+			f12.S3BackupMode = svcsdktypes.SplunkS3BackupMode(*r.ko.Spec.SplunkDestinationConfiguration.S3BackupMode)
+		}
+		if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration != nil {
+			f12f9 := &svcsdktypes.S3DestinationUpdate{}
+			if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BucketARN != nil {
+				f12f9.BucketARN = r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BucketARN
+			}
+			if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints != nil {
+				f12f9f1 := &svcsdktypes.BufferingHints{}
+				if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds != nil {
+					intervalInSecondsCopy0 := *r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds
+					if intervalInSecondsCopy0 > math.MaxInt32 || intervalInSecondsCopy0 < math.MinInt32 {
+						return nil, fmt.Errorf("error: field IntervalInSeconds is of type int32")
+					}
+					intervalInSecondsCopy := int32(intervalInSecondsCopy0)
+					f12f9f1.IntervalInSeconds = &intervalInSecondsCopy
+				}
+				if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs != nil {
+					sizeInMBsCopy0 := *r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs
+					if sizeInMBsCopy0 > math.MaxInt32 || sizeInMBsCopy0 < math.MinInt32 {
+						return nil, fmt.Errorf("error: field SizeInMBs is of type int32")
+					}
+					sizeInMBsCopy := int32(sizeInMBsCopy0)
+					f12f9f1.SizeInMBs = &sizeInMBsCopy
+				}
+				f12f9.BufferingHints = f12f9f1
+			}
+			if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions != nil {
+				f12f9f2 := &svcsdktypes.CloudWatchLoggingOptions{}
+				if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled != nil {
+					f12f9f2.Enabled = r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled
+				}
+				if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName != nil {
+					f12f9f2.LogGroupName = r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName
+				}
+				if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName != nil {
+					f12f9f2.LogStreamName = r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName
+				}
+				f12f9.CloudWatchLoggingOptions = f12f9f2
+			}
+			if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CompressionFormat != nil {
+				f12f9.CompressionFormat = svcsdktypes.CompressionFormat(*r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CompressionFormat)
+			}
+			if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration != nil {
+				f12f9f4 := &svcsdktypes.EncryptionConfiguration{}
+				if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig != nil {
+					f12f9f4f0 := &svcsdktypes.KMSEncryptionConfig{}
+					if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN != nil {
+						f12f9f4f0.AWSKMSKeyARN = r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN
+					}
+					f12f9f4.KMSEncryptionConfig = f12f9f4f0
+				}
+				if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig != nil {
+					f12f9f4.NoEncryptionConfig = svcsdktypes.NoEncryptionConfig(*r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig)
+				}
+				f12f9.EncryptionConfiguration = f12f9f4
+			}
+			if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.ErrorOutputPrefix != nil {
+				f12f9.ErrorOutputPrefix = r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.ErrorOutputPrefix
+			}
+			if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.Prefix != nil {
+				f12f9.Prefix = r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.Prefix
+			}
+			if r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.RoleARN != nil {
+				f12f9.RoleARN = r.ko.Spec.SplunkDestinationConfiguration.S3Configuration.RoleARN
+			}
+			f12.S3Update = f12f9
+		}
+		if r.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration != nil {
+			f12f10 := &svcsdktypes.SecretsManagerConfiguration{}
+			if r.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.Enabled != nil {
+				f12f10.Enabled = r.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.Enabled
+			}
+			if r.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleARN != nil {
+				f12f10.RoleARN = r.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleARN
+			}
+			if r.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretARN != nil {
+				f12f10.SecretARN = r.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretARN
+			}
+			f12.SecretsManagerConfiguration = f12f10
+		}
+		res.SplunkDestinationUpdate = f12
 	}
 
 	return res, nil
