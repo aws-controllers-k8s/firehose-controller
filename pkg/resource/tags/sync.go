@@ -2,9 +2,13 @@ package tags
 
 import (
 	"context"
+	"maps"
+	"slices"
 
 	svcapitypes "github.com/aws-controllers-k8s/firehose-controller/apis/v1alpha1"
+	ackcompare "github.com/aws-controllers-k8s/runtime/pkg/compare"
 	ackrtlog "github.com/aws-controllers-k8s/runtime/pkg/runtime/log"
+	acktags "github.com/aws-controllers-k8s/runtime/pkg/tags"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	svcsdk "github.com/aws/aws-sdk-go-v2/service/firehose"
 	svcsdktypes "github.com/aws/aws-sdk-go-v2/service/firehose/types"
@@ -66,14 +70,20 @@ func SyncResourceTags(
 		exit(err)
 	}()
 
-	addedOrUpdated, removed := computeTagsDelta(desiredTags, latestTags)
+	from := toACKTags(latestTags)
+	to := toACKTags(desiredTags)
+	added, _, removed := ackcompare.GetTagsDifference(from, to)
+
+	if len(added) == 0 && len(removed) == 0 {
+		return nil
+	}
 
 	if len(removed) > 0 {
 		_, err = client.UntagDeliveryStream(
 			ctx,
 			&svcsdk.UntagDeliveryStreamInput{
 				DeliveryStreamName: aws.String(deliveryStreamName),
-				TagKeys:            removed,
+				TagKeys:            slices.Sorted(maps.Keys(removed)),
 			},
 		)
 		mr.RecordAPICall("UPDATE", "UntagDeliveryStream", err)
@@ -82,7 +92,14 @@ func SyncResourceTags(
 		}
 	}
 
-	if len(addedOrUpdated) > 0 {
+	if len(added) > 0 {
+		addedOrUpdated := make([]svcsdktypes.Tag, 0, len(added))
+		for _, k := range slices.Sorted(maps.Keys(added)) {
+			addedOrUpdated = append(addedOrUpdated, svcsdktypes.Tag{
+				Key:   aws.String(k),
+				Value: aws.String(added[k]),
+			})
+		}
 		_, err = client.TagDeliveryStream(
 			ctx,
 			&svcsdk.TagDeliveryStreamInput{
@@ -98,58 +115,20 @@ func SyncResourceTags(
 	return nil
 }
 
-// computeTagsDelta compares two Tag arrays and return two different list
-// containing the addedOrupdated and removed tags. The removed tags array
-// only contains the tags Keys.
-func computeTagsDelta(
-	a []*svcapitypes.Tag,
-	b []*svcapitypes.Tag,
-) (addedOrUpdated []svcsdktypes.Tag, removed []string) {
-
-	// Find the keys in the Spec have either been added or updated.
-	addedOrUpdated = make([]svcsdktypes.Tag, 0)
-	for _, aTag := range a {
-		found := false
-		for _, bTag := range b {
-			if *aTag.Key == *bTag.Key {
-				if *aTag.Value == *bTag.Value {
-					found = true
-				}
-
-				break
-			}
+// toACKTags converts a list of Tags into the map representation used by the
+// ACK runtime tag comparison. Nil tags or tags without a key are skipped, and
+// a nil value is represented as an empty string.
+func toACKTags(tags []*svcapitypes.Tag) acktags.Tags {
+	m := make(acktags.Tags)
+	for _, t := range tags {
+		if t == nil || t.Key == nil {
+			continue
 		}
-		if !found {
-			addedOrUpdated = append(addedOrUpdated, svcsdktypes.Tag{
-				Key:   aTag.Key,
-				Value: aTag.Value,
-			})
+		v := ""
+		if t.Value != nil {
+			v = *t.Value
 		}
+		m[*t.Key] = v
 	}
-
-	for _, bTag := range b {
-		found := false
-		for _, aTag := range a {
-			if *aTag.Key == *bTag.Key {
-				found = true
-				break
-			}
-		}
-
-		if !found {
-			removed = append(removed, *bTag.Key)
-		}
-	}
-
-	return addedOrUpdated, removed
-}
-
-// equalTags returns true if two Tag arrays are equal regardless of the order
-// of their elements.
-func EqualTags(
-	a []*svcapitypes.Tag,
-	b []*svcapitypes.Tag,
-) bool {
-	addedOrUpdated, removed := computeTagsDelta(a, b)
-	return len(addedOrUpdated) == 0 && len(removed) == 0
+	return m
 }
