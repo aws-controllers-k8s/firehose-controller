@@ -19,7 +19,11 @@ import (
 	svcsdktypes "github.com/aws/aws-sdk-go-v2/service/firehose/types"
 )
 
-// Maps an HttpEndpointDestinationDescription to relevant Spec and Status fields.
+// readHttpDestinationDescription writes the described destination onto the
+// spec, nil included: Firehose leaves unset fields out of the description, and
+// keeping the desired value there hides a spec change from the delta. The
+// access key secret reference and the resource reference wrappers are never
+// described and stay as they are.
 func readHttpDestinationDescription(ko *svcapitypes.DeliveryStream, respHttpDest *svcsdktypes.HttpEndpointDestinationDescription) {
 	if respHttpDest == nil {
 		return
@@ -28,135 +32,91 @@ func readHttpDestinationDescription(ko *svcapitypes.DeliveryStream, respHttpDest
 	if ko.Spec.HTTPEndpointDestinationConfiguration == nil {
 		ko.Spec.HTTPEndpointDestinationConfiguration = &svcapitypes.HTTPEndpointDestinationConfiguration{}
 	}
-	specHttpEndpointDestConfig := ko.Spec.HTTPEndpointDestinationConfiguration
+	spec := ko.Spec.HTTPEndpointDestinationConfiguration
 
+	spec.S3BackupMode = nil
 	if respHttpDest.S3BackupMode != "" {
-		specHttpEndpointDestConfig.S3BackupMode = aws.String(string(respHttpDest.S3BackupMode))
+		spec.S3BackupMode = aws.String(string(respHttpDest.S3BackupMode))
 	}
-	if respHttpDest.RoleARN != nil {
-		specHttpEndpointDestConfig.RoleARN = respHttpDest.RoleARN
-	}
+	spec.RoleARN = respHttpDest.RoleARN
 
-	readBufferingHints(specHttpEndpointDestConfig, respHttpDest.BufferingHints)
-	readEndpointConfiguration(specHttpEndpointDestConfig, respHttpDest.EndpointConfiguration)
-	readRetryOptions(specHttpEndpointDestConfig, respHttpDest.RetryOptions)
-	readCloudwatchLoggingOptions(specHttpEndpointDestConfig, respHttpDest.CloudWatchLoggingOptions)
-	readProcessingConfiguration(specHttpEndpointDestConfig, respHttpDest.ProcessingConfiguration)
-	readRequestConfiguration(specHttpEndpointDestConfig, respHttpDest.RequestConfiguration)
-	readS3DestinationDescription(specHttpEndpointDestConfig, respHttpDest.S3DestinationDescription)
-	readSecretsManagerConfiguration(specHttpEndpointDestConfig, respHttpDest.SecretsManagerConfiguration)
+	readBufferingHints(spec, respHttpDest.BufferingHints)
+	readEndpointConfiguration(spec, respHttpDest.EndpointConfiguration)
+	readRetryOptions(spec, respHttpDest.RetryOptions)
+	readCloudwatchLoggingOptions(spec, respHttpDest.CloudWatchLoggingOptions)
+	readProcessingConfiguration(spec, respHttpDest.ProcessingConfiguration)
+	readRequestConfiguration(spec, respHttpDest.RequestConfiguration)
+	readS3DestinationDescription(spec, respHttpDest.S3DestinationDescription)
+	readSecretsManagerConfiguration(spec, respHttpDest.SecretsManagerConfiguration)
 }
 
-func readBufferingHints(specHttpEndpointDestConfig *svcapitypes.HTTPEndpointDestinationConfiguration, respBufferingHints *svcsdktypes.HttpEndpointBufferingHints) {
-	if respBufferingHints == nil {
+func readBufferingHints(spec *svcapitypes.HTTPEndpointDestinationConfiguration, resp *svcsdktypes.HttpEndpointBufferingHints) {
+	spec.BufferingHints = nil
+	if resp == nil {
 		return
 	}
-
-	if specHttpEndpointDestConfig.BufferingHints == nil {
-		specHttpEndpointDestConfig.BufferingHints = &svcapitypes.HTTPEndpointBufferingHints{}
+	spec.BufferingHints = &svcapitypes.HTTPEndpointBufferingHints{}
+	if resp.IntervalInSeconds != nil {
+		spec.BufferingHints.IntervalInSeconds = aws.Int64(int64(*resp.IntervalInSeconds))
 	}
-	if respBufferingHints.IntervalInSeconds != nil {
-		specHttpEndpointDestConfig.BufferingHints.IntervalInSeconds = aws.Int64(int64(*respBufferingHints.IntervalInSeconds))
-	}
-	if respBufferingHints.SizeInMBs != nil {
-		specHttpEndpointDestConfig.BufferingHints.SizeInMBs = aws.Int64(int64(*respBufferingHints.SizeInMBs))
+	if resp.SizeInMBs != nil {
+		spec.BufferingHints.SizeInMBs = aws.Int64(int64(*resp.SizeInMBs))
 	}
 }
 
-func readEndpointConfiguration(specHttpEndpointDestConfig *svcapitypes.HTTPEndpointDestinationConfiguration, respEndpointConfiguration *svcsdktypes.HttpEndpointDescription) {
-	if respEndpointConfiguration == nil {
+// readEndpointConfiguration keeps the access key secret reference, which the
+// description never carries.
+func readEndpointConfiguration(spec *svcapitypes.HTTPEndpointDestinationConfiguration, resp *svcsdktypes.HttpEndpointDescription) {
+	if resp == nil {
 		return
 	}
+	if spec.EndpointConfiguration == nil {
+		spec.EndpointConfiguration = &svcapitypes.HTTPEndpointConfiguration{}
+	}
+	spec.EndpointConfiguration.Name = resp.Name
+	spec.EndpointConfiguration.URL = resp.Url
+}
 
-	if specHttpEndpointDestConfig.EndpointConfiguration == nil {
-		specHttpEndpointDestConfig.EndpointConfiguration = &svcapitypes.HTTPEndpointConfiguration{}
+func readRetryOptions(spec *svcapitypes.HTTPEndpointDestinationConfiguration, resp *svcsdktypes.HttpEndpointRetryOptions) {
+	spec.RetryOptions = nil
+	if resp == nil {
+		return
 	}
-	if respEndpointConfiguration.Name != nil {
-		specHttpEndpointDestConfig.EndpointConfiguration.Name = respEndpointConfiguration.Name
-	}
-	if respEndpointConfiguration.Url != nil {
-		specHttpEndpointDestConfig.EndpointConfiguration.URL = respEndpointConfiguration.Url
+	spec.RetryOptions = &svcapitypes.HTTPEndpointRetryOptions{}
+	if resp.DurationInSeconds != nil {
+		spec.RetryOptions.DurationInSeconds = aws.Int64(int64(*resp.DurationInSeconds))
 	}
 }
 
-func readRetryOptions(specHttpEndpointDestConfig *svcapitypes.HTTPEndpointDestinationConfiguration, respRetryOptions *svcsdktypes.HttpEndpointRetryOptions) {
-	if respRetryOptions == nil {
+func readCloudwatchLoggingOptions(spec *svcapitypes.HTTPEndpointDestinationConfiguration, resp *svcsdktypes.CloudWatchLoggingOptions) {
+	spec.CloudWatchLoggingOptions = nil
+	if resp == nil {
 		return
 	}
-
-	if specHttpEndpointDestConfig.RetryOptions == nil {
-		specHttpEndpointDestConfig.RetryOptions = &svcapitypes.HTTPEndpointRetryOptions{}
-	}
-	if respRetryOptions.DurationInSeconds != nil {
-		specHttpEndpointDestConfig.RetryOptions.DurationInSeconds = aws.Int64(int64(*respRetryOptions.DurationInSeconds))
-	}
+	spec.CloudWatchLoggingOptions = cloudWatchLoggingOptionsFromSDK(resp)
 }
 
-func readCloudwatchLoggingOptions(specHttpEndpointDestConfig *svcapitypes.HTTPEndpointDestinationConfiguration, respCloudWatchLoggingOptions *svcsdktypes.CloudWatchLoggingOptions) {
-	if respCloudWatchLoggingOptions == nil {
+func readProcessingConfiguration(spec *svcapitypes.HTTPEndpointDestinationConfiguration, resp *svcsdktypes.ProcessingConfiguration) {
+	spec.ProcessingConfiguration = nil
+	if resp == nil {
 		return
 	}
-
-	if specHttpEndpointDestConfig.CloudWatchLoggingOptions == nil {
-		specHttpEndpointDestConfig.CloudWatchLoggingOptions = &svcapitypes.CloudWatchLoggingOptions{}
-	}
-	if respCloudWatchLoggingOptions.Enabled != nil {
-		specHttpEndpointDestConfig.CloudWatchLoggingOptions.Enabled = respCloudWatchLoggingOptions.Enabled
-	}
-	if respCloudWatchLoggingOptions.LogGroupName != nil {
-		specHttpEndpointDestConfig.CloudWatchLoggingOptions.LogGroupName = respCloudWatchLoggingOptions.LogGroupName
-	}
-	if respCloudWatchLoggingOptions.LogStreamName != nil {
-		specHttpEndpointDestConfig.CloudWatchLoggingOptions.LogStreamName = respCloudWatchLoggingOptions.LogStreamName
-	}
+	spec.ProcessingConfiguration = processingConfigurationFromSDK(resp)
 }
 
-func readProcessingConfiguration(specHttpEndpointDestConfig *svcapitypes.HTTPEndpointDestinationConfiguration, respProcessingConfiguration *svcsdktypes.ProcessingConfiguration) {
-	if respProcessingConfiguration == nil {
+func readRequestConfiguration(spec *svcapitypes.HTTPEndpointDestinationConfiguration, resp *svcsdktypes.HttpEndpointRequestConfiguration) {
+	spec.RequestConfiguration = nil
+	if resp == nil {
 		return
 	}
-
-	if specHttpEndpointDestConfig.ProcessingConfiguration == nil {
-		specHttpEndpointDestConfig.ProcessingConfiguration = &svcapitypes.ProcessingConfiguration{}
+	spec.RequestConfiguration = &svcapitypes.HTTPEndpointRequestConfiguration{}
+	if resp.ContentEncoding != "" {
+		spec.RequestConfiguration.ContentEncoding = aws.String(string(resp.ContentEncoding))
 	}
-	if respProcessingConfiguration.Enabled != nil {
-		specHttpEndpointDestConfig.ProcessingConfiguration.Enabled = respProcessingConfiguration.Enabled
-	}
-	if respProcessingConfiguration.Processors != nil {
-		specHttpEndpointDestConfig.ProcessingConfiguration.Processors = make([]*svcapitypes.Processor, len(respProcessingConfiguration.Processors))
-		for i, proc := range respProcessingConfiguration.Processors {
-			specHttpEndpointDestConfig.ProcessingConfiguration.Processors[i] = &svcapitypes.Processor{}
-			if proc.Type != "" {
-				specHttpEndpointDestConfig.ProcessingConfiguration.Processors[i].Type = aws.String(string(proc.Type))
-			}
-			if proc.Parameters != nil {
-				specHttpEndpointDestConfig.ProcessingConfiguration.Processors[i].Parameters = make([]*svcapitypes.ProcessorParameter, len(proc.Parameters))
-				for j, param := range proc.Parameters {
-					specHttpEndpointDestConfig.ProcessingConfiguration.Processors[i].Parameters[j] = &svcapitypes.ProcessorParameter{
-						ParameterName:  aws.String(string(param.ParameterName)),
-						ParameterValue: param.ParameterValue,
-					}
-				}
-			}
-		}
-	}
-}
-
-func readRequestConfiguration(specHttpEndpointDestConfig *svcapitypes.HTTPEndpointDestinationConfiguration, respRequestConfiguration *svcsdktypes.HttpEndpointRequestConfiguration) {
-	if respRequestConfiguration == nil {
-		return
-	}
-
-	if specHttpEndpointDestConfig.RequestConfiguration == nil {
-		specHttpEndpointDestConfig.RequestConfiguration = &svcapitypes.HTTPEndpointRequestConfiguration{}
-	}
-	if respRequestConfiguration.ContentEncoding != "" {
-		specHttpEndpointDestConfig.RequestConfiguration.ContentEncoding = aws.String(string(respRequestConfiguration.ContentEncoding))
-	}
-	if respRequestConfiguration.CommonAttributes != nil {
-		specHttpEndpointDestConfig.RequestConfiguration.CommonAttributes = make([]*svcapitypes.HTTPEndpointCommonAttribute, len(respRequestConfiguration.CommonAttributes))
-		for i, attr := range respRequestConfiguration.CommonAttributes {
-			specHttpEndpointDestConfig.RequestConfiguration.CommonAttributes[i] = &svcapitypes.HTTPEndpointCommonAttribute{
+	if resp.CommonAttributes != nil {
+		spec.RequestConfiguration.CommonAttributes = make([]*svcapitypes.HTTPEndpointCommonAttribute, len(resp.CommonAttributes))
+		for i, attr := range resp.CommonAttributes {
+			spec.RequestConfiguration.CommonAttributes[i] = &svcapitypes.HTTPEndpointCommonAttribute{
 				AttributeName:  attr.AttributeName,
 				AttributeValue: attr.AttributeValue,
 			}
@@ -164,91 +124,29 @@ func readRequestConfiguration(specHttpEndpointDestConfig *svcapitypes.HTTPEndpoi
 	}
 }
 
-func readS3DestinationDescription(specHttpEndpointDestConfig *svcapitypes.HTTPEndpointDestinationConfiguration, respS3DestinationDescription *svcsdktypes.S3DestinationDescription) {
-	if respS3DestinationDescription == nil {
+// readS3DestinationDescription merges in place so the bucket, role and KMS
+// key reference wrappers survive.
+func readS3DestinationDescription(spec *svcapitypes.HTTPEndpointDestinationConfiguration, resp *svcsdktypes.S3DestinationDescription) {
+	if resp == nil {
 		return
 	}
-
-	if specHttpEndpointDestConfig.S3Configuration == nil {
-		specHttpEndpointDestConfig.S3Configuration = &svcapitypes.S3DestinationConfiguration{}
+	if spec.S3Configuration == nil {
+		spec.S3Configuration = &svcapitypes.S3DestinationConfiguration{}
 	}
-
-	if specHttpEndpointDestConfig.S3Configuration == nil {
-		specHttpEndpointDestConfig.S3Configuration = &svcapitypes.S3DestinationConfiguration{}
-	}
-	if respS3DestinationDescription.BucketARN != nil {
-		specHttpEndpointDestConfig.S3Configuration.BucketARN = respS3DestinationDescription.BucketARN
-	}
-	if respS3DestinationDescription.BufferingHints != nil {
-		if specHttpEndpointDestConfig.S3Configuration.BufferingHints == nil {
-			specHttpEndpointDestConfig.S3Configuration.BufferingHints = &svcapitypes.BufferingHints{}
-		}
-		if respS3DestinationDescription.BufferingHints.IntervalInSeconds != nil {
-			specHttpEndpointDestConfig.S3Configuration.BufferingHints.IntervalInSeconds = aws.Int64(int64(*respS3DestinationDescription.BufferingHints.IntervalInSeconds))
-		}
-		if respS3DestinationDescription.BufferingHints.SizeInMBs != nil {
-			specHttpEndpointDestConfig.S3Configuration.BufferingHints.SizeInMBs = aws.Int64(int64(*respS3DestinationDescription.BufferingHints.SizeInMBs))
-		}
-	}
-	if respS3DestinationDescription.CompressionFormat != "" {
-		specHttpEndpointDestConfig.S3Configuration.CompressionFormat = aws.String(string(respS3DestinationDescription.CompressionFormat))
-	}
-	if respS3DestinationDescription.EncryptionConfiguration != nil {
-		if specHttpEndpointDestConfig.S3Configuration.EncryptionConfiguration == nil {
-			specHttpEndpointDestConfig.S3Configuration.EncryptionConfiguration = &svcapitypes.EncryptionConfiguration{}
-		}
-		if respS3DestinationDescription.EncryptionConfiguration.KMSEncryptionConfig != nil {
-			if specHttpEndpointDestConfig.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig == nil {
-				specHttpEndpointDestConfig.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig = &svcapitypes.KMSEncryptionConfig{}
-			}
-			if respS3DestinationDescription.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN != nil {
-				specHttpEndpointDestConfig.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN = respS3DestinationDescription.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN
-			}
-		}
-		if respS3DestinationDescription.EncryptionConfiguration.NoEncryptionConfig != "" {
-			specHttpEndpointDestConfig.S3Configuration.EncryptionConfiguration.NoEncryptionConfig = aws.String(string(respS3DestinationDescription.EncryptionConfiguration.NoEncryptionConfig))
-		}
-	}
-	if respS3DestinationDescription.RoleARN != nil {
-		specHttpEndpointDestConfig.S3Configuration.RoleARN = respS3DestinationDescription.RoleARN
-	}
-	if respS3DestinationDescription.CloudWatchLoggingOptions != nil {
-		if specHttpEndpointDestConfig.S3Configuration.CloudWatchLoggingOptions == nil {
-			specHttpEndpointDestConfig.S3Configuration.CloudWatchLoggingOptions = &svcapitypes.CloudWatchLoggingOptions{}
-		}
-		if respS3DestinationDescription.CloudWatchLoggingOptions.Enabled != nil {
-			specHttpEndpointDestConfig.S3Configuration.CloudWatchLoggingOptions.Enabled = respS3DestinationDescription.CloudWatchLoggingOptions.Enabled
-		}
-		if respS3DestinationDescription.CloudWatchLoggingOptions.LogGroupName != nil {
-			specHttpEndpointDestConfig.S3Configuration.CloudWatchLoggingOptions.LogGroupName = respS3DestinationDescription.CloudWatchLoggingOptions.LogGroupName
-		}
-		if respS3DestinationDescription.CloudWatchLoggingOptions.LogStreamName != nil {
-			specHttpEndpointDestConfig.S3Configuration.CloudWatchLoggingOptions.LogStreamName = respS3DestinationDescription.CloudWatchLoggingOptions.LogStreamName
-		}
-	}
-	if respS3DestinationDescription.ErrorOutputPrefix != nil {
-		specHttpEndpointDestConfig.S3Configuration.ErrorOutputPrefix = respS3DestinationDescription.ErrorOutputPrefix
-	}
-	if respS3DestinationDescription.Prefix != nil {
-		specHttpEndpointDestConfig.S3Configuration.Prefix = respS3DestinationDescription.Prefix
-	}
+	mergeS3DestinationDescription(spec.S3Configuration, resp)
 }
 
-func readSecretsManagerConfiguration(specHttpEndpointDestConfig *svcapitypes.HTTPEndpointDestinationConfiguration, respSecretsMgrConfig *svcsdktypes.SecretsManagerConfiguration) {
-	if respSecretsMgrConfig == nil {
+// readSecretsManagerConfiguration merges in place so the role and secret
+// reference wrappers survive, and clears the block when it is not described.
+func readSecretsManagerConfiguration(spec *svcapitypes.HTTPEndpointDestinationConfiguration, resp *svcsdktypes.SecretsManagerConfiguration) {
+	if resp == nil {
+		spec.SecretsManagerConfiguration = nil
 		return
 	}
-	if specHttpEndpointDestConfig.SecretsManagerConfiguration == nil {
-		specHttpEndpointDestConfig.SecretsManagerConfiguration = &svcapitypes.SecretsManagerConfiguration{}
+	if spec.SecretsManagerConfiguration == nil {
+		spec.SecretsManagerConfiguration = &svcapitypes.SecretsManagerConfiguration{}
 	}
-
-	if respSecretsMgrConfig.Enabled != nil {
-		specHttpEndpointDestConfig.SecretsManagerConfiguration.Enabled = respSecretsMgrConfig.Enabled
-	}
-	if respSecretsMgrConfig.RoleARN != nil {
-		specHttpEndpointDestConfig.SecretsManagerConfiguration.RoleARN = respSecretsMgrConfig.RoleARN
-	}
-	if respSecretsMgrConfig.SecretARN != nil {
-		specHttpEndpointDestConfig.SecretsManagerConfiguration.SecretARN = respSecretsMgrConfig.SecretARN
-	}
+	spec.SecretsManagerConfiguration.Enabled = resp.Enabled
+	spec.SecretsManagerConfiguration.RoleARN = resp.RoleARN
+	spec.SecretsManagerConfiguration.SecretARN = resp.SecretARN
 }

@@ -19,8 +19,10 @@ import (
 	svcsdktypes "github.com/aws/aws-sdk-go-v2/service/firehose/types"
 )
 
-// Maps an ExtendedS3DestinationDescription onto the Spec, keeping the
-// reference wrappers the description cannot carry.
+// readExtendedS3DestinationDescription writes the described destination onto
+// the spec, nil included: Firehose leaves unset fields out of the description,
+// and keeping the desired value there hides a spec change from the delta. The
+// bucket, role and KMS key reference wrappers are never described and stay.
 func readExtendedS3DestinationDescription(ko *svcapitypes.DeliveryStream, resp *svcsdktypes.ExtendedS3DestinationDescription) {
 	if resp == nil {
 		return
@@ -31,54 +33,53 @@ func readExtendedS3DestinationDescription(ko *svcapitypes.DeliveryStream, resp *
 	}
 	spec := ko.Spec.ExtendedS3DestinationConfiguration
 
-	if resp.BucketARN != nil {
-		spec.BucketARN = resp.BucketARN
-	}
-	if resp.RoleARN != nil {
-		spec.RoleARN = resp.RoleARN
-	}
-	if resp.Prefix != nil {
-		spec.Prefix = resp.Prefix
-	}
-	if resp.ErrorOutputPrefix != nil {
-		spec.ErrorOutputPrefix = resp.ErrorOutputPrefix
-	}
+	spec.BucketARN = resp.BucketARN
+	spec.RoleARN = resp.RoleARN
+	spec.Prefix = resp.Prefix
+	spec.ErrorOutputPrefix = resp.ErrorOutputPrefix
+	spec.CompressionFormat = nil
 	if resp.CompressionFormat != "" {
 		spec.CompressionFormat = aws.String(string(resp.CompressionFormat))
 	}
+	spec.S3BackupMode = nil
 	if resp.S3BackupMode != "" {
 		spec.S3BackupMode = aws.String(string(resp.S3BackupMode))
 	}
-	if resp.FileExtension != nil {
-		spec.FileExtension = resp.FileExtension
-	}
-	if resp.CustomTimeZone != nil {
-		spec.CustomTimeZone = resp.CustomTimeZone
-	}
+	spec.FileExtension = resp.FileExtension
+	spec.CustomTimeZone = resp.CustomTimeZone
+	spec.BufferingHints = nil
 	if resp.BufferingHints != nil {
 		spec.BufferingHints = bufferingHintsFromSDK(resp.BufferingHints)
 	}
+	spec.CloudWatchLoggingOptions = nil
 	if resp.CloudWatchLoggingOptions != nil {
 		spec.CloudWatchLoggingOptions = cloudWatchLoggingOptionsFromSDK(resp.CloudWatchLoggingOptions)
 	}
-	if resp.EncryptionConfiguration != nil {
+	if resp.EncryptionConfiguration == nil {
+		spec.EncryptionConfiguration = nil
+	} else {
 		if spec.EncryptionConfiguration == nil {
 			spec.EncryptionConfiguration = &svcapitypes.EncryptionConfiguration{}
 		}
 		mergeEncryptionConfiguration(spec.EncryptionConfiguration, resp.EncryptionConfiguration)
 	}
+	spec.ProcessingConfiguration = nil
 	if resp.ProcessingConfiguration != nil {
 		spec.ProcessingConfiguration = processingConfigurationFromSDK(resp.ProcessingConfiguration)
 	}
-	if resp.S3BackupDescription != nil {
+	if resp.S3BackupDescription == nil {
+		spec.S3BackupConfiguration = nil
+	} else {
 		if spec.S3BackupConfiguration == nil {
 			spec.S3BackupConfiguration = &svcapitypes.S3DestinationConfiguration{}
 		}
 		mergeS3DestinationDescription(spec.S3BackupConfiguration, resp.S3BackupDescription)
 	}
+	spec.DataFormatConversionConfiguration = nil
 	if resp.DataFormatConversionConfiguration != nil {
 		spec.DataFormatConversionConfiguration = dataFormatConversionConfigurationFromSDK(resp.DataFormatConversionConfiguration)
 	}
+	spec.DynamicPartitioningConfiguration = nil
 	if resp.DynamicPartitioningConfiguration != nil {
 		spec.DynamicPartitioningConfiguration = dynamicPartitioningConfigurationFromSDK(resp.DynamicPartitioningConfiguration)
 	}
@@ -103,20 +104,21 @@ func cloudWatchLoggingOptionsFromSDK(resp *svcsdktypes.CloudWatchLoggingOptions)
 	}
 }
 
-// mergeEncryptionConfiguration writes the observed values onto spec and keeps
-// the KMS key reference wrapper, which the description does not carry.
+// mergeEncryptionConfiguration writes the described encryption settings onto
+// spec, nil included, and keeps the KMS key reference wrapper.
 func mergeEncryptionConfiguration(spec *svcapitypes.EncryptionConfiguration, resp *svcsdktypes.EncryptionConfiguration) {
+	spec.NoEncryptionConfig = nil
 	if resp.NoEncryptionConfig != "" {
 		spec.NoEncryptionConfig = aws.String(string(resp.NoEncryptionConfig))
 	}
-	if resp.KMSEncryptionConfig != nil {
-		if spec.KMSEncryptionConfig == nil {
-			spec.KMSEncryptionConfig = &svcapitypes.KMSEncryptionConfig{}
-		}
-		if resp.KMSEncryptionConfig.AWSKMSKeyARN != nil {
-			spec.KMSEncryptionConfig.AWSKMSKeyARN = resp.KMSEncryptionConfig.AWSKMSKeyARN
-		}
+	if resp.KMSEncryptionConfig == nil {
+		spec.KMSEncryptionConfig = nil
+		return
 	}
+	if spec.KMSEncryptionConfig == nil {
+		spec.KMSEncryptionConfig = &svcapitypes.KMSEncryptionConfig{}
+	}
+	spec.KMSEncryptionConfig.AWSKMSKeyARN = resp.KMSEncryptionConfig.AWSKMSKeyARN
 }
 
 func processingConfigurationFromSDK(resp *svcsdktypes.ProcessingConfiguration) *svcapitypes.ProcessingConfiguration {
@@ -143,36 +145,34 @@ func processingConfigurationFromSDK(resp *svcsdktypes.ProcessingConfiguration) *
 	return config
 }
 
-// mergeS3DestinationDescription writes the observed values onto spec and keeps
-// the bucket and role reference wrappers.
+// mergeS3DestinationDescription writes the described S3 destination onto
+// spec, nil included for the fields Firehose leaves out when unset, and keeps
+// the bucket, role and KMS key reference wrappers.
 func mergeS3DestinationDescription(spec *svcapitypes.S3DestinationConfiguration, resp *svcsdktypes.S3DestinationDescription) {
-	if resp.BucketARN != nil {
-		spec.BucketARN = resp.BucketARN
-	}
-	if resp.RoleARN != nil {
-		spec.RoleARN = resp.RoleARN
-	}
-	if resp.Prefix != nil {
-		spec.Prefix = resp.Prefix
-	}
-	if resp.ErrorOutputPrefix != nil {
-		spec.ErrorOutputPrefix = resp.ErrorOutputPrefix
-	}
+	spec.BucketARN = resp.BucketARN
+	spec.RoleARN = resp.RoleARN
+	spec.Prefix = resp.Prefix
+	spec.ErrorOutputPrefix = resp.ErrorOutputPrefix
+	spec.CompressionFormat = nil
 	if resp.CompressionFormat != "" {
 		spec.CompressionFormat = aws.String(string(resp.CompressionFormat))
 	}
+	spec.BufferingHints = nil
 	if resp.BufferingHints != nil {
 		spec.BufferingHints = bufferingHintsFromSDK(resp.BufferingHints)
 	}
+	spec.CloudWatchLoggingOptions = nil
 	if resp.CloudWatchLoggingOptions != nil {
 		spec.CloudWatchLoggingOptions = cloudWatchLoggingOptionsFromSDK(resp.CloudWatchLoggingOptions)
 	}
-	if resp.EncryptionConfiguration != nil {
-		if spec.EncryptionConfiguration == nil {
-			spec.EncryptionConfiguration = &svcapitypes.EncryptionConfiguration{}
-		}
-		mergeEncryptionConfiguration(spec.EncryptionConfiguration, resp.EncryptionConfiguration)
+	if resp.EncryptionConfiguration == nil {
+		spec.EncryptionConfiguration = nil
+		return
 	}
+	if spec.EncryptionConfiguration == nil {
+		spec.EncryptionConfiguration = &svcapitypes.EncryptionConfiguration{}
+	}
+	mergeEncryptionConfiguration(spec.EncryptionConfiguration, resp.EncryptionConfiguration)
 }
 
 func dataFormatConversionConfigurationFromSDK(resp *svcsdktypes.DataFormatConversionConfiguration) *svcapitypes.DataFormatConversionConfiguration {
