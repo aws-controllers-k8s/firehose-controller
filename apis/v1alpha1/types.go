@@ -1527,11 +1527,11 @@ type SplunkDestinationConfiguration struct {
 	// are used.
 	BufferingHints *SplunkBufferingHints `json:"bufferingHints,omitempty"`
 	// Describes the Amazon CloudWatch logging options for your Firehose stream.
-	CloudWatchLoggingOptions          *CloudWatchLoggingOptions `json:"cloudWatchLoggingOptions,omitempty"`
-	HECAcknowledgmentTimeoutInSeconds *int64                    `json:"hECAcknowledgmentTimeoutInSeconds,omitempty"`
-	HECEndpoint                       *string                   `json:"hECEndpoint,omitempty"`
-	HECEndpointType                   *string                   `json:"hECEndpointType,omitempty"`
-	HECToken                          *string                   `json:"hECToken,omitempty"`
+	CloudWatchLoggingOptions          *CloudWatchLoggingOptions       `json:"cloudWatchLoggingOptions,omitempty"`
+	HECAcknowledgmentTimeoutInSeconds *int64                          `json:"hECAcknowledgmentTimeoutInSeconds,omitempty"`
+	HECEndpoint                       *string                         `json:"hECEndpoint,omitempty"`
+	HECEndpointType                   *string                         `json:"hECEndpointType,omitempty"`
+	HECToken                          *ackv1alpha1.SecretKeyReference `json:"hECToken,omitempty"`
 	// Describes a data processing configuration.
 	ProcessingConfiguration *ProcessingConfiguration `json:"processingConfiguration,omitempty"`
 	// Configures retry behavior in case Firehose is unable to deliver documents

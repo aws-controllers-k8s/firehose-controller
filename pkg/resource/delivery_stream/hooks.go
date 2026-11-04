@@ -172,6 +172,8 @@ func setDestinations(ko *svcapitypes.DeliveryStream, resp *svcsdk.DescribeDelive
 		readHttpDestinationDescription(ko, respDestination.HttpEndpointDestinationDescription)
 	case respDestination.ExtendedS3DestinationDescription != nil:
 		readExtendedS3DestinationDescription(ko, respDestination.ExtendedS3DestinationDescription)
+	case respDestination.SplunkDestinationDescription != nil:
+		readSplunkDestinationDescription(ko, respDestination.SplunkDestinationDescription)
 	}
 
 	return nil
