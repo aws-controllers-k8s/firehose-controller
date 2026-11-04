@@ -354,3 +354,28 @@ class TestDeliveryStream:
         assert destination["Prefix"] == "updated/"
         assert destination["BufferingHints"]["IntervalInSeconds"] == 120
         assert destination["BufferingHints"]["SizeInMBs"] == 2
+
+        # A field Firehose leaves out of the description while it is unset,
+        # patched on its own, must still reach the stream.
+        updates = {
+            "spec": {
+                "extendedS3DestinationConfiguration": {
+                    "errorOutputPrefix": "errors/",
+                },
+            }
+        }
+
+        synced_at = condition.get_synced_last_transition_time(ref)
+        k8s.patch_custom_resource(ref, updates)
+
+        assert k8s.wait_on_condition_after(
+            ref, condition.CONDITION_TYPE_RESOURCE_SYNCED, "True",
+            last_transition_after=synced_at,
+            wait_periods=RESYNC_WAIT_PERIODS, period_length=RESYNC_WAIT_PERIOD_LENGTH,
+        )
+        condition.assert_synced(ref)
+
+        delivery_stream = firehose_client.describe_delivery_stream(DeliveryStreamName=ds_name)
+        destination = delivery_stream["DeliveryStreamDescription"]["Destinations"][0]["ExtendedS3DestinationDescription"]
+        assert destination["ErrorOutputPrefix"] == "errors/"
+        assert destination["Prefix"] == "updated/"

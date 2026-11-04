@@ -279,3 +279,72 @@ func TestExtendedS3LateInitializationLeavesNoDelta(t *testing.T) {
 		t.Errorf("late initialization left %d differences: %+v", len(delta.Differences), delta.Differences)
 	}
 }
+
+func TestReadExtendedS3DestinationDescriptionClearsOmittedFields(t *testing.T) {
+	// A stream described without a prefix, processing, backup or KMS settings
+	// must not keep the desired ones, or a patch that only adds them never
+	// reaches UpdateDestination.
+	bucketRef := &ackv1alpha1.AWSResourceReferenceWrapper{From: &ackv1alpha1.AWSResourceReference{Name: aws.String("bucket")}}
+	keyRef := &ackv1alpha1.AWSResourceReferenceWrapper{From: &ackv1alpha1.AWSResourceReference{Name: aws.String("key")}}
+	ko := &svcapitypes.DeliveryStream{}
+	ko.Spec.ExtendedS3DestinationConfiguration = &svcapitypes.ExtendedS3DestinationConfiguration{
+		BucketRef:         bucketRef,
+		Prefix:            aws.String("data/"),
+		ErrorOutputPrefix: aws.String("errors/"),
+		EncryptionConfiguration: &svcapitypes.EncryptionConfiguration{
+			KMSEncryptionConfig: &svcapitypes.KMSEncryptionConfig{AWSKMSKeyRef: keyRef, AWSKMSKeyARN: aws.String("arn:aws:kms:eu-west-1:123456789012:key/1")},
+		},
+		ProcessingConfiguration: &svcapitypes.ProcessingConfiguration{Enabled: aws.Bool(true)},
+		S3BackupConfiguration:   &svcapitypes.S3DestinationConfiguration{BucketRef: bucketRef},
+	}
+
+	readExtendedS3DestinationDescription(ko, &svcsdktypes.ExtendedS3DestinationDescription{
+		BucketARN:               aws.String("arn:aws:s3:::data"),
+		RoleARN:                 aws.String("arn:aws:iam::123456789012:role/firehose"),
+		EncryptionConfiguration: &svcsdktypes.EncryptionConfiguration{NoEncryptionConfig: svcsdktypes.NoEncryptionConfigNoEncryption},
+	})
+
+	spec := ko.Spec.ExtendedS3DestinationConfiguration
+	if spec.Prefix != nil || spec.ErrorOutputPrefix != nil {
+		t.Errorf("prefixes missing from the description must be cleared: %+v", spec)
+	}
+	if spec.ProcessingConfiguration != nil || spec.S3BackupConfiguration != nil {
+		t.Errorf("blocks missing from the description must be cleared: %+v", spec)
+	}
+	if spec.EncryptionConfiguration == nil || spec.EncryptionConfiguration.KMSEncryptionConfig != nil ||
+		aws.ToString(spec.EncryptionConfiguration.NoEncryptionConfig) != "NoEncryption" {
+		t.Errorf("a KMS block missing from the description must be cleared and NoEncryption read: %+v", spec.EncryptionConfiguration)
+	}
+	if spec.BucketRef != bucketRef {
+		t.Errorf("BucketRef was dropped")
+	}
+}
+
+func TestMergeS3DestinationDescriptionKeepsReferences(t *testing.T) {
+	bucketRef := &ackv1alpha1.AWSResourceReferenceWrapper{From: &ackv1alpha1.AWSResourceReference{Name: aws.String("bucket")}}
+	keyRef := &ackv1alpha1.AWSResourceReferenceWrapper{From: &ackv1alpha1.AWSResourceReference{Name: aws.String("key")}}
+	spec := &svcapitypes.S3DestinationConfiguration{
+		BucketRef: bucketRef,
+		Prefix:    aws.String("data/"),
+		EncryptionConfiguration: &svcapitypes.EncryptionConfiguration{
+			KMSEncryptionConfig: &svcapitypes.KMSEncryptionConfig{AWSKMSKeyRef: keyRef},
+		},
+	}
+
+	mergeS3DestinationDescription(spec, &svcsdktypes.S3DestinationDescription{
+		BucketARN: aws.String("arn:aws:s3:::data"),
+		EncryptionConfiguration: &svcsdktypes.EncryptionConfiguration{
+			KMSEncryptionConfig: &svcsdktypes.KMSEncryptionConfig{AWSKMSKeyARN: aws.String("arn:aws:kms:eu-west-1:123456789012:key/1")},
+		},
+	})
+
+	if spec.Prefix != nil {
+		t.Errorf("a prefix missing from the description must be cleared, got %q", aws.ToString(spec.Prefix))
+	}
+	if spec.BucketRef != bucketRef || spec.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef != keyRef {
+		t.Errorf("reference wrappers were dropped: %+v", spec)
+	}
+	if got := aws.ToString(spec.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN); got != "arn:aws:kms:eu-west-1:123456789012:key/1" {
+		t.Errorf("AWSKMSKeyARN: got %q", got)
+	}
+}
