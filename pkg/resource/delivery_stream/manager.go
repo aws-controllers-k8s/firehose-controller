@@ -50,7 +50,7 @@ var (
 // +kubebuilder:rbac:groups=firehose.services.k8s.aws,resources=deliverystreams,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=firehose.services.k8s.aws,resources=deliverystreams/status,verbs=get;update;patch
 
-var lateInitializeFieldNames = []string{"DeliveryStreamEncryptionConfiguration", "ExtendedS3DestinationConfiguration", "BufferingHints", "CloudWatchLoggingOptions", "CompressionFormat", "CustomTimeZone", "DataFormatConversionConfiguration", "DynamicPartitioningConfiguration", "RetryOptions", "EncryptionConfiguration", "ErrorOutputPrefix", "FileExtension", "Prefix", "ProcessingConfiguration", "BufferingHints", "CloudWatchLoggingOptions", "CompressionFormat", "EncryptionConfiguration", "S3BackupMode", "HTTPEndpointDestinationConfiguration", "BufferingHints", "CloudWatchLoggingOptions", "EndpointConfiguration", "ProcessingConfiguration", "RequestConfiguration", "RetryOptions", "RoleARN", "S3BackupMode", "S3Configuration", "BufferingHints", "CloudWatchLoggingOptions", "CompressionFormat", "EncryptionConfiguration", "ErrorOutputPrefix", "Prefix", "SecretsManagerConfiguration"}
+var lateInitializeFieldNames = []string{"DeliveryStreamEncryptionConfiguration", "ExtendedS3DestinationConfiguration", "BufferingHints", "CloudWatchLoggingOptions", "CompressionFormat", "CustomTimeZone", "DataFormatConversionConfiguration", "DynamicPartitioningConfiguration", "RetryOptions", "EncryptionConfiguration", "ErrorOutputPrefix", "FileExtension", "Prefix", "ProcessingConfiguration", "BufferingHints", "CloudWatchLoggingOptions", "CompressionFormat", "EncryptionConfiguration", "S3BackupMode", "HTTPEndpointDestinationConfiguration", "BufferingHints", "CloudWatchLoggingOptions", "EndpointConfiguration", "ProcessingConfiguration", "RequestConfiguration", "RetryOptions", "RoleARN", "S3BackupMode", "S3Configuration", "BufferingHints", "CloudWatchLoggingOptions", "CompressionFormat", "EncryptionConfiguration", "ErrorOutputPrefix", "Prefix", "SecretsManagerConfiguration", "SplunkDestinationConfiguration", "BufferingHints", "CloudWatchLoggingOptions", "HECAcknowledgmentTimeoutInSeconds", "ProcessingConfiguration", "RetryOptions", "S3BackupMode", "S3Configuration", "BufferingHints", "CloudWatchLoggingOptions", "CompressionFormat", "EncryptionConfiguration", "ErrorOutputPrefix", "Prefix", "SecretsManagerConfiguration"}
 
 // resourceManager is responsible for providing a consistent way to perform
 // CRUD operations in a backend AWS service API for Book custom resources.
@@ -460,6 +460,91 @@ func (rm *resourceManager) lateInitializeFromReadOneOutput(
 	if observedKo.Spec.HTTPEndpointDestinationConfiguration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration != nil {
 		if observedKo.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration != nil && latestKo.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration == nil {
 			latestKo.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration = observedKo.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration
+		}
+	}
+	if observedKo.Spec.SplunkDestinationConfiguration != nil && latestKo.Spec.SplunkDestinationConfiguration == nil {
+		latestKo.Spec.SplunkDestinationConfiguration = observedKo.Spec.SplunkDestinationConfiguration
+	}
+	if observedKo.Spec.SplunkDestinationConfiguration != nil && latestKo.Spec.SplunkDestinationConfiguration != nil {
+		if observedKo.Spec.SplunkDestinationConfiguration.BufferingHints != nil && latestKo.Spec.SplunkDestinationConfiguration.BufferingHints == nil {
+			latestKo.Spec.SplunkDestinationConfiguration.BufferingHints = observedKo.Spec.SplunkDestinationConfiguration.BufferingHints
+		}
+	}
+	if observedKo.Spec.SplunkDestinationConfiguration != nil && latestKo.Spec.SplunkDestinationConfiguration != nil {
+		if observedKo.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions != nil && latestKo.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions == nil {
+			latestKo.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions = observedKo.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions
+		}
+	}
+	if observedKo.Spec.SplunkDestinationConfiguration != nil && latestKo.Spec.SplunkDestinationConfiguration != nil {
+		if observedKo.Spec.SplunkDestinationConfiguration.HECAcknowledgmentTimeoutInSeconds != nil && latestKo.Spec.SplunkDestinationConfiguration.HECAcknowledgmentTimeoutInSeconds == nil {
+			latestKo.Spec.SplunkDestinationConfiguration.HECAcknowledgmentTimeoutInSeconds = observedKo.Spec.SplunkDestinationConfiguration.HECAcknowledgmentTimeoutInSeconds
+		}
+	}
+	if observedKo.Spec.SplunkDestinationConfiguration != nil && latestKo.Spec.SplunkDestinationConfiguration != nil {
+		if observedKo.Spec.SplunkDestinationConfiguration.ProcessingConfiguration != nil && latestKo.Spec.SplunkDestinationConfiguration.ProcessingConfiguration == nil {
+			latestKo.Spec.SplunkDestinationConfiguration.ProcessingConfiguration = observedKo.Spec.SplunkDestinationConfiguration.ProcessingConfiguration
+		}
+	}
+	if observedKo.Spec.SplunkDestinationConfiguration != nil && latestKo.Spec.SplunkDestinationConfiguration != nil {
+		if observedKo.Spec.SplunkDestinationConfiguration.RetryOptions != nil && latestKo.Spec.SplunkDestinationConfiguration.RetryOptions == nil {
+			latestKo.Spec.SplunkDestinationConfiguration.RetryOptions = observedKo.Spec.SplunkDestinationConfiguration.RetryOptions
+		}
+	}
+	if observedKo.Spec.SplunkDestinationConfiguration != nil && latestKo.Spec.SplunkDestinationConfiguration != nil {
+		if observedKo.Spec.SplunkDestinationConfiguration.S3BackupMode != nil && latestKo.Spec.SplunkDestinationConfiguration.S3BackupMode == nil {
+			latestKo.Spec.SplunkDestinationConfiguration.S3BackupMode = observedKo.Spec.SplunkDestinationConfiguration.S3BackupMode
+		}
+	}
+	if observedKo.Spec.SplunkDestinationConfiguration != nil && latestKo.Spec.SplunkDestinationConfiguration != nil {
+		if observedKo.Spec.SplunkDestinationConfiguration.S3Configuration != nil && latestKo.Spec.SplunkDestinationConfiguration.S3Configuration == nil {
+			latestKo.Spec.SplunkDestinationConfiguration.S3Configuration = observedKo.Spec.SplunkDestinationConfiguration.S3Configuration
+		}
+	}
+	if observedKo.Spec.SplunkDestinationConfiguration != nil && latestKo.Spec.SplunkDestinationConfiguration != nil {
+		if observedKo.Spec.SplunkDestinationConfiguration.S3Configuration != nil && latestKo.Spec.SplunkDestinationConfiguration.S3Configuration != nil {
+			if observedKo.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints != nil && latestKo.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints == nil {
+				latestKo.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints = observedKo.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints
+			}
+		}
+	}
+	if observedKo.Spec.SplunkDestinationConfiguration != nil && latestKo.Spec.SplunkDestinationConfiguration != nil {
+		if observedKo.Spec.SplunkDestinationConfiguration.S3Configuration != nil && latestKo.Spec.SplunkDestinationConfiguration.S3Configuration != nil {
+			if observedKo.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions != nil && latestKo.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions == nil {
+				latestKo.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions = observedKo.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions
+			}
+		}
+	}
+	if observedKo.Spec.SplunkDestinationConfiguration != nil && latestKo.Spec.SplunkDestinationConfiguration != nil {
+		if observedKo.Spec.SplunkDestinationConfiguration.S3Configuration != nil && latestKo.Spec.SplunkDestinationConfiguration.S3Configuration != nil {
+			if observedKo.Spec.SplunkDestinationConfiguration.S3Configuration.CompressionFormat != nil && latestKo.Spec.SplunkDestinationConfiguration.S3Configuration.CompressionFormat == nil {
+				latestKo.Spec.SplunkDestinationConfiguration.S3Configuration.CompressionFormat = observedKo.Spec.SplunkDestinationConfiguration.S3Configuration.CompressionFormat
+			}
+		}
+	}
+	if observedKo.Spec.SplunkDestinationConfiguration != nil && latestKo.Spec.SplunkDestinationConfiguration != nil {
+		if observedKo.Spec.SplunkDestinationConfiguration.S3Configuration != nil && latestKo.Spec.SplunkDestinationConfiguration.S3Configuration != nil {
+			if observedKo.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration != nil && latestKo.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration == nil {
+				latestKo.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration = observedKo.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration
+			}
+		}
+	}
+	if observedKo.Spec.SplunkDestinationConfiguration != nil && latestKo.Spec.SplunkDestinationConfiguration != nil {
+		if observedKo.Spec.SplunkDestinationConfiguration.S3Configuration != nil && latestKo.Spec.SplunkDestinationConfiguration.S3Configuration != nil {
+			if observedKo.Spec.SplunkDestinationConfiguration.S3Configuration.ErrorOutputPrefix != nil && latestKo.Spec.SplunkDestinationConfiguration.S3Configuration.ErrorOutputPrefix == nil {
+				latestKo.Spec.SplunkDestinationConfiguration.S3Configuration.ErrorOutputPrefix = observedKo.Spec.SplunkDestinationConfiguration.S3Configuration.ErrorOutputPrefix
+			}
+		}
+	}
+	if observedKo.Spec.SplunkDestinationConfiguration != nil && latestKo.Spec.SplunkDestinationConfiguration != nil {
+		if observedKo.Spec.SplunkDestinationConfiguration.S3Configuration != nil && latestKo.Spec.SplunkDestinationConfiguration.S3Configuration != nil {
+			if observedKo.Spec.SplunkDestinationConfiguration.S3Configuration.Prefix != nil && latestKo.Spec.SplunkDestinationConfiguration.S3Configuration.Prefix == nil {
+				latestKo.Spec.SplunkDestinationConfiguration.S3Configuration.Prefix = observedKo.Spec.SplunkDestinationConfiguration.S3Configuration.Prefix
+			}
+		}
+	}
+	if observedKo.Spec.SplunkDestinationConfiguration != nil && latestKo.Spec.SplunkDestinationConfiguration != nil {
+		if observedKo.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration != nil && latestKo.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration == nil {
+			latestKo.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration = observedKo.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration
 		}
 	}
 	return &resource{latestKo}

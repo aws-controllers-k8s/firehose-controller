@@ -46,6 +46,8 @@ type DeliveryStreamSpec struct {
 	// Enables configuring Kinesis Firehose to deliver data to any HTTP endpoint
 	// destination. You can specify only one destination.
 	HTTPEndpointDestinationConfiguration *HTTPEndpointDestinationConfiguration `json:"httpEndpointDestinationConfiguration,omitempty"`
+	// The destination in Splunk. You can specify only one destination.
+	SplunkDestinationConfiguration *SplunkDestinationConfiguration `json:"splunkDestinationConfiguration,omitempty"`
 	// A set of tags to assign to the Firehose stream. A tag is a key-value pair
 	// that you can define and assign to Amazon Web Services resources. Tags are
 	// metadata. For example, you can add friendly names and descriptions or other

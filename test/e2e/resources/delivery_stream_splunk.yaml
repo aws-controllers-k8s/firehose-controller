@@ -1,0 +1,28 @@
+apiVersion: firehose.services.k8s.aws/v1alpha1
+kind: DeliveryStream
+metadata:
+  name: $DELIVERY_STREAM_NAME
+  namespace: default
+spec:
+  deliveryStreamName: $DELIVERY_STREAM_NAME
+  deliveryStreamType: $DELIVERY_STREAM_TYPE
+  splunkDestinationConfiguration:
+    hECEndpoint: $HEC_ENDPOINT
+    hECEndpointType: Raw
+    hECToken:
+      namespace: default
+      name: $HEC_TOKEN_SECRET_NAME
+      key: $HEC_TOKEN_SECRET_KEY
+    hECAcknowledgmentTimeoutInSeconds: 180
+    retryOptions:
+      durationInSeconds: 300
+    s3BackupMode: FailedEventsOnly
+    s3Configuration:
+      bucketARN: $S3_BUCKET_ARN
+      roleARN: $S3_ROLE_ARN
+      bufferingHints:
+        intervalInSeconds: 60
+        sizeInMBs: 1
+  tags:
+    - key: environment
+      value: dev

@@ -71,6 +71,21 @@ import (
 // +kubebuilder:rbac:groups=secretsmanager.services.k8s.aws,resources=secrets,verbs=get;list
 // +kubebuilder:rbac:groups=secretsmanager.services.k8s.aws,resources=secrets/status,verbs=get;list
 
+// +kubebuilder:rbac:groups=s3.services.k8s.aws,resources=buckets,verbs=get;list
+// +kubebuilder:rbac:groups=s3.services.k8s.aws,resources=buckets/status,verbs=get;list
+
+// +kubebuilder:rbac:groups=kms.services.k8s.aws,resources=keys,verbs=get;list
+// +kubebuilder:rbac:groups=kms.services.k8s.aws,resources=keys/status,verbs=get;list
+
+// +kubebuilder:rbac:groups=iam.services.k8s.aws,resources=roles,verbs=get;list
+// +kubebuilder:rbac:groups=iam.services.k8s.aws,resources=roles/status,verbs=get;list
+
+// +kubebuilder:rbac:groups=iam.services.k8s.aws,resources=roles,verbs=get;list
+// +kubebuilder:rbac:groups=iam.services.k8s.aws,resources=roles/status,verbs=get;list
+
+// +kubebuilder:rbac:groups=secretsmanager.services.k8s.aws,resources=secrets,verbs=get;list
+// +kubebuilder:rbac:groups=secretsmanager.services.k8s.aws,resources=secrets/status,verbs=get;list
+
 // ClearResolvedReferences removes any reference values that were made
 // concrete in the spec. It returns a copy of the input AWSResource which
 // contains the original *Ref values, but none of their respective concrete
@@ -168,6 +183,50 @@ func (rm *resourceManager) ClearResolvedReferences(res acktypes.AWSResource) ack
 		if ko.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration != nil {
 			if ko.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.SecretRef != nil {
 				ko.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.SecretARN = nil
+			}
+		}
+	}
+
+	if ko.Spec.SplunkDestinationConfiguration != nil {
+		if ko.Spec.SplunkDestinationConfiguration.S3Configuration != nil {
+			if ko.Spec.SplunkDestinationConfiguration.S3Configuration.BucketRef != nil {
+				ko.Spec.SplunkDestinationConfiguration.S3Configuration.BucketARN = nil
+			}
+		}
+	}
+
+	if ko.Spec.SplunkDestinationConfiguration != nil {
+		if ko.Spec.SplunkDestinationConfiguration.S3Configuration != nil {
+			if ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration != nil {
+				if ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig != nil {
+					if ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef != nil {
+						ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN = nil
+					}
+				}
+			}
+		}
+	}
+
+	if ko.Spec.SplunkDestinationConfiguration != nil {
+		if ko.Spec.SplunkDestinationConfiguration.S3Configuration != nil {
+			if ko.Spec.SplunkDestinationConfiguration.S3Configuration.RoleRef != nil {
+				ko.Spec.SplunkDestinationConfiguration.S3Configuration.RoleARN = nil
+			}
+		}
+	}
+
+	if ko.Spec.SplunkDestinationConfiguration != nil {
+		if ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration != nil {
+			if ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleRef != nil {
+				ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleARN = nil
+			}
+		}
+	}
+
+	if ko.Spec.SplunkDestinationConfiguration != nil {
+		if ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration != nil {
+			if ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretRef != nil {
+				ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretARN = nil
 			}
 		}
 	}
@@ -352,6 +411,77 @@ func (rm *resourceManager) EnsureReferences(
 			}
 		}
 	}
+	if desiredKO.Spec.SplunkDestinationConfiguration != nil {
+		if desiredKO.Spec.SplunkDestinationConfiguration.S3Configuration != nil {
+			if desiredKO.Spec.SplunkDestinationConfiguration.S3Configuration.BucketRef != nil {
+				if latestKO.Spec.SplunkDestinationConfiguration == nil {
+					latestKO.Spec.SplunkDestinationConfiguration = &svcapitypes.SplunkDestinationConfiguration{}
+				}
+				if latestKO.Spec.SplunkDestinationConfiguration.S3Configuration == nil {
+					latestKO.Spec.SplunkDestinationConfiguration.S3Configuration = &svcapitypes.S3DestinationConfiguration{}
+				}
+				if latestKO.Spec.SplunkDestinationConfiguration.S3Configuration.BucketRef == nil {
+					latestKO.Spec.SplunkDestinationConfiguration.S3Configuration.BucketRef = desiredKO.Spec.SplunkDestinationConfiguration.S3Configuration.BucketRef
+				}
+			}
+			if desiredKO.Spec.SplunkDestinationConfiguration.S3Configuration.RoleRef != nil {
+				if latestKO.Spec.SplunkDestinationConfiguration == nil {
+					latestKO.Spec.SplunkDestinationConfiguration = &svcapitypes.SplunkDestinationConfiguration{}
+				}
+				if latestKO.Spec.SplunkDestinationConfiguration.S3Configuration == nil {
+					latestKO.Spec.SplunkDestinationConfiguration.S3Configuration = &svcapitypes.S3DestinationConfiguration{}
+				}
+				if latestKO.Spec.SplunkDestinationConfiguration.S3Configuration.RoleRef == nil {
+					latestKO.Spec.SplunkDestinationConfiguration.S3Configuration.RoleRef = desiredKO.Spec.SplunkDestinationConfiguration.S3Configuration.RoleRef
+				}
+			}
+			if desiredKO.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration != nil {
+				if desiredKO.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig != nil {
+					if desiredKO.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef != nil {
+						if latestKO.Spec.SplunkDestinationConfiguration == nil {
+							latestKO.Spec.SplunkDestinationConfiguration = &svcapitypes.SplunkDestinationConfiguration{}
+						}
+						if latestKO.Spec.SplunkDestinationConfiguration.S3Configuration == nil {
+							latestKO.Spec.SplunkDestinationConfiguration.S3Configuration = &svcapitypes.S3DestinationConfiguration{}
+						}
+						if latestKO.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration == nil {
+							latestKO.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration = &svcapitypes.EncryptionConfiguration{}
+						}
+						if latestKO.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig == nil {
+							latestKO.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig = &svcapitypes.KMSEncryptionConfig{}
+						}
+						if latestKO.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef == nil {
+							latestKO.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef = desiredKO.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef
+						}
+					}
+				}
+			}
+		}
+		if desiredKO.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration != nil {
+			if desiredKO.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleRef != nil {
+				if latestKO.Spec.SplunkDestinationConfiguration == nil {
+					latestKO.Spec.SplunkDestinationConfiguration = &svcapitypes.SplunkDestinationConfiguration{}
+				}
+				if latestKO.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration == nil {
+					latestKO.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration = &svcapitypes.SecretsManagerConfiguration{}
+				}
+				if latestKO.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleRef == nil {
+					latestKO.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleRef = desiredKO.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleRef
+				}
+			}
+			if desiredKO.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretRef != nil {
+				if latestKO.Spec.SplunkDestinationConfiguration == nil {
+					latestKO.Spec.SplunkDestinationConfiguration = &svcapitypes.SplunkDestinationConfiguration{}
+				}
+				if latestKO.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration == nil {
+					latestKO.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration = &svcapitypes.SecretsManagerConfiguration{}
+				}
+				if latestKO.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretRef == nil {
+					latestKO.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretRef = desiredKO.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretRef
+				}
+			}
+		}
+	}
 
 	return &resource{latestKO}
 }
@@ -439,6 +569,36 @@ func (rm *resourceManager) ResolveReferences(
 	}
 
 	if fieldHasReferences, err := rm.resolveReferenceForHTTPEndpointDestinationConfiguration_SecretsManagerConfiguration_SecretARN(ctx, apiReader, ko); err != nil {
+		return &resource{ko}, (resourceHasReferences || fieldHasReferences), err
+	} else {
+		resourceHasReferences = resourceHasReferences || fieldHasReferences
+	}
+
+	if fieldHasReferences, err := rm.resolveReferenceForSplunkDestinationConfiguration_S3Configuration_BucketARN(ctx, apiReader, ko); err != nil {
+		return &resource{ko}, (resourceHasReferences || fieldHasReferences), err
+	} else {
+		resourceHasReferences = resourceHasReferences || fieldHasReferences
+	}
+
+	if fieldHasReferences, err := rm.resolveReferenceForSplunkDestinationConfiguration_S3Configuration_EncryptionConfiguration_KMSEncryptionConfig_AWSKMSKeyARN(ctx, apiReader, ko); err != nil {
+		return &resource{ko}, (resourceHasReferences || fieldHasReferences), err
+	} else {
+		resourceHasReferences = resourceHasReferences || fieldHasReferences
+	}
+
+	if fieldHasReferences, err := rm.resolveReferenceForSplunkDestinationConfiguration_S3Configuration_RoleARN(ctx, apiReader, ko); err != nil {
+		return &resource{ko}, (resourceHasReferences || fieldHasReferences), err
+	} else {
+		resourceHasReferences = resourceHasReferences || fieldHasReferences
+	}
+
+	if fieldHasReferences, err := rm.resolveReferenceForSplunkDestinationConfiguration_SecretsManagerConfiguration_RoleARN(ctx, apiReader, ko); err != nil {
+		return &resource{ko}, (resourceHasReferences || fieldHasReferences), err
+	} else {
+		resourceHasReferences = resourceHasReferences || fieldHasReferences
+	}
+
+	if fieldHasReferences, err := rm.resolveReferenceForSplunkDestinationConfiguration_SecretsManagerConfiguration_SecretARN(ctx, apiReader, ko); err != nil {
 		return &resource{ko}, (resourceHasReferences || fieldHasReferences), err
 	} else {
 		resourceHasReferences = resourceHasReferences || fieldHasReferences
@@ -541,6 +701,50 @@ func validateReferenceFields(ko *svcapitypes.DeliveryStream) error {
 		if ko.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration != nil {
 			if ko.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.SecretRef != nil && ko.Spec.HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.SecretARN != nil {
 				return ackerr.ResourceReferenceAndIDNotSupportedFor("HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.SecretARN", "HTTPEndpointDestinationConfiguration.SecretsManagerConfiguration.SecretRef")
+			}
+		}
+	}
+
+	if ko.Spec.SplunkDestinationConfiguration != nil {
+		if ko.Spec.SplunkDestinationConfiguration.S3Configuration != nil {
+			if ko.Spec.SplunkDestinationConfiguration.S3Configuration.BucketRef != nil && ko.Spec.SplunkDestinationConfiguration.S3Configuration.BucketARN != nil {
+				return ackerr.ResourceReferenceAndIDNotSupportedFor("SplunkDestinationConfiguration.S3Configuration.BucketARN", "SplunkDestinationConfiguration.S3Configuration.BucketRef")
+			}
+		}
+	}
+
+	if ko.Spec.SplunkDestinationConfiguration != nil {
+		if ko.Spec.SplunkDestinationConfiguration.S3Configuration != nil {
+			if ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration != nil {
+				if ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig != nil {
+					if ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef != nil && ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN != nil {
+						return ackerr.ResourceReferenceAndIDNotSupportedFor("SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN", "SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef")
+					}
+				}
+			}
+		}
+	}
+
+	if ko.Spec.SplunkDestinationConfiguration != nil {
+		if ko.Spec.SplunkDestinationConfiguration.S3Configuration != nil {
+			if ko.Spec.SplunkDestinationConfiguration.S3Configuration.RoleRef != nil && ko.Spec.SplunkDestinationConfiguration.S3Configuration.RoleARN != nil {
+				return ackerr.ResourceReferenceAndIDNotSupportedFor("SplunkDestinationConfiguration.S3Configuration.RoleARN", "SplunkDestinationConfiguration.S3Configuration.RoleRef")
+			}
+		}
+	}
+
+	if ko.Spec.SplunkDestinationConfiguration != nil {
+		if ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration != nil {
+			if ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleRef != nil && ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleARN != nil {
+				return ackerr.ResourceReferenceAndIDNotSupportedFor("SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleARN", "SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleRef")
+			}
+		}
+	}
+
+	if ko.Spec.SplunkDestinationConfiguration != nil {
+		if ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration != nil {
+			if ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretRef != nil && ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretARN != nil {
+				return ackerr.ResourceReferenceAndIDNotSupportedFor("SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretARN", "SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretRef")
 			}
 		}
 	}
@@ -1215,4 +1419,198 @@ func getReferencedResourceState_Secret(
 			"Status.ACKResourceMetadata.ARN")
 	}
 	return nil
+}
+
+// resolveReferenceForSplunkDestinationConfiguration_S3Configuration_BucketARN reads the resource referenced
+// from SplunkDestinationConfiguration.S3Configuration.BucketRef field and sets the SplunkDestinationConfiguration.S3Configuration.BucketARN
+// from referenced resource. Returns a boolean indicating whether a reference
+// contains references, or an error
+func (rm *resourceManager) resolveReferenceForSplunkDestinationConfiguration_S3Configuration_BucketARN(
+	ctx context.Context,
+	apiReader client.Reader,
+	ko *svcapitypes.DeliveryStream,
+) (hasReferences bool, err error) {
+	if ko.Spec.SplunkDestinationConfiguration != nil {
+		if ko.Spec.SplunkDestinationConfiguration.S3Configuration != nil {
+			if ko.Spec.SplunkDestinationConfiguration.S3Configuration.BucketRef != nil && ko.Spec.SplunkDestinationConfiguration.S3Configuration.BucketRef.From != nil {
+				hasReferences = true
+				arr := ko.Spec.SplunkDestinationConfiguration.S3Configuration.BucketRef.From
+				if arr.Name == nil || *arr.Name == "" {
+					return hasReferences, fmt.Errorf("provided resource reference is nil or empty: SplunkDestinationConfiguration.S3Configuration.BucketRef")
+				}
+				namespace, _, err := ackrt.ValidateCrossNamespaceReference(
+					rm.cfg.EnableCrossNamespace,
+					ko.ObjectMeta.GetNamespace(),
+					arr.Namespace,
+					*arr.Name,
+				)
+				if err != nil {
+					return hasReferences, err
+				}
+				obj := &s3apitypes.Bucket{}
+				if err := getReferencedResourceState_Bucket(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
+					return hasReferences, err
+				}
+				ko.Spec.SplunkDestinationConfiguration.S3Configuration.BucketARN = (*string)(obj.Status.ACKResourceMetadata.ARN)
+			}
+		}
+	}
+
+	return hasReferences, nil
+}
+
+// resolveReferenceForSplunkDestinationConfiguration_S3Configuration_EncryptionConfiguration_KMSEncryptionConfig_AWSKMSKeyARN reads the resource referenced
+// from SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef field and sets the SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN
+// from referenced resource. Returns a boolean indicating whether a reference
+// contains references, or an error
+func (rm *resourceManager) resolveReferenceForSplunkDestinationConfiguration_S3Configuration_EncryptionConfiguration_KMSEncryptionConfig_AWSKMSKeyARN(
+	ctx context.Context,
+	apiReader client.Reader,
+	ko *svcapitypes.DeliveryStream,
+) (hasReferences bool, err error) {
+	if ko.Spec.SplunkDestinationConfiguration != nil {
+		if ko.Spec.SplunkDestinationConfiguration.S3Configuration != nil {
+			if ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration != nil {
+				if ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig != nil {
+					if ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef != nil && ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef.From != nil {
+						hasReferences = true
+						arr := ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef.From
+						if arr.Name == nil || *arr.Name == "" {
+							return hasReferences, fmt.Errorf("provided resource reference is nil or empty: SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyRef")
+						}
+						namespace, _, err := ackrt.ValidateCrossNamespaceReference(
+							rm.cfg.EnableCrossNamespace,
+							ko.ObjectMeta.GetNamespace(),
+							arr.Namespace,
+							*arr.Name,
+						)
+						if err != nil {
+							return hasReferences, err
+						}
+						obj := &kmsapitypes.Key{}
+						if err := getReferencedResourceState_Key(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
+							return hasReferences, err
+						}
+						ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN = (*string)(obj.Status.ACKResourceMetadata.ARN)
+					}
+				}
+			}
+		}
+	}
+
+	return hasReferences, nil
+}
+
+// resolveReferenceForSplunkDestinationConfiguration_S3Configuration_RoleARN reads the resource referenced
+// from SplunkDestinationConfiguration.S3Configuration.RoleRef field and sets the SplunkDestinationConfiguration.S3Configuration.RoleARN
+// from referenced resource. Returns a boolean indicating whether a reference
+// contains references, or an error
+func (rm *resourceManager) resolveReferenceForSplunkDestinationConfiguration_S3Configuration_RoleARN(
+	ctx context.Context,
+	apiReader client.Reader,
+	ko *svcapitypes.DeliveryStream,
+) (hasReferences bool, err error) {
+	if ko.Spec.SplunkDestinationConfiguration != nil {
+		if ko.Spec.SplunkDestinationConfiguration.S3Configuration != nil {
+			if ko.Spec.SplunkDestinationConfiguration.S3Configuration.RoleRef != nil && ko.Spec.SplunkDestinationConfiguration.S3Configuration.RoleRef.From != nil {
+				hasReferences = true
+				arr := ko.Spec.SplunkDestinationConfiguration.S3Configuration.RoleRef.From
+				if arr.Name == nil || *arr.Name == "" {
+					return hasReferences, fmt.Errorf("provided resource reference is nil or empty: SplunkDestinationConfiguration.S3Configuration.RoleRef")
+				}
+				namespace, _, err := ackrt.ValidateCrossNamespaceReference(
+					rm.cfg.EnableCrossNamespace,
+					ko.ObjectMeta.GetNamespace(),
+					arr.Namespace,
+					*arr.Name,
+				)
+				if err != nil {
+					return hasReferences, err
+				}
+				obj := &iamapitypes.Role{}
+				if err := getReferencedResourceState_Role(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
+					return hasReferences, err
+				}
+				ko.Spec.SplunkDestinationConfiguration.S3Configuration.RoleARN = (*string)(obj.Status.ACKResourceMetadata.ARN)
+			}
+		}
+	}
+
+	return hasReferences, nil
+}
+
+// resolveReferenceForSplunkDestinationConfiguration_SecretsManagerConfiguration_RoleARN reads the resource referenced
+// from SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleRef field and sets the SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleARN
+// from referenced resource. Returns a boolean indicating whether a reference
+// contains references, or an error
+func (rm *resourceManager) resolveReferenceForSplunkDestinationConfiguration_SecretsManagerConfiguration_RoleARN(
+	ctx context.Context,
+	apiReader client.Reader,
+	ko *svcapitypes.DeliveryStream,
+) (hasReferences bool, err error) {
+	if ko.Spec.SplunkDestinationConfiguration != nil {
+		if ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration != nil {
+			if ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleRef != nil && ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleRef.From != nil {
+				hasReferences = true
+				arr := ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleRef.From
+				if arr.Name == nil || *arr.Name == "" {
+					return hasReferences, fmt.Errorf("provided resource reference is nil or empty: SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleRef")
+				}
+				namespace, _, err := ackrt.ValidateCrossNamespaceReference(
+					rm.cfg.EnableCrossNamespace,
+					ko.ObjectMeta.GetNamespace(),
+					arr.Namespace,
+					*arr.Name,
+				)
+				if err != nil {
+					return hasReferences, err
+				}
+				obj := &iamapitypes.Role{}
+				if err := getReferencedResourceState_Role(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
+					return hasReferences, err
+				}
+				ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleARN = (*string)(obj.Status.ACKResourceMetadata.ARN)
+			}
+		}
+	}
+
+	return hasReferences, nil
+}
+
+// resolveReferenceForSplunkDestinationConfiguration_SecretsManagerConfiguration_SecretARN reads the resource referenced
+// from SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretRef field and sets the SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretARN
+// from referenced resource. Returns a boolean indicating whether a reference
+// contains references, or an error
+func (rm *resourceManager) resolveReferenceForSplunkDestinationConfiguration_SecretsManagerConfiguration_SecretARN(
+	ctx context.Context,
+	apiReader client.Reader,
+	ko *svcapitypes.DeliveryStream,
+) (hasReferences bool, err error) {
+	if ko.Spec.SplunkDestinationConfiguration != nil {
+		if ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration != nil {
+			if ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretRef != nil && ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretRef.From != nil {
+				hasReferences = true
+				arr := ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretRef.From
+				if arr.Name == nil || *arr.Name == "" {
+					return hasReferences, fmt.Errorf("provided resource reference is nil or empty: SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretRef")
+				}
+				namespace, _, err := ackrt.ValidateCrossNamespaceReference(
+					rm.cfg.EnableCrossNamespace,
+					ko.ObjectMeta.GetNamespace(),
+					arr.Namespace,
+					*arr.Name,
+				)
+				if err != nil {
+					return hasReferences, err
+				}
+				obj := &secretsmanagerapitypes.Secret{}
+				if err := getReferencedResourceState_Secret(ctx, apiReader, obj, *arr.Name, namespace); err != nil {
+					return hasReferences, err
+				}
+				ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretARN = (*string)(obj.Status.ACKResourceMetadata.ARN)
+			}
+		}
+	}
+
+	return hasReferences, nil
 }

@@ -841,6 +841,246 @@ func newResourceDelta(
 			}
 		}
 	}
+	if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration, b.ko.Spec.SplunkDestinationConfiguration) {
+		delta.Add("Spec.SplunkDestinationConfiguration", a.ko.Spec.SplunkDestinationConfiguration, b.ko.Spec.SplunkDestinationConfiguration)
+	} else if a.ko.Spec.SplunkDestinationConfiguration != nil && b.ko.Spec.SplunkDestinationConfiguration != nil {
+		if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.BufferingHints, b.ko.Spec.SplunkDestinationConfiguration.BufferingHints) {
+			delta.Add("Spec.SplunkDestinationConfiguration.BufferingHints", a.ko.Spec.SplunkDestinationConfiguration.BufferingHints, b.ko.Spec.SplunkDestinationConfiguration.BufferingHints)
+		} else if a.ko.Spec.SplunkDestinationConfiguration.BufferingHints != nil && b.ko.Spec.SplunkDestinationConfiguration.BufferingHints != nil {
+			if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.BufferingHints.IntervalInSeconds, b.ko.Spec.SplunkDestinationConfiguration.BufferingHints.IntervalInSeconds) {
+				delta.Add("Spec.SplunkDestinationConfiguration.BufferingHints.IntervalInSeconds", a.ko.Spec.SplunkDestinationConfiguration.BufferingHints.IntervalInSeconds, b.ko.Spec.SplunkDestinationConfiguration.BufferingHints.IntervalInSeconds)
+			} else if a.ko.Spec.SplunkDestinationConfiguration.BufferingHints.IntervalInSeconds != nil && b.ko.Spec.SplunkDestinationConfiguration.BufferingHints.IntervalInSeconds != nil {
+				if *a.ko.Spec.SplunkDestinationConfiguration.BufferingHints.IntervalInSeconds != *b.ko.Spec.SplunkDestinationConfiguration.BufferingHints.IntervalInSeconds {
+					delta.Add("Spec.SplunkDestinationConfiguration.BufferingHints.IntervalInSeconds", a.ko.Spec.SplunkDestinationConfiguration.BufferingHints.IntervalInSeconds, b.ko.Spec.SplunkDestinationConfiguration.BufferingHints.IntervalInSeconds)
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.BufferingHints.SizeInMBs, b.ko.Spec.SplunkDestinationConfiguration.BufferingHints.SizeInMBs) {
+				delta.Add("Spec.SplunkDestinationConfiguration.BufferingHints.SizeInMBs", a.ko.Spec.SplunkDestinationConfiguration.BufferingHints.SizeInMBs, b.ko.Spec.SplunkDestinationConfiguration.BufferingHints.SizeInMBs)
+			} else if a.ko.Spec.SplunkDestinationConfiguration.BufferingHints.SizeInMBs != nil && b.ko.Spec.SplunkDestinationConfiguration.BufferingHints.SizeInMBs != nil {
+				if *a.ko.Spec.SplunkDestinationConfiguration.BufferingHints.SizeInMBs != *b.ko.Spec.SplunkDestinationConfiguration.BufferingHints.SizeInMBs {
+					delta.Add("Spec.SplunkDestinationConfiguration.BufferingHints.SizeInMBs", a.ko.Spec.SplunkDestinationConfiguration.BufferingHints.SizeInMBs, b.ko.Spec.SplunkDestinationConfiguration.BufferingHints.SizeInMBs)
+				}
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions, b.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions) {
+			delta.Add("Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions", a.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions, b.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions)
+		} else if a.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions != nil && b.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions != nil {
+			if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.Enabled, b.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.Enabled) {
+				delta.Add("Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.Enabled", a.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.Enabled, b.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.Enabled)
+			} else if a.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.Enabled != nil && b.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.Enabled != nil {
+				if *a.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.Enabled != *b.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.Enabled {
+					delta.Add("Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.Enabled", a.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.Enabled, b.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.Enabled)
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName, b.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName) {
+				delta.Add("Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName", a.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName, b.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName)
+			} else if a.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName != nil && b.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName != nil {
+				if *a.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName != *b.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName {
+					delta.Add("Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName", a.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName, b.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogGroupName)
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName, b.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName) {
+				delta.Add("Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName", a.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName, b.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName)
+			} else if a.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName != nil && b.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName != nil {
+				if *a.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName != *b.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName {
+					delta.Add("Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName", a.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName, b.ko.Spec.SplunkDestinationConfiguration.CloudWatchLoggingOptions.LogStreamName)
+				}
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.HECAcknowledgmentTimeoutInSeconds, b.ko.Spec.SplunkDestinationConfiguration.HECAcknowledgmentTimeoutInSeconds) {
+			delta.Add("Spec.SplunkDestinationConfiguration.HECAcknowledgmentTimeoutInSeconds", a.ko.Spec.SplunkDestinationConfiguration.HECAcknowledgmentTimeoutInSeconds, b.ko.Spec.SplunkDestinationConfiguration.HECAcknowledgmentTimeoutInSeconds)
+		} else if a.ko.Spec.SplunkDestinationConfiguration.HECAcknowledgmentTimeoutInSeconds != nil && b.ko.Spec.SplunkDestinationConfiguration.HECAcknowledgmentTimeoutInSeconds != nil {
+			if *a.ko.Spec.SplunkDestinationConfiguration.HECAcknowledgmentTimeoutInSeconds != *b.ko.Spec.SplunkDestinationConfiguration.HECAcknowledgmentTimeoutInSeconds {
+				delta.Add("Spec.SplunkDestinationConfiguration.HECAcknowledgmentTimeoutInSeconds", a.ko.Spec.SplunkDestinationConfiguration.HECAcknowledgmentTimeoutInSeconds, b.ko.Spec.SplunkDestinationConfiguration.HECAcknowledgmentTimeoutInSeconds)
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.HECEndpoint, b.ko.Spec.SplunkDestinationConfiguration.HECEndpoint) {
+			delta.Add("Spec.SplunkDestinationConfiguration.HECEndpoint", a.ko.Spec.SplunkDestinationConfiguration.HECEndpoint, b.ko.Spec.SplunkDestinationConfiguration.HECEndpoint)
+		} else if a.ko.Spec.SplunkDestinationConfiguration.HECEndpoint != nil && b.ko.Spec.SplunkDestinationConfiguration.HECEndpoint != nil {
+			if *a.ko.Spec.SplunkDestinationConfiguration.HECEndpoint != *b.ko.Spec.SplunkDestinationConfiguration.HECEndpoint {
+				delta.Add("Spec.SplunkDestinationConfiguration.HECEndpoint", a.ko.Spec.SplunkDestinationConfiguration.HECEndpoint, b.ko.Spec.SplunkDestinationConfiguration.HECEndpoint)
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.HECEndpointType, b.ko.Spec.SplunkDestinationConfiguration.HECEndpointType) {
+			delta.Add("Spec.SplunkDestinationConfiguration.HECEndpointType", a.ko.Spec.SplunkDestinationConfiguration.HECEndpointType, b.ko.Spec.SplunkDestinationConfiguration.HECEndpointType)
+		} else if a.ko.Spec.SplunkDestinationConfiguration.HECEndpointType != nil && b.ko.Spec.SplunkDestinationConfiguration.HECEndpointType != nil {
+			if *a.ko.Spec.SplunkDestinationConfiguration.HECEndpointType != *b.ko.Spec.SplunkDestinationConfiguration.HECEndpointType {
+				delta.Add("Spec.SplunkDestinationConfiguration.HECEndpointType", a.ko.Spec.SplunkDestinationConfiguration.HECEndpointType, b.ko.Spec.SplunkDestinationConfiguration.HECEndpointType)
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.HECToken, b.ko.Spec.SplunkDestinationConfiguration.HECToken) {
+			delta.Add("Spec.SplunkDestinationConfiguration.HECToken", a.ko.Spec.SplunkDestinationConfiguration.HECToken, b.ko.Spec.SplunkDestinationConfiguration.HECToken)
+		} else if a.ko.Spec.SplunkDestinationConfiguration.HECToken != nil && b.ko.Spec.SplunkDestinationConfiguration.HECToken != nil {
+			if *a.ko.Spec.SplunkDestinationConfiguration.HECToken != *b.ko.Spec.SplunkDestinationConfiguration.HECToken {
+				delta.Add("Spec.SplunkDestinationConfiguration.HECToken", a.ko.Spec.SplunkDestinationConfiguration.HECToken, b.ko.Spec.SplunkDestinationConfiguration.HECToken)
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration, b.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration) {
+			delta.Add("Spec.SplunkDestinationConfiguration.ProcessingConfiguration", a.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration, b.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration)
+		} else if a.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration != nil && b.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration != nil {
+			if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Enabled, b.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Enabled) {
+				delta.Add("Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Enabled", a.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Enabled, b.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Enabled)
+			} else if a.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Enabled != nil && b.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Enabled != nil {
+				if *a.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Enabled != *b.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Enabled {
+					delta.Add("Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Enabled", a.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Enabled, b.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Enabled)
+				}
+			}
+			if len(a.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Processors) != len(b.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Processors) {
+				delta.Add("Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Processors", a.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Processors, b.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Processors)
+			} else if len(a.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Processors) > 0 {
+				if !equality.Semantic.Equalities.DeepEqual(a.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Processors, b.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Processors) {
+					delta.Add("Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Processors", a.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Processors, b.ko.Spec.SplunkDestinationConfiguration.ProcessingConfiguration.Processors)
+				}
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.RetryOptions, b.ko.Spec.SplunkDestinationConfiguration.RetryOptions) {
+			delta.Add("Spec.SplunkDestinationConfiguration.RetryOptions", a.ko.Spec.SplunkDestinationConfiguration.RetryOptions, b.ko.Spec.SplunkDestinationConfiguration.RetryOptions)
+		} else if a.ko.Spec.SplunkDestinationConfiguration.RetryOptions != nil && b.ko.Spec.SplunkDestinationConfiguration.RetryOptions != nil {
+			if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.RetryOptions.DurationInSeconds, b.ko.Spec.SplunkDestinationConfiguration.RetryOptions.DurationInSeconds) {
+				delta.Add("Spec.SplunkDestinationConfiguration.RetryOptions.DurationInSeconds", a.ko.Spec.SplunkDestinationConfiguration.RetryOptions.DurationInSeconds, b.ko.Spec.SplunkDestinationConfiguration.RetryOptions.DurationInSeconds)
+			} else if a.ko.Spec.SplunkDestinationConfiguration.RetryOptions.DurationInSeconds != nil && b.ko.Spec.SplunkDestinationConfiguration.RetryOptions.DurationInSeconds != nil {
+				if *a.ko.Spec.SplunkDestinationConfiguration.RetryOptions.DurationInSeconds != *b.ko.Spec.SplunkDestinationConfiguration.RetryOptions.DurationInSeconds {
+					delta.Add("Spec.SplunkDestinationConfiguration.RetryOptions.DurationInSeconds", a.ko.Spec.SplunkDestinationConfiguration.RetryOptions.DurationInSeconds, b.ko.Spec.SplunkDestinationConfiguration.RetryOptions.DurationInSeconds)
+				}
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.S3BackupMode, b.ko.Spec.SplunkDestinationConfiguration.S3BackupMode) {
+			delta.Add("Spec.SplunkDestinationConfiguration.S3BackupMode", a.ko.Spec.SplunkDestinationConfiguration.S3BackupMode, b.ko.Spec.SplunkDestinationConfiguration.S3BackupMode)
+		} else if a.ko.Spec.SplunkDestinationConfiguration.S3BackupMode != nil && b.ko.Spec.SplunkDestinationConfiguration.S3BackupMode != nil {
+			if *a.ko.Spec.SplunkDestinationConfiguration.S3BackupMode != *b.ko.Spec.SplunkDestinationConfiguration.S3BackupMode {
+				delta.Add("Spec.SplunkDestinationConfiguration.S3BackupMode", a.ko.Spec.SplunkDestinationConfiguration.S3BackupMode, b.ko.Spec.SplunkDestinationConfiguration.S3BackupMode)
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.S3Configuration, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration) {
+			delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration)
+		} else if a.ko.Spec.SplunkDestinationConfiguration.S3Configuration != nil && b.ko.Spec.SplunkDestinationConfiguration.S3Configuration != nil {
+			if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BucketARN, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BucketARN) {
+				delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration.BucketARN", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BucketARN, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BucketARN)
+			} else if a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BucketARN != nil && b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BucketARN != nil {
+				if *a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BucketARN != *b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BucketARN {
+					delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration.BucketARN", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BucketARN, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BucketARN)
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints) {
+				delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints)
+			} else if a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints != nil && b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints != nil {
+				if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds) {
+					delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds)
+				} else if a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds != nil && b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds != nil {
+					if *a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds != *b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds {
+						delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.IntervalInSeconds)
+					}
+				}
+				if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs) {
+					delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs)
+				} else if a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs != nil && b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs != nil {
+					if *a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs != *b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs {
+						delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.BufferingHints.SizeInMBs)
+					}
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions) {
+				delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions)
+			} else if a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions != nil && b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions != nil {
+				if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled) {
+					delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled)
+				} else if a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled != nil && b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled != nil {
+					if *a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled != *b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled {
+						delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.Enabled)
+					}
+				}
+				if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName) {
+					delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName)
+				} else if a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName != nil && b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName != nil {
+					if *a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName != *b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName {
+						delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogGroupName)
+					}
+				}
+				if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName) {
+					delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName)
+				} else if a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName != nil && b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName != nil {
+					if *a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName != *b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName {
+						delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CloudWatchLoggingOptions.LogStreamName)
+					}
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CompressionFormat, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CompressionFormat) {
+				delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration.CompressionFormat", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CompressionFormat, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CompressionFormat)
+			} else if a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CompressionFormat != nil && b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CompressionFormat != nil {
+				if *a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CompressionFormat != *b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CompressionFormat {
+					delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration.CompressionFormat", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CompressionFormat, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.CompressionFormat)
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration) {
+				delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration)
+			} else if a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration != nil && b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration != nil {
+				if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig) {
+					delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig)
+				} else if a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig != nil && b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig != nil {
+					if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN) {
+						delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN)
+					} else if a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN != nil && b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN != nil {
+						if *a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN != *b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN {
+							delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.KMSEncryptionConfig.AWSKMSKeyARN)
+						}
+					}
+				}
+				if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig) {
+					delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig)
+				} else if a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig != nil && b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig != nil {
+					if *a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig != *b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig {
+						delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.EncryptionConfiguration.NoEncryptionConfig)
+					}
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.ErrorOutputPrefix, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.ErrorOutputPrefix) {
+				delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration.ErrorOutputPrefix", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.ErrorOutputPrefix, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.ErrorOutputPrefix)
+			} else if a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.ErrorOutputPrefix != nil && b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.ErrorOutputPrefix != nil {
+				if *a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.ErrorOutputPrefix != *b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.ErrorOutputPrefix {
+					delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration.ErrorOutputPrefix", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.ErrorOutputPrefix, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.ErrorOutputPrefix)
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.Prefix, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.Prefix) {
+				delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration.Prefix", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.Prefix, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.Prefix)
+			} else if a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.Prefix != nil && b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.Prefix != nil {
+				if *a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.Prefix != *b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.Prefix {
+					delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration.Prefix", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.Prefix, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.Prefix)
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.RoleARN, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.RoleARN) {
+				delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration.RoleARN", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.RoleARN, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.RoleARN)
+			} else if a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.RoleARN != nil && b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.RoleARN != nil {
+				if *a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.RoleARN != *b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.RoleARN {
+					delta.Add("Spec.SplunkDestinationConfiguration.S3Configuration.RoleARN", a.ko.Spec.SplunkDestinationConfiguration.S3Configuration.RoleARN, b.ko.Spec.SplunkDestinationConfiguration.S3Configuration.RoleARN)
+				}
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration, b.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration) {
+			delta.Add("Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration", a.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration, b.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration)
+		} else if a.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration != nil && b.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration != nil {
+			if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.Enabled, b.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.Enabled) {
+				delta.Add("Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.Enabled", a.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.Enabled, b.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.Enabled)
+			} else if a.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.Enabled != nil && b.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.Enabled != nil {
+				if *a.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.Enabled != *b.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.Enabled {
+					delta.Add("Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.Enabled", a.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.Enabled, b.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.Enabled)
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleARN, b.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleARN) {
+				delta.Add("Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleARN", a.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleARN, b.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleARN)
+			} else if a.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleARN != nil && b.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleARN != nil {
+				if *a.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleARN != *b.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleARN {
+					delta.Add("Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleARN", a.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleARN, b.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.RoleARN)
+				}
+			}
+			if ackcompare.HasNilDifference(a.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretARN, b.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretARN) {
+				delta.Add("Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretARN", a.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretARN, b.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretARN)
+			} else if a.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretARN != nil && b.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretARN != nil {
+				if *a.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretARN != *b.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretARN {
+					delta.Add("Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretARN", a.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretARN, b.ko.Spec.SplunkDestinationConfiguration.SecretsManagerConfiguration.SecretARN)
+				}
+			}
+		}
+	}
 	desiredACKTags, _ := convertToOrderedACKTags(a.ko.Spec.Tags)
 	latestACKTags, _ := convertToOrderedACKTags(b.ko.Spec.Tags)
 	if !ackcompare.MapStringStringEqual(desiredACKTags, latestACKTags) {
